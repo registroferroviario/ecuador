@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <link rel="icon" type="image/png" href="ico.jpg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F.C. del Sur - Registroferroviario.ec</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================
+           VARIABLES DE TEMA (AMARILLO / NEGRO / BLANCO)
+           ========================================== */
+        [data-theme="light"] {
+            --bg-body: #f8f2f2;            /* Fondo de página cálido con tinte rojizo tenue */
+            --bg-card: #ffffff;            /* Tarjetas en blanco limpio para contraste */
+            --rail-color: rgba(220, 38, 38, 0.15);
+            --main-accent: #dc2626;        /* Rojo escarlata vibrante pero ligero */
+            --main-dark: #1f1111;
+            --main-soft: #fde8e8;          /* Fondos de bloques destacados en rojo tenue */
+            --secondary-accent: #d97706;   /* Amarillo/Ocre cálido para alto contraste sobre claro */
+            --border-card: #fca5a5;        /* Bordes rojizos suaves que enmarcan las tarjetas */
+            --border-accent: #dc2626;      
+            --text-main: #1c0a0a;
+            --text-muted: #6b5252;
+            --shadow-card: rgba(220, 38, 38, 0.08);
+
+            --dropdown-bg: #ffffff;
+            --dropdown-hover: #dc2626;
+            --dropdown-text-hover: #ffffff;
+            --dropdown-border: #d97706;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #121212;                    /* Fondo neutro mate */
+            --bg-card: #1e1e22;                    /* Tarjeta gris carbón */
+            --rail-color: rgba(244, 63, 94, 0.12);
+            --main-accent: #f43f5e;                /* Rojo ligero/cálido brillante (sin tono rosa) */
+            --main-dark: #ffffff;
+            --main-soft: rgba(244, 63, 94, 0.12);  
+            --secondary-accent: #facc15;           /* Amarillo dorado brillante */
+            --border-card: #27272a;
+            --border-accent: #f43f5e;
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --shadow-card: rgba(0, 0, 0, 0.4);
+
+            --dropdown-bg: #1e1e22;
+            --dropdown-hover: #f43f5e;
+            --dropdown-text-hover: #ffffff;
+            --dropdown-border: #facc15;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        .top-stripe {
+    height: 8px;
+    background: linear-gradient(90deg, #ffcc00 0%, #003399 50%, #cc0000 100%);
+    width: 100%;
+}
+
+        .rail-pattern {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.75;
+            will-change: background-position;
+        }
+
+        .rail-pattern-left {
+            left: 15px;
+            background: repeating-linear-gradient(0deg, transparent, transparent 18px, var(--rail-color) 18px, var(--rail-color) 22px),
+            linear-gradient(90deg, transparent 22px, var(--rail-color) 22px, var(--rail-color) 26px, transparent 26px, transparent 54px, var(--rail-color) 54px, var(--rail-color) 58px, transparent 58px);
+        }
+
+        .rail-pattern-right {
+            right: 15px;
+            background: repeating-linear-gradient(0deg, transparent, transparent 18px, var(--rail-color) 18px, var(--rail-color) 22px),
+            linear-gradient(90deg, transparent 22px, var(--rail-color) 22px, var(--rail-color) 26px, transparent 26px, transparent 54px, var(--rail-color) 54px, var(--rail-color) 58px, transparent 58px);
+        }
+
+        /* NAVEGACIÓN Y DESPLEGABLES MULTINIVEL */
+        .top-navbar {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-card);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px var(--shadow-card);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            height: 60px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            list-style: none;
+            height: 100%;
+        }
+
+        .nav-links li {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover,
+        .nav-links li:hover > a,
+        .nav-links a.active {
+            background-color: var(--main-soft);
+            color: var(--main-accent);
+        }
+        .nav-links ul {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--dropdown-bg);
+            border: 1px solid var(--dropdown-border);
+            border-top: 2px solid var(--main-accent);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            list-style: none;
+            min-width: 260px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 6px 0;
+            z-index: 1001;
+        }
+
+        .nav-links li:hover > ul {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-links ul ul {
+            top: 0;
+            left: 100%;
+            margin-left: 2px;
+            border-top: 1px solid var(--dropdown-border);
+            border-left: 2px solid var(--main-accent);
+            border-radius: 0 8px 8px 8px;
+        }
+
+        .nav-links ul li {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+
+        .nav-links ul a {
+            width: 100%;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 0;
+            color: var(--text-main);
+            justify-content: space-between;
+        }
+
+        .nav-links ul a:hover,
+        .nav-links ul li:hover > a {
+            background-color: var(--dropdown-hover);
+            color: var(--dropdown-text-hover) !important;
+        }
+
+        .arrow-down::after { content: " ▾"; font-size: 0.75rem; color: var(--main-accent); }
+        .arrow-right::after { content: " ▸"; font-size: 0.75rem; color: var(--main-accent); }
+        .arrow-left::after { content: " ◂"; font-size: 0.75rem; color: var(--main-accent); }
+
+        .theme-toggle-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--main-accent);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--main-accent);
+            color: #000000;
+            border-color: var(--main-accent);
+        }
+
+        .wrapper {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            position: relative;
+            z-index: 1;
+        }
+        header {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-card);
+            border-left: 4px solid var(--main-accent);
+            box-shadow: 0 6px 25px var(--shadow-card);
+            margin-bottom: 40px;
+            overflow: hidden;
+            display: flex;
+            align-items: stretch;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .header-info {
+            padding: 30px;
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .header-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .brand-logo-small {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: #092011;
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .brand-logo-small .tri-yellow { color: #ffcc00 !important; }
+        .brand-logo-small .tri-blue   { color: #3388ff !important; }
+        .brand-logo-small .tri-red    { color: #ff3333 !important; }
+
+        .flag-box {
+            width: 60px;
+            height: 38px;
+            border: 1px solid var(--border-card);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px var(--shadow-card);
+            flex-shrink: 0;
+        }
+
+        .flag-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%);
+        }
+
+        .main-railway-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.2rem, 3.8vw, 3.2rem);
+            font-weight: 900;
+            color: var(--text-main);
+            line-height: 1.1;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 600px;
+        }
+
+        .header-photo-container {
+            position: relative;
+            width: 40%;
+            min-width: 280px;
+            background-color: var(--bg-body);
+            overflow: hidden;
+            border-left: 1px solid var(--border-card);
+        }
+
+        .header-photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.5s ease;
+        }
+
+        .header-photo-container:hover img {
+            transform: scale(1.05);
+        }
+
+        .header-photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 16px;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.95) 100%);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-align: right;
+            border-top: 1px solid var(--border-card);
+        }
+
+        /* SECCIONES GENÉRICAS */
+        section {
+            margin-bottom: 50px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--main-accent);
+            letter-spacing: -0.5px;
+        }
+
+        .section-line {
+            flex-grow: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--main-accent), transparent);
+        }
+
+        
+        .infinite-carousel {
+            overflow: hidden;
+            width: 100%;
+            border-radius: 16px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            box-shadow: 0 8px 25px var(--shadow-card);
+            position: relative;
+            padding: 15px 0;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 20px;
+            width: max-content;
+            animation: scrollContinuous 25s linear infinite;
+        }
+
+        .infinite-carousel:hover .carousel-track {
+            animation-play-state: paused;
+        }
+
+        .carousel-card {
+            width: calc((1280px - 88px - 40px) / 3); 
+            height: 320px;
+            flex-shrink: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border-card);
+            box-shadow: 0 4px 12px var(--shadow-card);
+            transition: border-color 0.3s ease;
+        }
+
+        .carousel-card:hover {
+            border-color: var(--main-accent);
+        }
+
+        .carousel-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .carousel-card:hover img {
+            transform: scale(1.06);
+        }
+
+        .carousel-card-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 15px 12px;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.95) 100%);
+            color: #ffffff;
+        }
+
+        .carousel-card-caption h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+            color: var(--main-accent);
+        }
+
+        .carousel-card-caption p {
+            font-size: 0.8rem;
+            color: #a1a1aa;
+        }
+
+        @keyframes scrollContinuous {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-50% - 10px)); }
+        }
+
+        /* TABLA TÉCNICA */
+        .tech-table-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 22px var(--shadow-card);
+        }
+
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .tech-table th {
+            background-color: var(--main-soft);
+            color: var(--main-accent);
+            padding: 16px 24px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            border-bottom: 3px solid var(--main-soft);
+        }
+
+        .tech-table td.param-title {
+            background-color: var(--bg-body);
+            color: var(--text-muted);
+            font-weight: 700;
+            width: 38%;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--border-card);
+            border-right: 1px solid var(--border-card);
+        }
+
+        .tech-table td.param-value {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            font-weight: 400;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--border-card);
+        }
+
+        .tech-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tech-table tr:hover td.param-title,
+        .tech-table tr:hover td.param-value {
+            background-color: var(--main-soft);
+        }
+
+        .btn-table-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--main-accent);
+            color: #ffffff !important;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.25s ease;
+        }
+
+        .btn-table-link:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        
+        .history-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-top: 3px solid var(--main-accent);
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 6px 20px var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .history-card,
+.gallery-item,
+.tech-table-container,
+header {
+    border: 1px solid var(--border-card);
+    border-top: 4px solid var(--main-accent); /* Franja roja superior fija */
+    background-color: var(--bg-card);
+}
+
+        .history-row {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .history-row.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .history-image-box {
+            width: 38%;
+            min-width: 260px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-card);
+            box-shadow: 0 4px 12px var(--shadow-card);
+            position: relative;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .history-image-box:hover {
+            border-color: var(--main-accent);
+        }
+
+        .history-image-box img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .history-image-box:hover img {
+            transform: scale(1.05);
+        }
+
+        .history-image-box span {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            color: #ffffff;
+            font-size: 0.75rem;
+            padding: 8px 10px;
+            text-align: center;
+            font-weight: 600;
+            border-top: 1px solid var(--border-card);
+        }
+
+        .history-content {
+            flex: 1;
+            font-size: 0.98rem;
+            color: var(--text-main);
+        }
+
+        .history-content h3 {
+            color: var(--main-accent);
+        }
+
+        .history-content p {
+            margin-bottom: 10px;
+        }
+
+        .history-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .history-content blockquote {
+            border-left: 3px solid var(--main-accent);
+            padding: 10px 14px;
+            margin: 12px 0;
+            font-style: italic;
+            color: var(--text-main);
+            background-color: var(--main-soft);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.92rem;
+        }
+
+        .photo-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .gallery-item {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px var(--shadow-card);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px var(--shadow-card);
+            border-color: var(--main-accent);
+        }
+
+        .gallery-image-container {
+            width: 100%;
+            aspect-ratio: 16 / 9; 
+            overflow: hidden;
+            position: relative;
+            background-color: var(--bg-body); 
+            cursor: pointer;
+        }
+
+        .gallery-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .gallery-item:hover .gallery-image-container img {
+            transform: scale(1.08);
+        }
+
+        .gallery-info {
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-grow: 1;
+        }
+
+        .gallery-info h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .gallery-info p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 0 25px rgba(255, 234, 0, 0.2);
+            border: 1px solid var(--main-accent);
+            object-fit: contain;
+        }
+
+        .modal-caption {
+            margin-top: 15px;
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: var(--main-accent);
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .close-modal:hover {
+            color: #ffffff;
+        }
+
+        .floating-map-btn {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    z-index: 1000;
+    background-color: var(--main-accent);
+    color: #000000;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.floating-map-btn:hover {
+    transform: scale(1.05);
+    opacity: 0.95;
+}
+
+/* MODAL DEL MAPA Y CONTROLES DE ZOOM */
+.map-modal {
+    display: none;
+    position: fixed;
+    z-index: 2500;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+}
+
+.map-modal-content {
+    background-color: var(--bg-card);
+    border: 1px solid var(--main-accent);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 1000px;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.map-modal-header {
+    padding: 15px 20px;
+    background-color: var(--bg-body);
+    border-bottom: 1px solid var(--border-card);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.map-modal-header h3 {
+    font-family: 'Outfit', sans-serif;
+    color: var(--main-accent);
+    margin: 0;
+}
+
+.close-map-btn {
+    background: none;
+    border: none;
+    color: var(--text-main);
+    font-size: 1.8rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.map-viewport {
+    flex: 1;
+    overflow: hidden;
+    cursor: grab;
+    background-color: #0a0a0c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.map-viewport:active {
+    cursor: grabbing;
+}
+
+.map-viewport img {
+    max-width: 150%;
+    max-height: 150%;
+    object-fit: contain;
+}
+
+.zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 6px;
+    border-radius: 8px;
+    border: 1px solid var(--border-card);
+}
+
+.zoom-controls button {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid var(--border-card);
+    border-radius: 4px;
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.zoom-controls button:hover {
+    background: var(--main-accent);
+    color: #000;
+}
+
+.triple-image-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    width: 100%;
+}
+
+.triple-image-item {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-card);
+    box-shadow: 0 4px 12px var(--shadow-card);
+    aspect-ratio: 4 / 3;
+    cursor: pointer;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.triple-image-item:hover {
+    border-color: #f43f5e;
+    transform: translateY(-3px);
+}
+
+.triple-image-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.triple-image-item:hover img {
+    transform: scale(1.08);
+}
+
+.triple-image-item span {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(15, 23, 42, 0.9);
+    color: var(--cyan-accent);
+    font-size: 0.75rem;
+    padding: 8px 10px;
+    text-align: center;
+    font-weight: 600;
+    border-top: 1px solid var(--cyan-accent);
+}
+
+
+
+        footer {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-top: 2px solid var(--main-accent);
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        footer strong {
+            color: var(--main-accent);
+        }
+
+        @media (max-width: 1100px) {
+            .rail-pattern { display: none; }
+            .carousel-card { width: 300px; }
+        }
+
+        @media (max-width: 850px) {
+            header { flex-direction: column; }
+            .header-photo-container { width: 100%; height: 220px; border-left: none; border-top: 1px solid var(--border-card); }
+            .tech-table th, .tech-table td { padding: 10px 14px; font-size: 0.88rem; }
+            .tech-table td.param-title { width: 45%; }
+            .carousel-card { width: 260px; height: 260px; }
+            
+            .photo-gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .history-row, .history-row.reverse {
+                flex-direction: column;
+            }
+            .history-image-box {
+                width: 100%;
+            }
+        }
+    </style>
+    <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+</head>
+<body>
+
+    <div class="top-stripe"></div>
+
+    <div class="rail-pattern rail-pattern-left" id="railLeft"></div>
+    <div class="rail-pattern rail-pattern-right" id="railRight"></div>
+
+    <nav class="top-navbar">
+        <div class="nav-container">
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                
+                <li>
+                    <a href="ffcc.html" class="arrow-down">FF.CC. Ecuador</a>
+                    <ul>
+                        <li>
+                            <a href="fcdelsur.html" class="arrow-right, active">F.C. del Sur </a>
+                            <ul>
+                                <li><a href="fcdelsur.html">Información y reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfcdelsur.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="g&q.html" class="arrow-right">G. & Q. (Guayaquil - Quito)</a>
+                            <ul>
+                                <li>
+                                    <a href="g&q.html">Información y reseña histórica</a>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                    <ul>
+                                        <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                        <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                        <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                        <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotorasvaporg&q.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul"</a></li>
+                                        <li><a href="consolidation.html">Baldwin 2-8-0 "Consolidation"</a></li>
+                                        <li>
+                                            <a href="listadolocomotoras.html" class="arrow-left">Históricas</a>
+                                            <ul>
+                                                <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul" 42" 12,8 metros</a></li>
+                                                <li></li><a href="g&q_mogul2-6-0_48.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                                <li><a href="lima-shay.html">Lima 0-4+4+4-0 "Shay"</a></li>
+                                                <li><a href="g&q_mallet0-6-6-0.html">Baldwin 0-6-6-0 "Mallet"</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_42.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_54.html">Baldwin 2-8-0 "Consolidation" 54" 16,4 metros</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_44.html">Baldwin 2-8-0 "Consolidation" 44" 13,4 metros</a></li>
+                                                <li><a href="g&q_garratt_2-6-2+2-6-2.html">Beyer Peacock 2-6-2+2-6-2 "Garratt"</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="extra_locomotoras.html">Locomotoras utilitarias y equipo auxiliar</a></li>
+                                <li>
+                                    <a href="listadocoches.html" class="arrow-left">Listado de coches de viajeros</a>
+                                    <ul>
+                                        <li><a href="coches250.html">Coches serie 250</a></li>
+                                        <li>
+                                            <a href="unidadescompletas.html" class="arrow-right">Composiciones remolcadas</a>
+                                            <ul>
+                                                <li><a href="unidadescompletaspanoramico.html">Moderno Panorámico</a></li>
+                                                <li><a href="unidadescompletascrucero.html">Moderno Crucero 1 & 2</a></li>
+                                                <li><a href="unidadescompletasmodernocut3.html">Moderno CUT3</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="cochescut4.html">Coches CUT4</a></li>
+                                        <li><a href="colonialmadera13.html">Coloniales madera 13m</a></li>
+                                        <li><a href="colonialmadera14.html">Coloniales madera 14m</a></li>
+                                        <li><a href="coches_metalicos_reciclados.html">Metálico reciclado</a></li>
+                                        <li><a href="cochesjaula.html">Coches Jaula</a></li>
+                                        <li><a href="coches3500.html">Coches UT3500</a></li>
+                                        <li><a href="feep_furgon_generador.html">Furgones generador</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="mantenimiento.jpg" class="arrow-left">Vagones</a>
+                                    <ul>
+                                        <li><a href="g&q_furgon_1500.html">Furgón Boxcar tipo "1500"</a></li>
+                                        <li><a href="g&q_tanquero_1100.html">Vagón tanquero tipo "1100"</a></li>
+                                        <li><a href="g&q_plataforma_300.html">Plataforma tipo "300"</a></li>
+                                        <li><a href="g&q_gondola_600.html">Góndola tipo "600"</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="listadoestaciones_g&q.html">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcquitosanlorenzo.html" class="arrow-right">F.C. Quito a San Lorenzo</a>
+                            <ul>
+                                <li><a href="fcquitosanlorenzo.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasvaporqsl.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="qsl_borsig4-6-0.html">Borsig 4-6-0 42" 12,8 metros</a></li>
+                                        <li><a href="norte_baldwin2-8-0.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                        <li><a href="curaray_baldwin2-6-0.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                    </ul>
+                                
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                        <ul>
+                                            <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                            <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                            <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                            <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                            <li><a href="extra_locomotoras.html">Otras locomotoras diésel utilitarias</a></li>
+                                        </ul>
+                                </li>
+                                <li><a href="mantenimiento.jpg">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcsibambecuenca.html" class="arrow-right">S. C. (Sibambe a Cuenca)</a>
+                            <ul>
+                                <li><a href="fcsibambecuenca.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorassc.html">Listado locomotoras de vapor</a></li>
+                                <li><a href="listadoestaciones_sc.html">Estaciones</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcalacosta.html" class="arrow-right">F.C. Guayaquil a Salinas</a>
+                            <ul>
+                                <li><a href="fcalacosta.html">Reseña histórica</a></li>
+                                <li>
+                                    <a href="listadolocomotorasvaporcosta.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="costa_henschel2-6-0.html">Henschel 2-6-0 "Mogul"</a></li>
+                                        <li><a href="costa_henschel4-6-0.html">Henschel 4-6-0</a></li>
+                                    </ul>
+                                </li>
+                                    
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcambatocuraray.html" class="arrow-right">F.C. Ambato a Curaray</a>
+                            <ul>
+                                <li><a href="fcambatocuraray.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoras_curaray.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcbahiachone.html" class="arrow-right">F.C. Bahía a Chone</a>
+                            <ul>
+                                <li><a href="fcbahiachone.html">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fccentral.html" class="arrow-right">F.C. Central del Ecuador</a>
+                            <ul>
+                                <li><a href="fccentral.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfccentral.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_loja.html" class="arrow-right">F.C. Puerto Bolívar y Pasaje</a>
+                            <ul>
+                                <li><a href="fcpuertobolivar_loja.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoraseloro.html">Listado materialrodante</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_piedras.html" class="arrow-right">F.C. Puerto Bolívar a Piedras</a>
+                            <ul>
+                                <li><a href="fcpuertobolivar_piedras.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoraseloro.html">Listado materialrodante</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="ffccaduana_guayaquil.html" class="arrow-right">F.C. Aduana de Guayaquil</a>
+                            <ul>
+                                <li><a href="ffccaduana_guayaquil.html">Reseña Histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="mantenimiento.jpg">FF.CC. no construidos</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="ffcc.html#indus" class="arrow-down">FF.CC. Industriales</a>
+                    <ul>
+                        <li><a href="mantenimiento.jpg">Ingenio Valdez</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio San Carlos</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Inés María</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Luz María y Matilde</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Rocafuerte</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Nugues</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Adelina María</a></li>
+                        <li><a href="mantenimiento.jpg">United Fruit Company</a></li>
+                        <li><a href="mantenimiento.jpg">Ecuadorian Oilfields</a></li>
+                        <li><a href="mantenimiento.jpg">Galápagos?</a></li>
+                    </ul>
+                
+                </li>
+
+                <li><a href="metroquito.html">Metro de Quito</a></li>
+                <li><a href="tranviacuenca.html">Tranvía Cuenca</a></li>
+                <li>
+                    <a href="#" class="arrow-down">Tranvías Históricos</a>
+                    <ul>
+                        <li><a href="antiguo_tranviaquito.html">Tranvía de Quito</a></li>
+                        <li><a href="antiguo_tranviaguayaquil.html">Tranvía de Guayaquil</a></li>
+                    </ul>
+                </li>
+                
+                <li><a href="mantenimiento.jpg">F.E.E.P (2010-2020)</a></li>
+                <li><a href="actualidad_trenes.html">Trenes en 2026</a></li>
+            </ul>
+
+            <button class="theme-toggle-btn" onclick="toggleTheme()">
+                <span id="themeIcon">Modo Oscuro</span>
+            </button>
+        </div>
+    </nav>
+    
+    <button class="floating-map-btn" onclick="openMapModal()">
+    Ver Mapa de línea
+    </button>
+
+    <div class="wrapper">
+
+        <header>
+            <div class="header-info">
+                <div class="header-top-row">
+                   
+                    <div class="brand-logo-small">
+                        <span class="tri-yellow">REGISTRO</span>
+                        <span class="tri-blue">FERRO</span><span class="tri-red">VIARIO</span>
+                    </div>
+
+                    <div class="flag-box">
+                        <img src="bandera.webp" alt="Bandera del Ecuador" onerror="this.src='icotrian.png'">
+                    </div>
+                </div>
+
+                <h1 class="main-railway-title">Ferrocarril de Yaguachi</h1>
+                <p class="subtitle">Luego renombrado F.C. del Sur es <br> ¡el primer ferrocarril construido en el Ecuador!</p>
+            </div>
+
+            <div class="header-photo-container">
+                <img src="historia/FC Sur/abfiP.jpg" alt="Paso por la Nariz del Diablo" onerror="this.src='ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg'">
+                <div class="header-photo-overlay">Locomotora Porter 0-6-0 de 1873 numerada #2 "Guayaquil" junto a un coche y una plataforma 
+                    cerca de Yaguachi en 1877 durante la construcción del FF.CC.</div>
+            </div>
+        </header>
+
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Galería Fotográfica en Movimiento</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="infinite-carousel">
+                <div class="carousel-track">
+                    <div class="carousel-card">
+                        <img src="historia/FC Sur/Puente de Milagro 1877.jpg" alt="Locomotora Shay" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>Puente de Milagro en 1877</h4>
+                            <p>Un tren detenido sobre el puente durante una exhibición fotográfica.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-card">
+                        <img src="historia/FC Sur/Estación del ferrocarril en Yaguachi. Yaguachi - Guayas - Ecuador 1877.jpg" alt="Locomotora Shay" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>Estación de Yaguachi en 1877.</h4>
+                            <p>Tren en la estación de Yaguachi.</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="historia/FC Sur/construcción.jpg" alt="Locomotora Alsthom" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>Trabajos en Yaguachi en 1877.</h4>
+                            <p>Locomotora Porter 0-6-0 durante la construcción del FF.CC.</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="historia/FC Sur/pesquería 1877.jpg" alt="Estación Salcedo" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>Pesquería en 1877.</h4>
+                            <p>Vista de un tramo de vía.</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="historia/FC Sur/yaguachi 1877.jpg" alt="Coche de Pasajeros" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>Yaguachi 1877.</h4>
+                            <p>Casas cerca de las vías en Yaguachi, 1877.</p>
+                        </div>
+                    </div>
+
+                    
+
+
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Información Técnica e Infraestructura</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="tech-table-container">
+                <table class="tech-table">
+                    <thead>
+                        <tr>
+                            <th>Especificación / Parámetro</th>
+                            <th>Detalle Técnico</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="param-title">Nombre</td>
+                            <td class="param-value">-Ferrocarril de Yaguachi (1872-1875) <br> -<strong>Ferrocarril del Sur (1875-1898)</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Constructor</td>
+                            <td class="param-value">-Estado ecuatoriano pres. Gabriel García Moreno (1872-1875) <br> -Estado ecuatoriano (1875-1876)
+                                <br> -Estado ecuatoriano pres. Ignacio de Veintimilla (1876-1883 )<br> -Ing. Jameston Kelly (1884-1892) 
+                                <br> -Conde Thadée d’Oksza (1888-1892) <br> -Ing. Cristóbal Thill (1892-1895) 
+                                <br> -Eloy Alfaro, Leonidas Plaza, Archer Harman (1895-1897)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Tipo</td>
+                            <td class="param-value">Ferrocarril ordinario, Línea principal</td>
+                        </tr>
+                         <tr>
+                            <td class="param-title">Ancho de vía</td>
+                            <td class="param-value"><span><strong>-914 mm</strong></span></td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Número de estaciones</td>
+                            <td class="param-value"><strong>6</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Estado de operación</td>
+                            <td class="param-value">Incorporado al
+                            <a href="g&q.html" class="btn-table-link">
+                                    G. & Q. Railway Company
+                                </a>
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <td class="param-title">Punto de partida</td>
+                            <td class="param-value"><strong>Durán</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Última estación</td>
+                            <td class="param-value"><strong>Chimbo</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Apertura de servicio</td>
+                            <td class="param-value"><strong>1 de mayo de 1874</strong> (Primer tramo de 13,2km entre Yaguachi y Milagro).</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Apertura Total</td>
+                            <td class="param-value"><strong>18 de febrero de 1879</strong> (Llegada del primer tren a Chimbo desde Durán).</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Última circulación</td>
+                            <td class="param-value"><strong>31 de agosto de 1897</strong> <br> (1 de septiembre de 1897 fue incorporado legalmente al 
+                                G. & Q. Railway Company).</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Longitud</td>
+                            <td class="param-value">25 km</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Dueño</td>
+                            <td class="param-value">-Municipalidad de Guayaquil (1912-1925)<br>-Estado ecuatoriano (1925-1954)</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Operador</td>
+                            <td class="param-value">-F.C. del Sur</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Velocidad máxima</td>
+                            <td class="param-value">40 km/h</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">materialrodante utilizado</td>
+                            <td class="param-value">
+                                <a href="listadolocomotorasfcdelsur.html" class="btn-table-link">
+                                    Ver materialrodante &rarr;
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Reseña Histórica</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="history-card">
+                
+                <div class="history-row">
+                    
+                    <div class="history-content">
+                         <h3><strong>Los primeros sueños y el arranque (1861-1875)</strong></h3><br>
+                        <p>En aquellos años el Ecuador vivía todavía dividido por la geografía. 
+                            <br> Cruzar desde la costa hasta la sierra significaba enfrentarse a caminos apenas transitables, 
+                            a leyendas de peligros y a jornadas que podían alargarse más de una semana. 
+                            El propio Bolívar, décadas atrás, había necesitado trece días para llegar de Quito a Guayaquil. 
+                             Esa realidad pesaba sobre el país como una herida abierta. Fue Gabriel García Moreno quien transformó el anhelo en proyecto. 
+                        </p>
+
+                        <p>
+                            En 1861, durante su primer período de influencia, la Convención Nacional autorizó al Poder Ejecutivo 
+                            a celebrar contratos para construir ferrocarriles o caminos de ruedas desde Babahoyo u otro punto de la costa hasta Quito, 
+                            y también hacia otras regiones. <br> Aquel decreto, firmado el 23 de abril de 1861, fue el primer paso oficial. 
+                            García Moreno, sin embargo, comprendió que la empresa completa resultaba todavía desproporcionada para los recursos del erario. 
+                            <br> Prefirió entonces concentrar energías en la gran carretera de Quito, que hacia 1872 llegaba ya hasta Sibambe, 
+                            con sus 273 kilómetros, más de cien puentes y ciento treinta acueductos.
+                        </p>
+                        <p>
+                            Solo entonces se atrevió a dar el salto. 
+                            Los obstáculos geológicos cerca del litoral le convencieron de que lo más práctico era unir Sibambe con Yaguachi mediante una vía férrea, 
+                            aprovechando el río Yaguachi para el tramo final hacia Guayaquil. En diciembre de 1872 firmó los plenos poderes a favor de Antonio Flores, 
+                            ministro en Washington, y envió al ingeniero Henry G. Mac Clellan a buscar capitales y materiales en Estados Unidos e Inglaterra. 
+                            <br> Al mismo tiempo, el ingeniero ecuatoriano Modesto López, formado en la Politécnica, comenzó a levantar terraplenes desde Sibambe 
+                            hacia Licay y la quebrada del Peligro, cerca de Huigra. En Yaguachi se iniciaron los trabajos de dragado del río y la preparación 
+                            de la estación junto a la orilla.
+                        </p>
+                        
+                    </div>
+                </div>
+
+                <div class="history-row reverse">
+                    <div class="history-image-box" onclick="openModal('historia/FC Sur/yaguachi 1877.jpg', 'Yaguachi en 1877.')">
+                        <img src="historia/FC Sur/yaguachi 1877.jpg" alt="Yaguachi en 1877." onerror="this.src='ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg'">
+                        <span>Yaguachi en 1877.</span>
+                    </div>
+                    <div class="history-content">
+                        
+                        <p>
+                            La organización fue minuciosa y, a su manera, humanitaria. 
+                            García Moreno se preocupó de que las brigadas de trabajadores no carecieran de asistencia espiritual: 
+                            después de gestiones fallidas en Riobamba, el gobernador del Azuay logró el nombramiento del capellán Dr. Salvador Ortega, 
+                            con un sueldo de veinticinco pesos mensuales y raciones. <br> También se designó médico del ferrocarril al Dr. Carlos Arroyo. 
+                            Los fondos llegaban de casi todas las tesorerías provinciales y, sobre todo, de un crédito del Banco del Ecuador: 
+                            ochenta mil pesos destinados principalmente a la compra de locomotoras y rieles.
+                        </p>
+                        <p>
+                            En julio de 1873 Mac Clellan regresó con el ingeniero John Curtis y se dio comienzo formal a los trabajos en Yaguachi. 
+                            Se compraron tres mil toneladas de rieles, se licitó la provisión de ciento veinte mil durmientes de guayacán 
+                            y se construyó la primera estación con oficinas, bodegas y talleres. Varios propietarios de terrenos —Valdez, Maridueña, 
+                            Garaicoa— cedieron generosamente sus tierras y maderas.
+                        </p>                  
+                    </div>
+                </div>
+
+                <div class="history-row">
+                    <div class="history-image-box" onclick="openModal('historia/FC Sur/1b.jpg', 'Locomotora Porter 2-4-0 de 1872 numerada 1 en Yaguachi, 1877.')">
+                        <img src="historia/FC Sur/1b.jpg" alt="Locomotora Porter 2-4-0 de 1872 numerada 1 en Yaguachi, 1877" onerror="this.src='ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg'">
+                        <span>Locomotora Porter 2-4-0 de 1872 numerada 1 en Yaguachi, 1877.</span>
+                    </div>
+                    <div class="history-content">
+                        <p>
+                            Las dos primeras locomotoras llegaron poco después. 
+                            Eran máquinas Porter de vía estrecha (914 mm), al armarse, siguiendo la costumbre inglesa, 
+                            se les puso los nombres de “García Moreno” y “José Javier Eguiguren” pero en Ecuador ambos funcionarios 
+                            protestaron por lo que consideraban una arbitrariedad y ordenaron cambiarlos. 
+                            <br> Así nacieron las locomotoras “Quito” y “Guayaquil”, destinadas a unir simbólicamente las dos ciudades principales del país. 
+                            Cada una costó siete mil quinientos soles y habían sido adquiridas bajo especificaciones de los ingenieros del Ferrocarril del Perú.
+                        </p>
+                        <p>
+                            El 1 de mayo de 1874 se estableció oficialmente el tráfico entre Yaguachi y Milagro. 
+                            <br> En el primer mes las entradas por fletes y pasajes alcanzaron 358 pesos, 
+                            cantidad suficiente para cubrir los sueldos del cuerpo de ingenieros. 
+                            El 27 de enero de 1875 García Moreno firmó el primer Reglamento de tráfico y, por primera vez en un documento oficial, 
+                            llamó a la línea Ferrocarril del Sur. Las normas eran severas: multas y penas de prisión 
+                            para quien transitara por la vía o dañara rieles o máquinas.
+                        </p>
+                        
+                        
+                    </div>
+                </div>
+
+                <div class="history-row">
+                    <div class="history-image-box" onclick="openModal('historia/FC Sur/pesqueria1877.jpg', 'Tren en tramo en construcción en Pesquería, 1877.')">
+                        <img src="historia/FC Sur/pesqueria1877.jpg" alt="Tren en tramo en construcción en Pesquería, 1877." onerror="this.src='ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg'">
+                        <span>Tren en tramo en construcción en Pesquería, 1877.</span>
+                    </div>
+                    <div class="history-content">
+                        <p>
+                            Cuando el presidente partió de Quito el 15 de abril de 1875 para inspeccionar personalmente los trabajos, 
+                            la obra ya era una realidad tangible en la costa. Visitó los campamentos de Pagma y Guigra, revisó la organización en Yaguachi 
+                            y obtuvo de los comerciantes de Guayaquil un préstamo de doscientos mil pesos sin intereses. 
+                            <br> En su Mensaje al Congreso del 6 de agosto de 1875 —escrito pocas horas antes de su trágico final— 
+                            pudo informar que el ferrocarril funcionaba en una extensión de nueve leguas (43,4km) y que se disponía de rieles para treinta kilómetros más. 
+                            <br> La línea llegaba entonces hasta Barraganetal.
+                        </p>
+                        <p>
+                            Así, entre sueños largamente acariciados y una voluntad tenaz, nació el Ferrocarril del Sur. 
+                            Las primeras locomotoras “Quito” y “Guayaquil” ya rodaban sobre los rieles, y el país comenzaba a escuchar, 
+                            por primera vez, el silbido del vapor entre la costa y las estribaciones de la cordillera.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="history-row reverse">
+                    <div class="history-image-box" onclick="openModal('historia/FC Sur/pesquería 1877.jpg', 'Vía en Pesquería, 1877.')">
+                        <img src="historia/FC Sur/pesquería 1877.jpg" alt="Vía en Pesquería, 1877." onerror="this.src='ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg'">
+                        <span>Vía en Pesquería, 1877.</span>
+                    </div>
+                    <div class="history-content">
+                        
+                        <h3><strong>Los años lentos y las primeras máquinas (1875-1888)</strong></h3>
+                        <br>
+                        <p>
+                            Tras el asesinato de García Moreno, el avance se volvió irregular. 
+                            Bajo el gobierno de Ignacio de Veintimilla se tendieron apenas unos kilómetros más y la vía llegó hasta Chimbo entre 1878 y 1879. 
+                            Se construyeron las estaciones de Santa Rosa de Chovo y Barraganetal. 
+                            Por entonces circularon también otras locomotoras, la Grant 4-4-0 de 1877 numerada 3 y llamada “Cuenca” 
+                            y las Baldwin 2-6-0 y 4-4-0 que llevaron nombres como “Ocho de septiembre” y “General I. de Veintimilla” con numeración 4, 5 ambas de 1880.
+                        </p>
+                        <p>
+                            Pero el verdadero impulso llegó con José María Plácido Caamaño y el ingeniero inglés Marco Jameston Kelly. 
+                            
+                        </p>                  
+                    </div>
+                </div>
+
+                <div class="history-row">
+                    
+                    <div class="history-content">
+                         <h3><strong>Kelly, las dificultades y el cambio de rumbo (1884-1892)</strong></h3><br>
+                        <p>
+                            Después de los años de casi estancamiento bajo Veintimilla, el presidente José María Plácido Caamaño dio nuevo aliento a la obra. 
+                            <br> Nombró administrador del tramo Yaguachi–Chimbo al ingeniero inglés Marco Jameston Kelly, un técnico experimentado, 
+                            vinculado a los círculos financieros de Europa y Estados Unidos. Kelly presentó en 1885 una propuesta ambiciosa: prolongar 
+                            la vía desde Chimbo hasta Sibambe (unos 82 kilómetros) a cambio del monopolio de la sal durante doce años, 
+                            valorado en doscientos mil pesos anuales. El Congreso aprobó el contrato sin mayores modificaciones.
+                        </p>
+                        <p>
+                            Kelly trabajó con energía. En 1886 levantó sobre el río Chimbo un gran puente de hierro fabricado por la casa Eiffel. 
+                            Al año siguiente instaló los primeros teléfonos del Ecuador entre Yaguachi y Chimbo, 
+                            y comenzó a trazar la conocida “Vía Kelly” hacia Sibambe, aprovechando en parte los antiguos terraplenes de la época de García Moreno. 
+                            Para resolver el costoso y lento transporte de materiales por el río, propuso también la construcción de un ramal de 
+                            veintiún kilómetros desde Yaguachi hasta Durán (entonces llamado El Recreo), frente a Guayaquil. El Congreso lo autorizó en agosto de 1887.
+                        </p>
+                        <p>
+                            Los trabajos en Durán empezaron el 8 de diciembre de ese año. 
+                            El 25 de noviembre de 1888 se colocó el último remache del magnífico puente sobre el río Yaguachi. 
+                            Ese día pasaron juntas cuatro locomotoras: las ya conocidas “Quito” y “Guayaquil”, la “Cuenca” y la pequeña “Mascota”. 
+                            Fue un momento de legítimo orgullo. Por primera vez la línea quedaba conectada directamente con el río Guayas.
+                        </p>
+                        
+                    </div>
+                </div>
+
+            
+
+                <div class="triple-image-grid">
+                    <div class="triple-image-item" onclick="openModal('historia/FC Sur/1890.jpg', 'Puente de Yaguachi en construcción en 1890.')">
+                        <img src="historia/FC Sur/1890.jpg" alt="Puente de Yaguachi en construcción en 1890." onerror="this.src='icotrian.png'">
+                        <span>Puente de Yaguachi en construcción en 1890.</span>
+                    </div>
+
+                    <div class="triple-image-item" onclick="openModal('historia/FC Sur/1885.jpg', 'Locomotora Grant 4-4-0 de 1877 numerada 3 en la stación de Yaguachi en 1885.')">
+                        <img src="historia/FC Sur/1885.jpg" alt="Yaguachi 1885" onerror="this.src='icotrian.png'">
+                        <span>Locomotora Grant 4-4-0 de 1877 numerada 3 en la stación de Yaguachi en 1885.</span>
+                    </div>
+                    
+                    <div class="triple-image-item" onclick="openModal('historia/FC Sur/puentechimbo.jpeg', 'Locomotora Baldwin 4-4-0 de 1880 numerada 5 sobre el puente de Chimbo.')">
+                        <img src="historia/FC Sur/puentechimbo.jpeg" alt="Puente de Chimbo" onerror="this.src='icotrian.png'">
+                        <span>Locomotora Baldwin 4-4-0 de 1880 numerada 5 sobre el puente de Chimbo.</span>
+                    </div>
+                </div>
+
+                <p>
+                    Sin embargo, a partir de 1888 las dificultades se acumularon, el invierno destruyó gran parte de los terraplenes, 
+                    las ventas de sal en toda la República apenas alcanzaban ciento sesenta mil pesos anuales, lejos de los doscientos mil previstos en el contrato. 
+                    <br> En los parajes de Chihuancay y Naranjapata los trabajadores huyeron aterrados por el paludismo, los animales feroces y las víboras. 
+                    Kelly pensó en traer inmigrantes asiáticos, pero el Gobierno y la opinión pública se opusieron con firmeza. 
+                    El empresario intentó abaratar costos reparando el camino de Chimbo a Guaranda, pero los recursos se agotaban.
+                    <br> Durante la administración de Antonio Flores la situación empeoró. Kelly formó la Compañía del Ferrocarril 
+                    y Obras Públicas con capitalistas de Guayaquil, pero las inundaciones de 1890 y el incumplimiento de plazos llevaron 
+                    a multas y a un juicio arbitral. Apareció entonces el Conde Thadée d’Oksza con una propuesta de “rescate” que el Congreso 
+                    aprobó en 1890, aunque nunca se concretó de manera efectiva. Flores, escéptico respecto a los ferrocarriles, 
+                    prefirió concentrar esfuerzos en la vía de herradura conocida como “Vía Flores”.
+                </p>
+                <p>
+                    Cuando Luis Cordero llegó a la presidencia en 1892, la empresa de Kelly estaba en plena bancarrota. 
+                    <br> El Estado tuvo que asumir temporalmente la administración del tramo Durán–Chimbo. 
+                    Se encargó al ingeniero alsaciano Cristóbal Thill un estudio técnico de la sección Chimbo–Sibambe, 
+                    que confirmó las enormes dificultades de la hoya del Chanchán. La reclamación del Conde d’Oksza fue desestimada. 
+                    <br> El ferrocarril seguía vivo, pero herido y sin un rumbo claro hacia la sierra.
+                    Así terminó la etapa de Kelly: con obras importantes —el puente de Chimbo, el ramal a Durán, 
+                    las primeras comunicaciones telefónicas— pero también con el amargo sabor del fracaso financiero y técnico. 
+                    Pero la continuación, fue la administración que llevaría los rieles hasta Quito, 
+                    Y llegaría pocos años después, cuando el general Eloy Alfaro y el empresario Archer Harman retomarán 
+                    el sueño con nueva energía y nuevos capitales.
+                </p>
+
+                <div class="history-row reverse">
+                    <div class="history-image-box" onclick="openModal('historia/FC Sur/Estación de Chimbo 1890-1895.jpg', 'Tren en la estación de Chimbo en 1895.')">
+                        <img src="historia/FC Sur/Estación de Chimbo 1890-1895.jpg" alt="Tren en la estación de Chimbo en 1895." onerror="this.src='ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg'">
+                        <span>Tren en la estación de Chimbo en 1895.</span>
+                    </div>
+                    <div class="history-content">
+                        
+                        <h3><strong>El gran salto: Alfaro, Harman y la Guayaquil & Quito Railway (1897)</strong></h3>
+                        <br>
+                        <p>
+                            En 1897 el general Eloy Alfaro retomó con energía el sueño interrumpido. 
+                            <br> El 14 de junio de ese año se firmó el contrato con Archer Harman, 
+                            poco después, el 1 de septiembre, se constituyó en Nueva Jersey la Guayaquil and Quito Railway Company por lo que 
+                            la última circulación del llamado F.C. del Sur se considera el 31 de agosto.
+                            <br> La nueva compañía entonces heredó las locomotoras existentes, 
+                            y cambió el ancho de vía para ajustarlo a nuevas especificaciones técnicas, así lograrían
+                            llegar a Quito, pero esa, <br> ¡es otra historia!
+                        </p>
+                                         
+                    </div>
+                </div>
+            </div>
+
+            
+
+            
+
+
+            
+        </section>
+        
+
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Galería Fotográfica</h2>
+                <p>Fotos del archivo y fondo "Fotografía patrimonial del Ecuador" del Instituto Nacional de Patrimonio Cultural.</p>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="photo-gallery-grid">
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('historia/FC Sur/pesqueria1877.jpg', 'Trabajos cerca del Kilómetro 22')">
+                        <img src="historia/FC Sur/pesqueria1877.jpg" alt="Descripción 1" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Trabajos en 1877.</h3>
+                        <p>Locomotora Porter 0-6-0 durante la construcción del FF.CC.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('historia/FC Sur/Estación del Milagro 1877.jpg','')">
+                        <img src="historia/FC Sur/Estación del Milagro 1877.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Estación de Milagro en 1877</h3>
+                        <p>Varios vagones a la vista en una de las vías de la estación de Milagro.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('historia/FC Sur/Puente de Milagro 1877.jpg','')">
+                        <img src="historia/FC Sur/Puente de Milagro 1877.jpg" alt="Descripción 3" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Puente de Milagro en 1877</h3>
+                        <p>Un tren detenido sobre el puente durante una exhibición fotográfica.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('historia/FC Sur/Estación del ferrocarril en Yaguachi. Yaguachi - Guayas - Ecuador 1877.jpg','')">
+                        <img src="historia/FC Sur/Estación del ferrocarril en Yaguachi. Yaguachi - Guayas - Ecuador 1877.jpg" alt="Descripción 3" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Estación de Yaguachi en 1877.</h3>
+                        <p>Tren en la estación de Yaguachi.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('historia/FC Sur/yaguachi 1877.jpg','')">
+                        <img src="historia/FC Sur/yaguachi 1877.jpg" alt="Descripción 3" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Yaguachi, 1877</h3>
+                        <p>Descripción breve de la infraestructura, tren o estación mostrada en la imagen.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('historia/FC Sur/Vía de los caminos del tren. - Guayas - Ecuador 1877.jpg','')">
+                        <img src="historia/FC Sur/Vía de los caminos del tren. - Guayas - Ecuador 1877.jpg" alt="Descripción 3" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Yaguachi, 1877</h3>
+                        <p>Descripción breve de la infraestructura, tren o estación mostrada en la imagen.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('historia/FC Sur/yaguachi1877.jpg','')">
+                        <img src="historia/FC Sur/yaguachi1877.jpg" alt="Descripción 3" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Yaguachi, 1877</h3>
+                        <p>Vista del río con las vías del tren.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('historia/FC Sur/Ferrocarril del Sur. Escrito con estilógrafo Campamento I 1890-1895.jpg','')">
+                        <img src="historia/FC Sur/Ferrocarril del Sur. Escrito con estilógrafo Campamento I 1890-1895.jpg" alt="Descripción 3" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Campamento I, 1890</h3>
+                        <p>Uno de los campamentos de la línea en 1890.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('historia/FC Sur/puentechimbo.jpeg','')">
+                        <img src="historia/FC Sur/puentechimbo.jpeg" alt="Descripción 3" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Puente de Chimbo, 1895</h3>
+                        <p>Puente metálico...</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('historia/FC Sur/Estación de Chimbo 1890-1895.jpg','')">
+                        <img src="historia/FC Sur/Estación de Chimbo 1890-1895.jpg" alt="Descripción 3" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Estación de Chimbo en 1895.</h3>
+                        <p>Una locomotora empujando un tren desde atrás en la estación de Chimbo en 1895.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                   <div class="gallery-image-container" onclick="openModal('historia/FC Sur/1885.jpg','')">
+                        <img src="historia/FC Sur/1885.jpg" alt="Descripción 3" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Estación de Yaguachi en 1885.</h3>
+                        <p>Locomotora Grant 4-4-0 numerada "3" en la estación de Yaguachi en 1885.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('historia/FC Sur/1885 (2).jpg','')">
+                        <img src="historia/FC Sur/1885 (2).jpg" alt="Descripción 3" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Puente de Milgaro, 1885.</h3>
+                        <p>Una vista general del puente de madera de Milgaro.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('historia/FC Sur/1890.jpg','')">
+                        <img src="historia/FC Sur/1890.jpg" alt="Descripción 3" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Puente de Yaguachi en 1890.</h3>
+                        <p>Una vista del puente metálico de Yaguachi en 1890.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('historia/FC Sur/Accidente en Naranjito 1900-1910.jpg','')">
+                        <img src="historia/FC Sur/Accidente en Naranjito 1900-1910.jpg" alt="Descripción 3" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Accidente en Naranjito, 1879</h3>
+                        <p>Descripción breve de la infraestructura, tren o estación mostrada en la imagen.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('historia/FC Sur/Accidente en Naranjito 1900-1910-.jpg','')">
+                        <img src="historia/FC Sur/Accidente en Naranjito 1900-1910-.jpg" alt="Descripción 3" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Accidente en Naranjito, 1879</h3>
+                        <p>Descripción breve de la infraestructura, tren o estación mostrada en la imagen.</p>
+                    </div>
+                </div>
+
+            
+        </section>
+
+        <footer>
+            <div><strong>registroferroviario.ec</strong> — Archivo Histórico Particular de Harukaze</div>
+            <div>Ecuador</div>
+        </footer>
+
+    </div>
+
+    
+
+<!-- Ventana Emergente (Modal) con Controles de Zoom -->
+<div id="mapModal" class="map-modal" onclick="closeMapModal(event)">
+    <div class="map-modal-content" onclick="event.stopPropagation()">
+        <div class="map-modal-header">
+            <h3>Mapa del Recorrido</h3>
+            <button class="close-map-btn" onclick="closeMapModal()">&times;</button>
+        </div>
+        <div class="map-viewport">
+            
+            <img id="zoomableMap" src="ffcc/historia/FC El Oro/ptobolivarpasajes/mapa.jpg" alt="Mapa de la línea férrea">
+        </div>
+        <div class="zoom-controls">
+            <button id="zoomInBtn" title="Acercar">+</button>
+            <button id="zoomOutBtn" title="Alejar">-</button>
+            <button id="zoomResetBtn" title="Restablecer">↺</button>
+        </div>
+    </div>
+</div>
+
+    <div id="imageModal" class="image-modal" onclick="closeModal()">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="imgModalSrc">
+        <div id="captionModal" class="modal-caption"></div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const label = document.getElementById('themeIcon');
+            if (label) {
+                label.textContent = theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        }
+
+        
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(savedTheme);
+
+        
+        const railLeft = document.getElementById('railLeft');
+        const railRight = document.getElementById('railRight');
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const position = scrolled * 0.4;
+            if (railLeft) railLeft.style.backgroundPositionY = `${position}px`;
+            if (railRight) railRight.style.backgroundPositionY = `${position}px`;
+        });
+
+        function openModal(imageSrc, captionText) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('imgModalSrc');
+            const caption = document.getElementById('captionModal');
+
+            modal.style.display = 'flex';
+            modalImg.src = imageSrc;
+            caption.textContent = captionText;
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeModal();
+            }
+        });
+        let panzoomInstance = null;
+
+function openMapModal() {
+    const modal = document.getElementById('mapModal');
+    const elem = document.getElementById('zoomableMap');
+    
+    modal.style.display = 'flex';
+
+    if (!panzoomInstance) {
+        panzoomInstance = Panzoom(elem, {
+            maxScale: 5,
+            minScale: 1,
+            contain: 'outside'
+        });
+
+        elem.parentElement.addEventListener('wheel', panzoomInstance.zoomWithWheel);
+
+        
+        document.getElementById('zoomInBtn').addEventListener('click', panzoomInstance.zoomIn);
+        document.getElementById('zoomOutBtn').addEventListener('click', panzoomInstance.zoomOut);
+        document.getElementById('zoomResetBtn').addEventListener('click', panzoomInstance.reset);
+    }
+}
+
+function closeMapModal(event) {
+    if (!event || event.target.id === 'mapModal' || event.classList?.contains('close-map-btn')) {
+        document.getElementById('mapModal').style.display = 'none';
+        if (panzoomInstance) {
+            panzoomInstance.reset();
+        }
+    }
+}
+document.addEventListener('DOMContentLoaded', () => {
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('mobile-open');
+        });
+
+        
+        const parentItems = document.querySelectorAll('.nav-links li');
+
+        parentItems.forEach(item => {
+            const link = item.querySelector(':scope > a');
+            const subMenu = item.querySelector(':scope > ul');
+
+            if (subMenu && link) {
+                link.addEventListener('click', (e) => {
+                   
+                    if (window.innerWidth <= 900) {
+                        
+                        if (!item.classList.contains('open')) {
+                            e.preventDefault(); 
+                            
+                            
+                            const siblings = item.parentElement.querySelectorAll(':scope > li.open');
+                            siblings.forEach(sibling => sibling.classList.remove('open'));
+
+                            item.classList.add('open');
+                        }
+                        
+                    }
+                });
+            }
+        });
+    });
+    </script>
+</body>
+</html>

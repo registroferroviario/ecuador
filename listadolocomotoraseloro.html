@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <link rel="icon" type="image/png" href="ico.jpg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de locomotoras - El Oro</title>
+    <meta name="description" content="Inventario y estado del materialrodante diésel: Series 2000, 2400, 160 y 150">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================
+           VARIABLES DE TEMA (PALETA AZUL)
+           ========================================== */
+         [data-theme="light"] {
+            --bg-body: #f4f4f5;
+            --bg-card: #ffffff;
+            --rail-color: rgba(0, 0, 0, 0.12);
+            --main-accent: #d97706; /* Amarillo/Ámbar de alto contraste para fondo claro */
+            --main-dark: #09090b;
+            --main-soft: #fef3c7;
+            --secondary-accent: #b45309;
+            --border-card: #e4e4e7;
+            --text-main: #09090b;
+            --text-muted: #71717a;
+            --shadow-card: rgba(0, 0, 0, 0.05);
+
+            /* Submenús Claro */
+            --dropdown-bg: #ffffff;
+            --dropdown-hover: #d97706;
+            --dropdown-text-hover: #ffffff;
+            --dropdown-border: #e4e4e7;
+        }
+
+        [data-theme="dark"] {
+    --bg-body: #121214;                    /* Pizarra oscuro mate (no negro puro) */
+    --bg-card: #1c1c21;                    /* Tarjetas en tono carbón suave */
+    --rail-color: rgba(245, 158, 11, 0.1); /* Rieles sutiles en ámbar mate */
+    --main-accent: #f59e0b;                /* Ámbar/dorado cálido (sin efecto neón) */
+    --main-dark: #f4f4f5;
+    --main-soft: rgba(245, 158, 11, 0.12); /* Fondos secundarios ámbar tenue */
+    --secondary-accent: #d97706;
+    --border-card: #2d2d35;                /* Bordes discretos de bajo contraste */
+    --text-main: #f4f4f5;                  /* Blanco cálido para evitar deslumbramiento */
+    --text-muted: #9ca3af;                /* Gris medio suave para descripciones */
+    --shadow-card: rgba(0, 0, 0, 0.4);
+
+    /* Submenús Oscuros */
+    --dropdown-bg: #1c1c21;
+    --dropdown-hover: #f59e0b;
+    --dropdown-text-hover: #121214;
+    --dropdown-border: #2d2d35;
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        .top-stripe {
+            height: 8px;
+            background: linear-gradient(90deg, #ffcc00 0%, #003399 50%, #cc0000 100%);
+            width: 100%;
+        }
+
+        .rail-pattern {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.75;
+            will-change: background-position;
+        }
+
+        .rail-pattern-left {
+            left: 15px;
+            background: repeating-linear-gradient(0deg, transparent, transparent 18px, var(--rail-color) 18px, var(--rail-color) 22px),
+            linear-gradient(90deg, transparent 22px, var(--rail-color) 22px, var(--rail-color) 26px, transparent 26px, transparent 54px, var(--rail-color) 54px, var(--rail-color) 58px, transparent 58px);
+        }
+
+        .rail-pattern-right {
+            right: 15px;
+            background: repeating-linear-gradient(0deg, transparent, transparent 18px, var(--rail-color) 18px, var(--rail-color) 22px),
+            linear-gradient(90deg, transparent 22px, var(--rail-color) 22px, var(--rail-color) 26px, transparent 26px, transparent 54px, var(--rail-color) 54px, var(--rail-color) 58px, transparent 58px);
+        }
+
+        /* NAVEGACIÓN Y DESPLEGABLES MULTINIVEL */
+        .top-navbar {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-card);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px var(--shadow-card);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            height: 60px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            list-style: none;
+            height: 100%;
+        }
+
+        .nav-links li {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover,
+        .nav-links li:hover > a,
+        .nav-links a.active {
+            background-color: var(--main-soft);
+            color: var(--main-accent);
+        }
+
+        .nav-links ul {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--dropdown-bg);
+            border: 1px solid var(--dropdown-border);
+            border-top: 2px solid var(--main-accent);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            list-style: none;
+            min-width: 260px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 6px 0;
+            z-index: 1001;
+        }
+
+        .nav-links li:hover > ul {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-links ul ul {
+            top: 0;
+            left: 100%;
+            margin-left: 2px;
+            border-top: 1px solid var(--dropdown-border);
+            border-left: 2px solid var(--main-accent);
+            border-radius: 0 8px 8px 8px;
+        }
+
+        .nav-links ul li {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+
+        .nav-links ul a {
+            width: 100%;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 0;
+            color: var(--text-main);
+            justify-content: space-between;
+        }
+
+        .nav-links ul a:hover,
+        .nav-links ul li:hover > a {
+            background-color: var(--dropdown-hover);
+            color: var(--dropdown-text-hover) !important;
+        }
+
+        .arrow-down::after { content: " ▾"; font-size: 0.75rem; color: var(--main-accent); }
+        .arrow-right::after { content: " ▸"; font-size: 0.75rem; color: var(--main-accent); }
+        .arrow-left::after { content: " ◂"; font-size: 0.75rem; color: var(--main-accent); }
+
+        .theme-toggle-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--main-accent);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--main-accent);
+            color: #ffffff;
+            border-color: var(--main-accent);
+        }
+
+        .wrapper {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-card);
+            border-top: 4px solid var(--main-accent);
+            box-shadow: 0 6px 25px var(--shadow-card);
+            margin-bottom: 40px;
+            padding: 35px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('historia/Loja/borsig.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .header-content {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-railway-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.2rem, 3.8vw, 3.2rem);
+            font-weight: 900;
+            color: var(--text-main);
+            line-height: 1.1;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 800px;
+        }
+
+        .ecuador-flag {
+            display: flex;
+            flex-direction: column;
+            width: 70px;
+            height: 46px;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .flag-yellow { background-color: #ffcc00; height: 50%; }
+        .flag-blue { background-color: #003399; height: 25%; }
+        .flag-red { background-color: #cc0000; height: 25%; }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--main-accent);
+            padding-left: 10px;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        h2 img {
+            width: 100%;
+            max-width: 180px;
+            height: auto;
+        }
+
+        /* TABLAS TÉCNICAS */
+        .tech-table-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-top: 4px solid var(--main-accent);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 22px var(--shadow-card);
+            margin-top: 20px;
+            margin-bottom: 3rem;
+        }
+
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.92rem;
+        }
+
+        .tech-table th {
+            background-color: var(--main-soft);
+            color: var(--main-accent);
+            padding: 16px 20px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.02rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--secondary-accent);
+        }
+
+        .tech-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border-card);
+            color: var(--text-main);
+        }
+
+        .tech-table td:first-child {
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 600;
+            color: var(--main-accent);
+        }
+
+        .tech-table tr:nth-child(even) td {
+            background-color: var(--bg-body);
+        }
+
+        .tech-table tr:hover td {
+            background-color: var(--main-soft);
+        }
+
+        .fila-clickeable {
+            cursor: pointer;
+        }
+
+        .btn-colores {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 0.55rem 1.1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin: 2rem 0 1rem;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.btn-colores:hover {
+    background: var(--bg-card-alt);
+}
+
+/* Cambia el aspecto del botón cuando está activo */
+body.colores-activos .btn-colores {
+    background: var(--accent-red);
+    border-color: var(--accent-red);
+    color: #ffffff;
+}
+
+/* Colores aplicados a los estados cuando la clase está activa en el body */
+body.colores-activos .tabla-tecnica td.estado-servicio {
+    background-color: #00b60fc5 !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 6px;
+}
+
+body.colores-activos .tabla-tecnica td.estado-apartada {
+    background-color: #ffd000c0 !important;
+    color: #1e293b !important;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 6px;
+}
+
+body.colores-activos .tabla-tecnica td.estado-chatarra {
+    background-color: #9e0000 !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 6px;
+}
+
+body.colores-activos .tabla-tecnica td.estado-expuesta {
+    background-color: #0b00ac !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 6px;
+}
+
+        footer {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-top: 2px solid var(--main-accent);
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        footer strong {
+            color: var(--main-accent);
+        }
+
+        @media (max-width: 1100px) {
+            .rail-pattern { display: none; }
+        }
+
+        @media (max-width: 850px) {
+            header {
+                flex-direction: column-reverse;
+                align-items: flex-start;
+            }
+            .tech-table-container { overflow-x: auto; }
+            .tech-table th, .tech-table td { padding: 10px 12px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-stripe"></div>
+
+    <div class="rail-pattern rail-pattern-left" id="railLeft"></div>
+    <div class="rail-pattern rail-pattern-right" id="railRight"></div>
+
+    <!-- NAVEGACIÓN COMPLETA Y RESTRUCTURADA -->
+    <nav class="top-navbar">
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                
+                <li>
+                    <a href="ffcc.html" class="arrow-down">FF.CC. Ecuador</a>
+                    <ul>
+                        <li>
+                            <a href="fcdelsur.html" class="arrow-right">F.C. del Sur </a>
+                            <ul>
+                                <li><a href="fcdelsur.html">Información y reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfcdelsur.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="g&q.html" class="arrow-right">G. & Q. (Guayaquil - Quito)</a>
+                            <ul>
+                                <li><a href="g&q.html">Información y reseña histórica</a></li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                    <ul>
+                                        <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                        <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                        <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                        <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                        <li><a href="extra_locomotoras.html">Otras locomotoras diésel utilitarias</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotorasvaporg&q.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul"</a></li>
+                                        <li><a href="consolidation.html">Baldwin 2-8-0 "Consolidation"</a></li>
+                                        <li>
+                                            <a href="listadolocomotoras.html" class="arrow-left">Históricas</a>
+                                            <ul>
+                                                <li><a href="historica1.html">Baldwin 2-6-0 "Mogul" 42" 12,8 metros</a></li>
+                                                <li></li><a href="historica2.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                                <li><a href="lima-shay.html">Lima 0-4+4+4-0 "Shay"</a></li>
+                                                <li><a href="historica3.html">Baldwin 0-6-6-0 "Mallet"</a></li>
+                                                <li><a href="historica3.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                                <li><a href="historica3.html">Baldwin 2-8-0 "Consolidation" 54" 16,4 metros</a></li>
+                                                <li><a href="historica3.html">Baldwin 2-8-0 "Consolidation" 44" 13,4 metros</a></li>
+                                                <li><a href="g&q_garratt_2-6-2+2-6-2.html">Beyer Peacock 2-6-2+2-6-2 "Garratt"</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="listadocoches.html" class="arrow-left">Listado de coches de viajeros</a>
+                                    <ul>
+                                        <li><a href="coches250.html">Coches serie 250</a></li>
+                                        <li>
+                                            <a href="unidadescompletas.html" class="arrow-right">Composiciones remolcadas</a>
+                                            <ul>
+                                                <li><a href="unidadescompletaspanoramico.html">Moderno Panorámico</a></li>
+                                                <li><a href="unidadescompletascrucero.html">Moderno Crucero 1 & 2</a></li>
+                                                <li><a href="unidadescompletasmodernocut3.html">Moderno CUT3</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="cochescut4.html">Coches CUT4</a></li>
+                                        <li><a href="colonialmadera13.html">Coloniales madera 13m</a></li>
+                                        <li><a href="colonialmadera14.html">Coloniales madera 14m</a></li>
+                                        <li><a href="cochesjaula.html">Coches Jaula</a></li>
+                                        <li><a href="coches3500.html">Coches UT3500</a></li>
+                                        <li><a href="feep_furgon_generador.html">Furgones generador</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="listadoestaciones_g&q.html">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcquitosanlorenzo.html" class="arrow-right">F.C. Quito a San Lorenzo</a>
+                            <ul>
+                                <li><a href="fcquitosanlorenzo.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasvaporqsl.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="qsl_borsig4-6-0.html">Borsig 4-6-0 42" 12,8 metros</a></li>
+                                        <li><a href="norte_baldwin2-8-0.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                    </ul>
+                                
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                        <ul>
+                                            <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                            <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                            <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                            <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                            <li><a href="extra_locomotoras.html">Otras locomotoras diésel utilitarias</a></li>
+                                        </ul>
+                                </li>
+                                <li><a href="mantenimiento.jpg">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcsibambecuenca.html" class="arrow-right">S. C. (Sibambe a Cuenca)</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                                <li><a href="mantenimiento.jpg">Estaciones</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcalacosta.html" class="arrow-right">F.C. Guayaquil a Salinas</a>
+                            <ul>
+                                <li><a href="fcalacosta.html">Reseña histórica</a></li>
+                                <li>
+                                    <a href="listadolocomotorasvaporcosta.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="costa_henschel2-6-0.html">Henschel 2-6-0 "Mogul"</a></li>
+                                        <li><a href="costa_henschel4-6-0.html">Henschel 4-6-0</a></li>
+                                    </ul>
+                                </li>
+                                    
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcambatocuraray.html" class="arrow-right">F.C. Ambato a Curaray</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcbahiachone.html" class="arrow-right">F.C. Bahía a Chone</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fccentral.html" class="arrow-right">F.C. Central del Ecuador</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_loja.html" class="arrow-right">F.C. Puerto Bolívar y Pasaje</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_piedras.html" class="arrow-right">F.C. Puerto Bolívar a Piedras</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="ffccaduana_guayaquil.html" class="arrow-right">F.C. Aduana de Guayaquil</a>
+                            <ul>
+                                <li><a href="ffccaduana_guayaquil.html">Reseña Histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="mantenimiento.jpg">FF.CC. no construidos</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="ffcc.html#indus" class="arrow-down">FF.CC. Industriales</a>
+                    <ul>
+                        <li><a href="">Ingenio Valdez</a></li>
+                        <li><a href="">Ingenio San Carlos</a></li>
+                        <li><a href="">Ingenio Inés María</a></li>
+                        <li><a href="">Ingenio Luz María y Matilde</a></li>
+                        <li><a href="">Ingenio Rocafuerte</a></li>
+                        <li><a href="">Ingenio Nugues</a></li>
+                        <li><a href="">Ingenio Adelina María</a></li>
+                        <li><a href="">United Fruit Company</a></li>
+                        <li><a href="">Ecuadorian Oilfields</a></li>
+                        <li><a href="">Galápagos?</a></li>
+                    </ul>
+                
+                </li>
+
+                <li><a href="metroquito.html">Metro de Quito</a></li>
+                <li><a href="tranviacuenca.html">Tranvía Cuenca</a></li>
+                <li>
+                    <a href="#" class="arrow-down">Tranvías Históricos</a>
+                    <ul>
+                        <li><a href="antiguo_tranviaquito.html">Tranvía de Quito</a></li>
+                        <li><a href="antiguo_tranviaguayaquil.html">Tranvía de Guayaquil</a></li>
+                    </ul>
+                </li>
+                
+                <li><a href="mantenimiento.jpg">F.E.E.P (2010-2020)</a></li>
+                <li><a href="actualidad_trenes.html">Trenes en 2026</a></li>
+            </ul>
+
+            <button class="theme-toggle-btn" onclick="toggleTheme()">
+                <span id="themeIcon">Modo Oscuro</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <header>
+            <div class="header-content">
+                <h1 class="main-railway-title">Listado de materialrodante</h1>
+                <p class="subtitle">Inventario general de parque de tracción de vapor y autocarriles de los FFCC en la provincia de El Oro.
+                    <br> Tenga en cuenta que se incluyen ambos ferrocarriles, tanto el de Pto. Bolívar a Piedras como el de Pto. Bolívar a Pasaje.
+                </p>
+            </div>
+            <div class="ecuador-flag" aria-label="Bandera de Ecuador">
+                <img src="bandera.webp" alt="">
+            </div>
+        </header>
+
+        <main>
+            <section id="serie-2000">
+                <h2 id="borsig">
+                    <a href="eloroborsig2-8-0.html" style="color: inherit; text-decoration: none;">Borsig 2-8-0 "Consolidation"</a>
+                    <img src="historia/Loja/borsig.png" alt="">
+                </h2>
+                <p>-</p>
+                <div class="tech-table-container">
+                    <table class="tech-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 9%;">Numeración</th>
+                                <th style="width: 9%;">Fabricante</th>
+                                <th style="width: 9%;">Nº Const.</th>
+                                <th style="width: 9%;">Año</th>
+                                <th style="width: 9%;">Base Taller</th>
+                                <th style="width: 13%;">Estado</th>
+                                <th style="width: 13%;">Año de baja</th>
+                                <th style="width: 7%;">Ancho de vía</th>
+                                <th style="width: 13%;">Color</th>
+                                <th style="width: 28%;">Datos adicionales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="fila-clickeable" onclick="window.location='';">
+                                <td>1</td>
+                                <td>Borsig</td>
+                                <td>Borsig</td>
+                                <td>1925</td>
+                                <td>-</td> 
+                                <td>Desconocido</td>
+                                <td>Desconocido</td>
+                                <td>750mm</td>
+                                <td>-</td>
+                                <td>Según fuente de 1949 fue renombrada #22.</td>
+                            </tr>
+                            <tr class="fila-clickeable" onclick="window.location='';">
+                                <td>2</td>
+                                <td>Borsig</td>
+                                <td>Borsig</td>
+                                <td>1925</td>
+                                <td>-</td> 
+                                <td>Desconocido</td>
+                                <td>Desconocido</td>
+                                <td>750mm</td>
+                                <td>-</td>
+                                <td>Según fuente de 1949 fue renombrada #23.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section>
+                <h2>Pittsburgh 0-4-4T</h2>
+                <p>ex 3 - También renumerada como 21.</p>
+                <div class="tech-table-container">
+                    <table class="tech-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 9%;">Numeración</th>
+                                <th style="width: 9%;">Fabricante</th>
+                                <th style="width: 9%;">Año</th>
+                                <th style="width: 9%;">Base Taller</th>
+                                <th style="width: 13%;">Estado</th>
+                                <th style="width: 13%;">Año de baja</th>
+                                <th style="width: 8%;">Ancho de vía</th>
+                                <th style="width: 13%;">Color</th>
+                                <th style="width: 28%;">Datos adicionales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="fila-clickeable" onclick="window.location='';">
+                                <td>1</td>
+                                <td>Pittsburgh</td>
+                                <td>1898</td>
+                                <td>-</td> 
+                                <td>-</td>
+                                <td>¿?</td>
+                                <td>914mm</td>
+                                <td>-</td>
+                                <td>-Nombrada Manabí <br> -Recalibrada a 1.067mm
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section>
+                <h2>0-4-4T</h2>
+                <p>¿?</p>
+                <div class="tech-table-container">
+                    <table class="tech-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 9%;">Numeración</th>
+                                <th style="width: 9%;">Fabricante</th>
+                                <th style="width: 9%;">Año</th>
+                                <th style="width: 9%;">Base Taller</th>
+                                <th style="width: 13%;">Estado</th>
+                                <th style="width: 13%;">Año de baja</th>
+                                <th style="width: 7%;">Ancho de vía</th>
+                                <th style="width: 13%;">Color</th>
+                                <th style="width: 28%;">Datos adicionales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="fila-clickeable" onclick="window.location='';">
+                                <td>12</td>
+                                <td>Baldwin</td>
+                                <td>1898</td>
+                                <td>-</td> 
+                                <td>-</td>
+                                <td>¿?</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>ex G&Q?
+                                    <p>Renombrada como #22.</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section>
+                <h2 id="shay">
+                    <a href="eloro0-6-0.html" style="color: inherit; text-decoration: none;">Kerr Stuart 0-6-0</a>
+                    <img src="historia/Loja/0-6-0.jpg" alt="">
+                </h2>
+                <p>Locomotoras ex FC Manta - Santa Ana 2-6-2T.</p>
+                <div class="tech-table-container">
+                    <table class="tech-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 9%;">Numeración</th>
+                                <th style="width: 9%;">Fabricante</th>
+                                <th style="width: 9%;">Año</th>
+                                <th style="width: 9%;">Base Taller</th>
+                                <th style="width: 13%;">Estado</th>
+                                <th style="width: 13%;">Año de baja</th>
+                                <th style="width: 7%;">Ancho de vía</th>
+                                <th style="width: 13%;">Color</th>
+                                <th style="width: 28%;">Datos adicionales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="fila-clickeable" onclick="window.location='';">
+                                <td>18</td>
+                                <td>Kerr Stuart</td>
+                                <td>1911</td>
+                                <td>-</td> 
+                                <td>Chatarreada</td>
+                                <td>¿?</td>
+                                <td>750mm</td>
+                                <td>-</td>
+                                <td>ex 2 F.C. Manta a Santa Ana.</td>
+                            </tr>
+                            <tr class="fila-clickeable" onclick="window.location='';">
+                                <td>19</td>
+                                <td>Kerr Stuart</td>
+                                <td>1911</td>
+                                <td>-</td> 
+                                <td>Chatarreada</td>
+                                <td>¿?</td>
+                                <td>750mm</td>
+                                <td>-</td>
+                                <td>ex 3 F.C. Manta a Santa Ana.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section>
+                <h2>
+                    <a href="eloroviw0-4-0.html" style="color: inherit; text-decoration: none;">Vulcan Iron Works 0-4-0</a>
+                    <img src="" alt="-">
+                </h2>
+                <p>-</p>
+                <div class="tech-table-container">
+                    <table class="tech-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 9%;">Numeración</th>
+                                <th style="width: 9%;">Fabricante</th>
+                                <th style="width: 9%;">Año</th>
+                                <th style="width: 9%;">Base Taller</th>
+                                <th style="width: 13%;">Estado</th>
+                                <th style="width: 13%;">Año de baja</th>
+                                <th style="width: 7%;">Ancho de vía</th>
+                                <th style="width: 13%;">Color</th>
+                                <th style="width: 28%;">Datos adicionales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="fila-clickeable" onclick="window.location='';">
+                                <td>20</td>
+                                <td>VIW</td>
+                                <td>1919</td>
+                                <td>-</td> 
+                                <td>-</td>
+                                <td>¿?</td>
+                                <td>750mm</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="alco">
+                <h2>
+                    <a href="" style="color: inherit; text-decoration: none;">American Locomotive Company 0-4-0</a>
+                    <img src="" alt="-">
+                </h2>
+                <p>-</p>
+                <div class="tech-table-container">
+                    <table class="tech-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 9%;">Numeración</th>
+                                <th style="width: 9%;">Fabricante</th>
+                                <th style="width: 9%;">Año</th>
+                                <th style="width: 9%;">Base Taller</th>
+                                <th style="width: 13%;">Estado</th>
+                                <th style="width: 13%;">Año de baja</th>
+                                <th style="width: 9%;">Ancho de vía</th>
+                                <th style="width: 11%;">Color</th>
+                                <th style="width: 28%;">Datos adicionales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="fila-clickeable" onclick="window.location='';">
+                                <td>24</td>
+                                <td>ALCo</td>
+                                <td>1903</td>
+                                <td>-</td> 
+                                <td>Chatarreada</td>
+                                <td>¿?</td>
+                                <td>1.067 mm</td>
+                                <td>-</td>
+                                <td></td>
+                            </tr>
+                            <tr class="fila-clickeable" onclick="window.location='';">
+                                <td>26</td>
+                                <td>ALCo</td>
+                                <td>1903</td>
+                                <td>-</td> 
+                                <td>Chatarreada</td>
+                                <td>¿?</td>
+                                <td>1.067 mm</td>
+                                <td>-</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section>
+                <h2>
+                    <a href="" style="color: inherit; text-decoration: none;">Borsig 2-6-0</a>
+                    <img src="" alt="-">
+                </h2>
+                <p>-</p>
+                <div class="tech-table-container">
+                    <table class="tech-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 9%;">Numeración</th>
+                                <th style="width: 9%;">Fabricante</th>
+                                <th style="width: 9%;">Año</th>
+                                <th style="width: 9%;">Base Taller</th>
+                                <th style="width: 13%;">Estado</th>
+                                <th style="width: 13%;">Año de baja</th>
+                                <th style="width: 7%;">Ancho de vía</th>
+                                <th style="width: 13%;">Color</th>
+                                <th style="width: 28%;">Datos adicionales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="fila-clickeable" onclick="window.location='';">
+                                <td>25</td>
+                                <td>Borsig</td>
+                                <td>1928</td>
+                                <td>-</td> 
+                                <td>¿?</td>
+                                <td>¿?</td>
+                                <td>1.067mm</td>
+                                <td>¿?</td>
+                                <td>¿?</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section>
+                <h2>2-6-0</h2>
+                <p>-</p>
+                <div class="tech-table-container">
+                    <table class="tech-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 9%;">Numeración</th>
+                                <th style="width: 9%;">Fabricante</th>
+                                <th style="width: 9%;">Año</th>
+                                <th style="width: 9%;">Base Taller</th>
+                                <th style="width: 13%;">Estado</th>
+                                <th style="width: 13%;">Año de baja</th>
+                                <th style="width: 7%;">Ancho de vía</th>
+                                <th style="width: 13%;">Color</th>
+                                <th style="width: 28%;">Datos adicionales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="fila-clickeable" onclick="window.location='';">
+                                <td>25</td>
+                                <td>Borsig</td>
+                                <td>1928</td>
+                                <td>¿?</td> 
+                                <td>¿?</td>
+                                <td>¿?</td>
+                                <td>¿?</td>
+                                <td>¿?</td>
+                                <td>¿?</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section>
+                <h2>0-4-4T</h2>
+                <p>ex #2 y después renombrada como #4.</p>
+                <div class="tech-table-container">
+                    <table class="tech-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 9%;">Numeración</th>
+                                <th style="width: 9%;">Fabricante</th>
+                                <th style="width: 9%;">Año</th>
+                                <th style="width: 9%;">Base Taller</th>
+                                <th style="width: 13%;">Estado</th>
+                                <th style="width: 13%;">Año de baja</th>
+                                <th style="width: 7%;">Ancho de vía</th>
+                                <th style="width: 13%;">Color</th>
+                                <th style="width: 28%;">Datos adicionales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="fila-clickeable" onclick="window.location='';">
+                                <td>26</td>
+                                <td>ALCo</td>
+                                <td>1903</td>
+                                <td>¿?</td> 
+                                <td>¿?</td>
+                                <td>¿?</td>
+                                <td>¿?</td>
+                                <td>¿?</td>
+                                <td>Anterior #2, renombrada también como #4.
+                                    <p>Después de 1940 modificada a 0-4-4.</p></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section>
+                <h2>0-4-0</h2>
+                <p>Locomotora de origen alemán pero constructor desconocido.</p>
+                <div class="tech-table-container">
+                    <table class="tech-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 9%;">Numeración</th>
+                                <th style="width: 9%;">Fabricante</th>
+                                <th style="width: 9%;">Año</th>
+                                <th style="width: 9%;">Base Taller</th>
+                                <th style="width: 13%;">Estado</th>
+                                <th style="width: 13%;">Año de baja</th>
+                                <th style="width: 7%;">Ancho de vía</th>
+                                <th style="width: 13%;">Color</th>
+                                <th style="width: 28%;">Datos adicionales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="fila-clickeable" onclick="window.location='';">
+                                <td>42</td>
+                                <td>¿?</td>
+                                <td>¿?</td>
+                                <td>¿?</td> 
+                                <td>¿?</td>
+                                <td>¿?</td>
+                                <td>¿?</td>
+                                <td>¿?</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section>
+                <h2>
+                    <a href="" style="color: inherit; text-decoration: none;">Autocarriles variados</a>
+                    <img src="" alt="-">
+                </h2>
+                <p>Listado de "autocarriles" utilizados en los dos ferrocarriles en la provincia de El Oro. Entiéndase marca en lugar de fabricante. <br> 
+                    Los autocarriles son una improvisación de vehículos de carretera para rodar sobre rieles mediante la modificación para equipar ejes de ferrocarril.
+                    La primera unidad de este listado sí era un coche de viajeros.
+                    <br>a = asientos, p = parados
+                </p>
+                <div class="tech-table-container">
+                    <table class="tech-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 9%;">Numeración</th>
+                                <th style="width: 9%;">Fabricante</th>
+                                <th style="width: 9%;">Año</th>
+                                <th style="width: 9%;">Capacidad</th>
+                                <th style="width: 13%;">Estado</th>
+                                <th style="width: 13%;">Año de baja</th>
+                                <th style="width: 7%;">Ancho de vía</th>
+                                <th style="width: 13%;">Color</th>
+                                <th style="width: 28%;">Datos adicionales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>-</td>
+                                <td>¿?</td>
+                                <td>¿?</td>
+                                <td>30a, 10p</td> 
+                                <td>-</td>
+                                <td>¿?</td>
+                                <td>750mm</td>
+                                <td>-</td>
+                                <td>-Ex F.C. Manta-Santa Ana. <br> -Único coche de viajeros en este FFCC.</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Buda</td>
+                                <td>1938</td>
+                                <td>6a, 0p</td> 
+                                <td>-</td>
+                                <td>¿?</td>
+                                <td>750mm</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Ford</td>
+                                <td>1938</td>
+                                <td>30a, 10p</td> 
+                                <td>-</td>
+                                <td>¿?</td>
+                                <td>750mm</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>Chevrolet</td>
+                                <td>1942</td>
+                                <td>28a, 10p</td> 
+                                <td>-</td>
+                                <td>¿?</td>
+                                <td>750mm</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>Ford</td>
+                                <td>1942</td>
+                                <td>24a, 8p</td> 
+                                <td>-</td>
+                                <td>¿?</td>
+                                <td>750mm</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>15</td>
+                                <td>¿?</td>
+                                <td>¿?</td>
+                                <td>-</td> 
+                                <td>-</td>
+                                <td>¿?</td>
+                                <td>750mm</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>16</td>
+                                <td>Ford</td>
+                                <td>1940</td>
+                                <td>28a, 10p</td> 
+                                <td>-</td>
+                                <td>¿?</td>
+                                <td>750mm</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>17</td>
+                                <td>Ford</td>
+                                <td>1942</td>
+                                <td>40a, 12p</td> 
+                                <td>-</td>
+                                <td>¿?</td>
+                                <td>750mm</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div><strong>RegistroFerroviario.ec</strong> — Archivo Histórico Particular de Harukaze</div>
+            <div>Inventario Técnico General Particular de Harukaze • materialrodante Diésel • 2026</div>
+        </footer>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const label = document.getElementById('themeIcon');
+            if (label) {
+                label.textContent = theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(savedTheme);
+
+        const railLeft = document.getElementById('railLeft');
+        const railRight = document.getElementById('railRight');
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const position = scrolled * 0.4;
+            if (railLeft) railLeft.style.backgroundPositionY = `${position}px`;
+            if (railRight) railRight.style.backgroundPositionY = `${position}px`;
+        });
+
+        
+    </script>
+</body>
+</html>

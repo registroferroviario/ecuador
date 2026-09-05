@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <link rel="icon" type="image/png" href="ico.jpg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esquema de Estaciones y Línea - RegistroFerroviario</title>
+    <meta name="description" content="Inventario, altura y progreso kilométrico de estaciones a lo largo de la red ferroviaria">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- VARIABLES DE COLOR Y ESTILOS DE TEMA --- */
+        [data-theme="light"] {
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-card-alt: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-red: #e11d48;
+            --accent-red-hover: #be123c;
+            
+            --border-color: #64748b; 
+            --border-table-line: #cbd5e1;
+            --border-width: 2px;
+            
+            --table-header-bg: #991b1b;
+            --shadow: 0 4px 15px rgba(15, 23, 42, 0.12);
+
+            --dropdown-bg: #ffffff;
+            --dropdown-hover: #e11d48;
+            --dropdown-text-hover: #ffffff;
+            --dropdown-border: #64748b;
+
+            --via-color: #cbd5e1;
+            --via-rail: #94a3b8;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-alt: #0f172a;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent-red: #ef4444;
+            --accent-red-hover: #dc2626;
+            
+            --border-color: #334155;
+            --border-table-line: #334155;
+            --border-width: 1px;
+
+            --table-header-bg: #a31313ef;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+
+            --dropdown-bg: #1f2937;
+            --dropdown-hover: #cf0000a9;
+            --dropdown-text-hover: #ffffff;
+            --dropdown-border: #334155;
+
+            --via-color: #1e293b;
+            --via-rail: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .top-stripe {
+            height: 8px;
+            background: linear-gradient(90deg, #ffcc00 0%, #003399 50%, #cc0000 100%);
+            width: 100%;
+        }
+
+        .header2 {
+            background-color: #921818 !important;
+            color: #ffffff !important;
+            padding: 3.5rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header2::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('ffcc/materialrodante/locomotoras/diesel/alsthom2400/2407\ sibambe.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.15;
+            z-index: 1;
+        }
+        .header2 .container {
+            position: relative;
+            z-index: 2;
+        }
+        .header2 h1 {
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .header2 .subtitle {
+            margin: 0.5rem 0 0 0;
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        /* --- NAVEGACIÓN COMPLETA (ESTILOS COCHESCUT4.HTML) --- */
+        .top-navbar {
+            background-color: var(--bg-card);
+            border-bottom: calc(var(--border-width) + 1px) solid var(--accent-red);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px var(--shadow);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            height: 55px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            list-style: none;
+            height: 100%;
+        }
+
+        .nav-links li {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover,
+        .nav-links li:hover > a,
+        .nav-links a.active {
+            background-color: var(--bg-card-alt);
+            color: var(--accent-red);
+        }
+
+        .nav-links ul {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--dropdown-bg);
+            border: var(--border-width) solid var(--dropdown-border);
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            list-style: none;
+            min-width: 260px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 6px 0;
+            z-index: 1001;
+        }
+
+        .nav-links li:hover > ul {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-links ul ul {
+            top: 0;
+            left: 100%;
+            margin-left: 2px;
+        }
+
+        .nav-links ul li {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+
+        .nav-links ul a {
+            width: 100%;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 0;
+            color: var(--text-primary);
+            justify-content: space-between;
+        }
+
+        .nav-links ul a:hover,
+        .nav-links ul li:hover > a {
+            background-color: var(--dropdown-hover);
+            color: var(--dropdown-text-hover) !important;
+        }
+
+        .arrow-down::after { content: " ▾"; font-size: 0.75rem; }
+        .arrow-right::after { content: " ▸"; font-size: 0.75rem; }
+        .arrow-left::after { content: " ◂"; font-size: 0.75rem; }
+
+        .theme-toggle-btn {
+            background: var(--bg-card);
+            border: var(--border-width) solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--accent-red);
+            color: #ffffff;
+        }
+
+        /* --- CONTENEDORES Y VÍAS DECORATIVAS --- */
+        .wrapper-main {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .via-decorativa {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 24px;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.7;
+            background-image: 
+                linear-gradient(90deg, var(--via-rail) 0, var(--via-rail) 3px, transparent 3px, transparent 21px, var(--via-rail) 21px, var(--via-rail) 24px),
+                repeating-linear-gradient(0deg, transparent, transparent 12px, var(--via-color) 12px, var(--via-color) 16px);
+        }
+
+        .via-izquierda { left: 10px; }
+        .via-derecha { right: 10px; }
+
+        .container, .container2 {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 2;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            border-left: none;
+            border-bottom: 2px solid var(--accent-red);
+            padding-left: 10px;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tabla-tecnica {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 3rem;
+        }
+        .tabla-tecnica tr:nth-child(even) {
+            background-color: var(--bg-card);
+        }
+        .tabla-tecnica tr:nth-child(odd) {
+            background-color: var(--bg-card-alt);
+        }
+        .tabla-tecnica th, .tabla-tecnica td {
+            padding: 0.85rem 0.6rem;
+            border-bottom: 1px solid var(--border-table-line);
+            text-align: center;
+            vertical-align: middle;
+        }
+        .tabla-tecnica th {
+            background-color: var(--table-header-bg) !important;
+            color: #ffffff !important;
+            padding: 1.2rem 0.6rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .tabla-tecnica td {
+            color: var(--text-primary) !important;
+            font-size: 0.9rem;
+        }
+        .tabla-tecnica td:first-child {
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 600;
+            color: #60a5fa !important;
+        }
+        .fila-clickeable {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fila-clickeable:hover {
+            background-color: rgba(185, 28, 28, 0.25) !important;
+        }
+
+        .img-estacion {
+            width: 70px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            display: block;
+            margin: 0 auto;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            background-color: var(--bg-card-alt);
+        }
+        .img-estacion:hover {
+            transform: scale(1.15);
+            border-color: #ef4444;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .badge-estado {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .estado-servicio { background-color: rgba(22, 163, 74, 0.2); color: #4ade80; border: 1px solid #16a34a; }
+        .estado-restaurada { background-color: rgba(37, 99, 235, 0.2); color: #60a5fa; border: 1px solid #2563eb; }
+        .estado-sin-servicio { background-color: rgba(220, 38, 38, 0.2); color: #f87171; border: 1px solid #dc2626; }
+        .estado-desaaprecida { background-color: rgba(24, 23, 23, 0.678); color: #ebdfdf; border: 1px solid #000000; }
+
+        .btn-mapa-flotante {
+            position: fixed;
+            top: 45%;
+            left: 0;
+            z-index: 999;
+            background: linear-gradient(135deg, #b91c1c, #921818);
+            color: #ffffff;
+            border: 1px solid #ef4444;
+            border-left: none;
+            padding: 12px 14px 12px 10px;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-mapa-flotante:hover {
+            background: #ef4444;
+            padding-left: 14px; 
+        }
+        .btn-mapa-flotante.abierto {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .flecha-mapa {
+            font-size: 0.75rem;
+            transition: transform 0.3s ease;
+        }
+
+        .mapa-header {
+            background-color: #0f172a;
+            padding: 1rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+        }
+        .mapa-header h3 {
+            margin: 0;
+            color: #f1f5f9;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .mapa-close {
+            background: #ef4444;
+            color: #ffffff;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+        .mapa-close:hover {
+            background: #b91c1c;
+        }
+
+        .mapa-sidebar {
+            position: fixed;
+            top: 0;
+            left: -100vw; 
+            width: 100vw; 
+            height: 100vh;
+            background-color: #1e293b;
+            z-index: 1000;
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            border-right: none;
+        }
+        .mapa-sidebar.activo {
+            left: 0;
+        }
+
+        .mapa-contenido {
+            flex: 1;
+            width: 100%;
+            height: calc(100vh - 60px);
+            background-color: #0f172a;
+            overflow: auto; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            box-sizing: border-box;
+        }
+
+        .mapa-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(2px);
+            z-index: 980;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .mapa-overlay.activo {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1010;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: rgba(30, 41, 59, 0.85);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            backdrop-filter: blur(4px);
+        }
+        .zoom-controls button {
+            width: 38px;
+            height: 38px;
+            background: #0f172a;
+            color: #ffffff;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .zoom-controls button:hover {
+            background: #ef4444;
+            border-color: #ef4444;
+        }
+
+        .mapa-imagen {
+            max-width: 90%;
+            max-height: 90%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            transition: transform 0.1s ease-out;
+            transform-origin: center center;
+            user-select: none;
+            -webkit-user-drag: none;
+            border-radius: 6px;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        footer {
+            background-color: #921818 !important;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1024px) {
+            .via-decorativa { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .header2 { padding: 2rem 0; }
+            .header2 h1 { font-size: 1.8rem; }
+            .header2 .subtitle { font-size: 1rem; }
+            h2 { font-size: 1.4rem; }
+            .tabla-tecnica { display: block; overflow-x: auto; white-space: nowrap; }
+            .tabla-tecnica th, .tabla-tecnica td { padding: 0.65rem 0.5rem; font-size: 0.82rem; }
+            .img-estacion { width: 55px; height: 38px; }
+            .mapa-sidebar { width: 85vw; left: -85vw; }
+            .btn-mapa-flotante.abierto { left: 85vw; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-stripe"></div>
+
+    <header class="header2">
+        <div class="container">
+            <h1>Lista de estaciones, ruta G. & Q.</h1>
+            <p class="subtitle">Infraestructura, altimetría y punto kilométrico de la red</p>
+        </div>
+    </header>
+
+    <!-- NAVEGACIÓN COMPLETA MULTINIVEL (TOMADA DE COCHESCUT4.HTML) -->
+    <nav class="top-navbar">
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                
+                <li>
+                    <a href="ffcc.html" class="arrow-down">FF.CC. Ecuador</a>
+                    <ul>
+                        <li>
+                            <a href="fcdelsur.html" class="arrow-right">F.C. del Sur </a>
+                            <ul>
+                                <li><a href="fcdelsur.html">Información y reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfcdelsur.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="g&q.html" class="arrow-right">G. & Q. (Guayaquil - Quito)</a>
+                            <ul>
+                                <li><a href="g&q.html">Información y reseña histórica</a></li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                    <ul>
+                                        <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                        <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                        <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                        <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                        <li><a href="extra_locomotoras.html">Otras locomotoras diésel utilitarias</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotorasvaporg&q.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul"</a></li>
+                                        <li><a href="consolidation.html">Baldwin 2-8-0 "Consolidation"</a></li>
+                                        <li>
+                                            <a href="listadolocomotoras.html" class="arrow-left">Históricas</a>
+                                            <ul>
+                                                <li><a href="historica1.html">Baldwin 2-6-0 "Mogul" 42" 12,8 metros</a></li>
+                                                <li></li><a href="historica2.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                                <li><a href="lima-shay.html">Lima 0-4+4+4-0 "Shay"</a></li>
+                                                <li><a href="historica3.html">Baldwin 0-6-6-0 "Mallet"</a></li>
+                                                <li><a href="historica3.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                                <li><a href="historica3.html">Baldwin 2-8-0 "Consolidation" 54" 16,4 metros</a></li>
+                                                <li><a href="historica3.html">Baldwin 2-8-0 "Consolidation" 44" 13,4 metros</a></li>
+                                                <li><a href="g&q_garratt_2-6-2+2-6-2.html">Beyer Peacock 2-6-2+2-6-2 "Garratt"</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="listadocoches.html" class="arrow-left">Listado de coches de viajeros</a>
+                                    <ul>
+                                        <li><a href="coches250.html">Coches serie 250</a></li>
+                                        <li>
+                                            <a href="unidadescompletas.html" class="arrow-right">Composiciones remolcadas</a>
+                                            <ul>
+                                                <li><a href="unidadescompletaspanoramico.html">Moderno Panorámico</a></li>
+                                                <li><a href="unidadescompletascrucero.html">Moderno Crucero 1 & 2</a></li>
+                                                <li><a href="unidadescompletasmodernocut3.html">Moderno CUT3</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="cochescut4.html">Coches CUT4</a></li>
+                                        <li><a href="colonialmadera13.html">Coloniales madera 13m</a></li>
+                                        <li><a href="colonialmadera14.html">Coloniales madera 14m</a></li>
+                                        <li><a href="cochesjaula.html">Coches Jaula</a></li>
+                                        <li><a href="coches3500.html">Coches UT3500</a></li>
+                                        <li><a href="feep_furgon_generador.html">Furgones generador</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="listadoestaciones_g&q.html">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcquitosanlorenzo.html" class="arrow-right">F.C. Quito a San Lorenzo</a>
+                            <ul>
+                                <li><a href="fcquitosanlorenzo.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasvaporqsl.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="qsl_borsig4-6-0.html">Borsig 4-6-0 42" 12,8 metros</a></li>
+                                        <li><a href="norte_baldwin2-8-0.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                    </ul>
+                                
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                        <ul>
+                                            <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                            <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                            <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                            <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                            <li><a href="extra_locomotoras.html">Otras locomotoras diésel utilitarias</a></li>
+                                        </ul>
+                                </li>
+                                <li><a href="mantenimiento.jpg">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcsibambecuenca.html" class="arrow-right">S. C. (Sibambe a Cuenca)</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                                <li><a href="mantenimiento.jpg">Estaciones</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcalacosta.html" class="arrow-right">F.C. Guayaquil a Salinas</a>
+                            <ul>
+                                <li><a href="fcalacosta.html">Reseña histórica</a></li>
+                                <li>
+                                    <a href="listadolocomotorasvaporcosta.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="costa_henschel2-6-0.html">Henschel 2-6-0 "Mogul"</a></li>
+                                        <li><a href="costa_henschel4-6-0.html">Henschel 4-6-0</a></li>
+                                    </ul>
+                                </li>
+                                    
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcambatocuraray.html" class="arrow-right">F.C. Ambato a Curaray</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcbahiachone.html" class="arrow-right">F.C. Bahía a Chone</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fccentral.html" class="arrow-right">F.C. Central del Ecuador</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_loja.html" class="arrow-right">F.C. Puerto Bolívar y Pasaje</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_piedras.html" class="arrow-right">F.C. Puerto Bolívar a Piedras</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="ffccaduana_guayaquil.html" class="arrow-right">F.C. Aduana de Guayaquil</a>
+                            <ul>
+                                <li><a href="ffccaduana_guayaquil.html">Reseña Histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="mantenimiento.jpg">FF.CC. no construidos</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="ffcc.html#indus" class="arrow-down">FF.CC. Industriales</a>
+                    <ul>
+                        <li><a href="">Ingenio Valdez</a></li>
+                        <li><a href="">Ingenio San Carlos</a></li>
+                        <li><a href="">Ingenio Inés María</a></li>
+                        <li><a href="">Ingenio Luz María y Matilde</a></li>
+                        <li><a href="">Ingenio Rocafuerte</a></li>
+                        <li><a href="">Ingenio Nugues</a></li>
+                        <li><a href="">Ingenio Adelina María</a></li>
+                        <li><a href="">United Fruit Company</a></li>
+                        <li><a href="">Ecuadorian Oilfields</a></li>
+                        <li><a href="">Galápagos?</a></li>
+                    </ul>
+                
+                </li>
+
+                <li><a href="metroquito.html">Metro de Quito</a></li>
+                <li><a href="tranviacuenca.html">Tranvía Cuenca</a></li>
+                <li>
+                    <a href="#" class="arrow-down">Tranvías Históricos</a>
+                    <ul>
+                        <li><a href="antiguo_tranviaquito.html">Tranvía de Quito</a></li>
+                        <li><a href="antiguo_tranviaguayaquil.html">Tranvía de Guayaquil</a></li>
+                    </ul>
+                </li>
+                
+                <li><a href="mantenimiento.jpg">F.E.E.P (2010-2020)</a></li>
+                <li><a href="actualidad_trenes.html">Trenes en 2026</a></li>
+            </ul>
+
+            <button class="theme-toggle-btn" onclick="toggleTheme()">
+                <span id="themeIcon">Modo Oscuro</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- WRAPPER CON LAS VÍAS DECORATIVAS LATERALES -->
+    <div class="wrapper-main">
+        <div class="via-decorativa via-izquierda"></div>
+        <div class="via-decorativa via-derecha"></div>
+
+        <main class="container">
+
+            <!-- TRAMO 1: DURÁN - RIOBAMBA -->
+            <section id="tramo-sur">
+                <h2>Tramo Sur: Durán (PK 0,0) — Riobamba (PK 230,5)</h2>
+                <p>Listado de estaciones de la filial litoral. <br> -Se ha tomado como referencia el informe "Perfil y cartacterísticas línea férrea Guayaquil-Quito" de la FEEP de 2014.
+                    <br> -Es posible que estaciones anteriores u originales de la línea no aparezcan.
+                    <br> -Algunas estaciones han desaparecido pero los desvíos o triángulos ferroviarios pueden ser utilizados tras renovación, en ese caso aprecerán también marcados.
+                </p>
+                <table class="tabla-tecnica">
+                    <thead>
+                        <tr>
+                            <th style="width: 7%;">PK</th>
+                            <th style="width: 17%;">Estación / Dependencia</th>
+                            <th style="width: 8%;">Foto 1</th>
+                            <th style="width: 8%;">Foto 2</th>
+                            <th style="width: 10%;">Altitud</th>
+                            <th style="width: 16%;">Tipo de Instalación</th>
+                            <th style="width: 11%;">Estado</th>
+                            <th style="width: 23%;">Equipamiento y Servicios</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 0,0</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Durán (Eloy Alfaro)</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="Durán Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="Durán Vista 2" class="img-estacion"></td>
+                            <td>4 m.s.n.m.</td>
+                            <td>Estación Terminal / Talleres</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">Talleres generales, depósito de locomotoras, placa giratoria.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 11,7</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Casiguaña</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>4 m.s.n.m.</td>
+                            <td>-</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 21,2</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Yaguachi</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>5 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">Triángulo ferroviario.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 33,6</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Valdez</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>9 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 34,4</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Milagro</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>12 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 43,8</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Venecia</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>19 m.s.n.m.</td>
+                            <td>-</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 50,5</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Naranjito</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>31 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 59,9</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">San Antonio</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>53 m.s.n.m.</td>
+                            <td>-</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 69,1</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Barraganetal</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>93 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 72,1</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Paquita</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>116 m.s.n.m.</td>
+                            <td>-</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 76,3</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">San Rafael</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>161 m.s.n.m.</td>
+                            <td>-</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 81,6</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Lolita</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>213 m.s.n.m.</td>
+                            <td>-</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 87,4</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Bucay</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>294 m.s.n.m.</td>
+                            <td>Estación y talleres</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">Talleres. <br>Triángulo ferroviario.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 93,7</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Ventura</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>397 m.s.n.m.</td>
+                            <td>Apeadero</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 99,6</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Naranjapada</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>555 m.s.n.m.</td>
+                            <td>-</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 107</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Olimpo</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>826 m.s.n.m.</td>
+                            <td>-</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 116,1</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Huigra</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>1.255 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">Triángulo ferroviario.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 121,6</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Chanchán</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>1.482 m.s.n.m.</td>
+                            <td>-</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 126,8</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Boliche</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>1.692 m.s.n.m.</td>
+                            <td>-</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 130,7</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Sibambe</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="historia/G&Q/esquemas/Sibambe.jpg" alt="-" class="img-estacion"></td>
+                            <td>1.836 m.s.n.m.</td>
+                            <td>Estación / Estación terminal</td>
+                            <td><span class="badge-estado estado-servicio">En servicio</span></td>
+                            <td style="text-align: left;">Triángulo ferroviario. <br> PK <strong>0,0</strong> FFCC Sibambe a Cuenca.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 138,1</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Caída</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>2.142 m.s.n.m.</td>
+                            <td>-</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 142,5</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Alausí</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="historia/G&Q/esquemas/Alausí.jpg" alt="-" class="img-estacion"></td>
+                            <td>2.347 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-servicio">En servicio</span></td>
+                            <td style="text-align: left;">Triángulo ferroviario.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 148</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Silvers</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>2.634 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 152,7</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Tixán</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>2.786 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 154,5</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Carolina</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>2.858 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 158,1</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Castillo</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>2.993 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 166</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Palmira</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>3.239 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 171,8</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Velez</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>3.172 m.s.n.m.</td>
+                            <td>-</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 181,5</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Guamote</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>3.057 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">Triángulo ferroviario.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 187,4</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Columbe</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>3.126 m.s.n.m.</td>
+                            <td>-</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 194,1</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Mancheno</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>3.202 m.s.n.m.</td>
+                            <td>-</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 205,6</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Colta</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>3.296 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 211,8</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Cajabamba</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>3.212 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 217,7</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">San Juan</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>3.016 m.s.n.m.</td>
+                            <td>-</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-duran.html';">
+                            <td>PK 223,4</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Sillaguan</td>
+                            <td><img src="img/estaciones/duran1.jpg" alt="-" class="img-estacion"></td>
+                            <td><img src="img/estaciones/duran2.jpg" alt="-" class="img-estacion"></td>
+                            <td>2.930 m.s.n.m.</td>
+                            <td>-</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 230,5</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Riobamba</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>2.764 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">Talleres generales, depósito de locomotoras y óvalo giratorio.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 239,3</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Uchanchi</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>2.995 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 244</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Luisa</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>3.171 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 252,4</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Siberia</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>3.351 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 261,8</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Urbina</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>3.609 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">Triángulo ferroviario</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 271,6</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Mocha Pata</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>3.349 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 275,6</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Mocha</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>3.187 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 287,3</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Cevallos</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>2.882 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 291,6</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Montalvo</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>2.842 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 304,9</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Ambato</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>2.570 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 315,2</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Puerto Arturo</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>2.668 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 325,7</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Cunchibamba</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>2.668 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 335,6</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Salcedo</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>2.636 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 348,9</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Latacunga</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>2.760 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">Triángulo ferroviario.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 360,6</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Guaytacama</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>2.882 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 369</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Lasso</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>2.995 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 374,3</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Chasqui</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>3.084 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">Triángulo ferroviario.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 380,4</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Daule</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>3.277 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 388,1</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">El Boliche</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>3.547 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">Ex Cotopaxi. <br> Triángulo ferroviario.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 399,1</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Chisinche</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>3.259 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-desaaprecida">Ya no existe</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 406,9</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Machachi</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>3.089 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 413,2</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Alóag</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>2.949 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 423</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Tambillo</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>2.779 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">Triángulo ferroviario.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 432,9</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Santa Rosa</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>3.013 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='estacion-ambato.html';">
+                            <td>PK 446,8</td>
+                            <td style="text-align: left; font-weight: 600; color: #f1f5f9 !important;">Quito-Chimbacalle</td>
+                            <td><img src="img/estaciones/ambato1.jpg" alt="Ambato Vista 1" class="img-estacion"></td>
+                            <td><img src="img/estaciones/ambato2.jpg" alt="Ambato Vista 2" class="img-estacion"></td>
+                            <td>2.777 m.s.n.m.</td>
+                            <td>Estación</td>
+                            <td><span class="badge-estado estado-sin-servicio">Fuera de servicio</span></td>
+                            <td style="text-align: left;">Estación terminal.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <footer>
+                <div class="container">
+                    <p>&copy; 2026 RegistroFerroviario.ec</p>
+                    <p>Esquema de Infraestructura y Estaciones • Red Ferroviaria</p>
+                </div>
+            </footer>     
+        </main>
+    </div>
+
+<button id="btnMap" class="btn-mapa-flotante" onclick="toggleMapa()">
+    <span id="flechaMapa" class="flecha-mapa">▶</span> Ver perfil
+</button>
+
+<div id="mapOverlay" class="mapa-overlay" onclick="toggleMapa()"></div>
+
+<aside id="mapSidebar" class="mapa-sidebar">
+    <div class="mapa-header">
+        <h3>Mapa General de la Línea</h3>
+        <button class="mapa-close" onclick="toggleMapa()">✕</button>
+    </div>
+    
+    <div class="mapa-contenido" id="mapContainer">
+        
+        <div class="zoom-controls">
+            <button onclick="zoomIn()" title="Acercar">+</button>
+            <button onclick="zoomOut()" title="Alejar">−</button>
+            <button onclick="resetZoom()" title="Restablecer">↺</button>
+        </div>
+
+        <img id="mapImage" src="historia/G&Q/PerfilGuayaquilQuito.jpg" alt="Mapa de la línea ferroviaria" class="mapa-imagen">
+    </div>
+</aside>
+
+<script>
+    // --- CONTROL DE TEMA ---
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        const label = document.getElementById('themeIcon');
+        if (label) {
+            label.textContent = theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro';
+        }
+        localStorage.setItem('theme', theme);
+    }
+
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        applyTheme(newTheme);
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    applyTheme(savedTheme);
+
+    // --- CONTROL DE MAPA FLOTANTE Y ZOOM ---
+    let scale = 1;
+    let pointX = 0;
+    let pointY = 0;
+    let startX = 0;
+    let startY = 0;
+    let isDragging = false;
+
+    const mapImage = document.getElementById('mapImage');
+    const mapContainer = document.getElementById('mapContainer');
+
+    function updateTransform() {
+        mapImage.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+    }
+
+    function zoomIn() {
+        if (scale < 5) {
+            scale += 0.4;
+            updateTransform();
+        }
+    }
+
+    function zoomOut() {
+        if (scale > 0.8) {
+            scale -= 0.4;
+            if (scale <= 1) resetZoom();
+            else updateTransform();
+        }
+    }
+
+    function resetZoom() {
+        scale = 1;
+        pointX = 0;
+        pointY = 0;
+        updateTransform();
+    }
+
+    mapContainer.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 0.25 : -0.25;
+        scale = Math.min(Math.max(0.8, scale + delta), 5);
+        if (scale <= 1) {
+            pointX = 0;
+            pointY = 0;
+        }
+        updateTransform();
+    }, { passive: false });
+
+    mapContainer.addEventListener('mousedown', (e) => {
+        if (scale <= 1) return;
+        isDragging = true;
+        startX = e.clientX - pointX;
+        startY = e.clientY - pointY;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        pointX = e.clientX - startX;
+        pointY = e.clientY - startY;
+        updateTransform();
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+
+    function toggleMapa() {
+        const sidebar = document.getElementById('mapSidebar');
+        const overlay = document.getElementById('mapOverlay');
+        const btn = document.getElementById('btnMap');
+        const flecha = document.getElementById('flechaMapa');
+
+        sidebar.classList.toggle('activo');
+        overlay.classList.toggle('activo');
+        btn.classList.toggle('abierto');
+
+        if (sidebar.classList.contains('activo')) {
+            flecha.textContent = '◀';
+        } else {
+            flecha.textContent = '▶';
+            resetZoom();
+        }
+    }
+</script>
+</body>
+</html>

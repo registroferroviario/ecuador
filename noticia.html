@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lectura de Noticia - RegistroFerroviario</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-header: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-red: #e11d48;
+            --border-color: #cbd5e1;
+            --border-width: 2px;
+            --shadow: 0 4px 15px rgba(15, 23, 42, 0.08);
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0b132b;
+            --bg-card: #1c2541;
+            --bg-header: #111827;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-red: #ef4444;
+            --border-color: #334155;
+            --border-width: 1px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-primary); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+        .top-stripe { height: 8px; background: linear-gradient(90deg, #ffcc00 0%, #003399 50%, #cc0000 100%); }
+
+        header { background-color: var(--bg-header); border-bottom: var(--border-width) solid var(--border-color); padding: 1rem 2rem; position: sticky; top: 0; z-index: 100; }
+        .header-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo-container { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text-primary); }
+        .logo-img { height: 40px; width: auto; }
+        .logo-text { font-family: 'Outfit', sans-serif; font-size: 1.4rem; font-weight: 800; }
+
+        nav { display: flex; align-items: center; gap: 1.5rem; }
+        nav a { text-decoration: none; color: var(--text-secondary); font-weight: 600; font-size: 0.95rem; }
+        nav a:hover { color: var(--accent-red); }
+
+        .theme-toggle { background: none; border: var(--border-width) solid var(--border-color); border-radius: 20px; padding: 0.4rem 0.8rem; cursor: pointer; color: var(--text-primary); font-weight: 600; font-size: 0.85rem; }
+
+        .container { max-width: 850px; margin: 2rem auto; padding: 0 1.5rem; flex: 1; }
+        .btn-volver { color: var(--accent-red); text-decoration: none; font-weight: 700; font-size: 0.95rem; display: inline-block; margin-bottom: 1.5rem; }
+        
+        .noticia-articulo { background: var(--bg-card); border: var(--border-width) solid var(--border-color); border-radius: 16px; padding: 2.5rem; box-shadow: var(--shadow); }
+        .noticia-meta { color: var(--accent-red); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 0.4rem; }
+        .noticia-titulo { font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; line-height: 1.25; margin-bottom: 0.5rem; }
+        .noticia-fecha { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem; }
+        .noticia-imagen { width: 100%; max-height: 420px; object-fit: cover; border-radius: 10px; border: var(--border-width) solid var(--border-color); margin-bottom: 1.5rem; }
+        .noticia-contenido { font-size: 1.05rem; line-height: 1.8; color: var(--text-primary); }
+
+        footer { background-color: var(--bg-header); border-top: var(--border-width) solid var(--border-color); padding: 2rem; text-align: center; margin-top: 4rem; color: var(--text-secondary); font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <div class="top-stripe"></div>
+
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo-container">
+                <img src="img/logo.png" alt="RegistroFerroviario" class="logo-img" onerror="this.style.display='none'">
+                <span class="logo-text">RegistroFerroviario</span>
+            </a>
+            <nav>
+                <a href="index.html">Inicio</a>
+                <a href="noticias.html">Noticias</a>
+                <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙 Oscuro</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <a href="seccion_noticias.html" class="btn-volver">← Volver al listado de noticias</a>
+        
+        <article class="noticia-articulo" id="noticia-contenedor">
+            <p>Cargando contenido...</p>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 RegistroFerroviario. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Control Tema Claro/Oscuro
+        const themeBtn = document.getElementById('themeBtn');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeBtn.innerHTML = currentTheme === 'dark' ? '☀️ Claro' : '🌙 Oscuro';
+
+        function toggleTheme() {
+            const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            themeBtn.innerHTML = theme === 'dark' ? '☀️ Claro' : '🌙 Oscuro';
+        }
+
+        // Obtener el ID de la URL y cargar los datos desde el JSON
+        const params = new URLSearchParams(window.location.search);
+        const noticiaId = params.get('id');
+
+        fetch('seccion_noticias.json')
+            .then(response => response.json())
+            .then(noticias => {
+                const noticia = noticias.find(item => item.id === noticiaId);
+                const contenedor = document.getElementById('noticia-contenedor');
+
+                if (noticia) {
+                    contenedor.innerHTML = `
+                        <div class="noticia-meta">${noticia.autor}</div>
+                        <h1 class="noticia-titulo">${noticia.titulo}</h1>
+                        <div class="noticia-fecha">Publicado el ${noticia.fecha}</div>
+                        <img src="${noticia.imagen}" class="noticia-imagen" alt="${noticia.titulo}">
+                        <div class="noticia-contenido">
+                            <p>${noticia.contenido}</p>
+                        </div>
+                    `;
+                    document.title = `${noticia.titulo} - RegistroFerroviario`;
+                } else {
+                    contenedor.innerHTML = '<h2>Publicación no encontrada</h2><p>La entrada no existe o cambió de dirección.</p>';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+</body>
+</html>

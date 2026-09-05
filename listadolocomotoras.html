@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <link rel="icon" type="image/png" href="ico.jpg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de locomotoras diésel - RegistroFerroviario</title>
+    <meta name="description" content="Inventario y estado del materialrodante diésel: Series 2000, 2400, 160 y 150">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- VARIABLES DE COLOR Y ESTILOS DE TEMA --- */
+        [data-theme="light"] {
+    --bg-body: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-card-alt: #f1f5f9;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --accent-red: #e11d48;
+    --accent-red-hover: #be123c;
+    
+    /* Borde más grueso y rojo para el tema claro */
+    --border-color: #b91c1c;
+    --border-width: 2px;
+
+    /* Submenús NAVEGACIÓN */
+    --dropdown-bg: #ffffff;
+    --dropdown-hover: rgba(225, 29, 72, 0.9);
+    --dropdown-text-hover: #ffffff;
+    --dropdown-border: #b91c1c;
+    --shadow: 0 4px 15px rgba(15, 23, 42, 0.12);
+
+    /* Decoración vías */
+    --via-color: #cbd5e1;
+    --via-rail: #94a3b8;
+}
+
+        [data-theme="dark"] {
+            --bg-body: #0b132b;
+            --bg-card: #1c2541;
+            --bg-card-alt: #0f172a;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-red: #ef4444;
+            --accent-red-hover: #dc2626;
+            
+            --border-color: #334155;
+            --border-width: 1px;
+
+            --dropdown-bg: #0f172a;
+            --dropdown-hover: #ef4444;
+            --dropdown-text-hover: #ffffff;
+            --dropdown-border: #334155;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+
+            /* Decoración vías */
+            --via-color: #1e293b;
+            --via-rail: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container,
+        .container2 {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2.5rem;
+            width: 120%;
+            position: relative;
+            z-index: 2;
+        }
+
+    
+        .wrapper-main {
+            position: relative;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .via-decorativa {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 24px;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.7;
+            background-image: 
+                linear-gradient(90deg, var(--via-rail) 0, var(--via-rail) 3px, transparent 3px, transparent 21px, var(--via-rail) 21px, var(--via-rail) 24px),
+                repeating-linear-gradient(0deg, transparent, transparent 12px, var(--via-color) 12px, var(--via-color) 16px);
+        }
+
+        .via-izquierda { left: 10px; }
+        .via-derecha { right: 10px; }
+
+        /* --- NAVEGACIÓN COMPLETA MULTINIVEL --- */
+        .top-navbar {
+            background-color: var(--bg-card);
+            border-bottom: calc(var(--border-width) + 1px) solid var(--accent-red);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            height: 55px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            list-style: none;
+            height: 100%;
+        }
+
+        .nav-links li {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover,
+        .nav-links li:hover > a,
+        .nav-links a.active {
+            background-color: var(--bg-card-alt);
+            color: var(--accent-red);
+        }
+
+        .nav-links ul {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--dropdown-bg);
+            border: var(--border-width) solid var(--dropdown-border);
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            list-style: none;
+            min-width: 260px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 6px 0;
+            z-index: 1001;
+        }
+
+        .nav-links li:hover > ul {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-links ul ul {
+            top: 0;
+            left: 100%;
+            margin-left: 2px;
+        }
+
+        .nav-links ul li {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+
+        .nav-links ul a {
+            width: 100%;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 0;
+            color: var(--text-primary);
+            justify-content: space-between;
+        }
+
+        .nav-links ul a:hover,
+        .nav-links ul li:hover > a {
+            background-color: var(--dropdown-hover);
+            color: var(--dropdown-text-hover) !important;
+        }
+
+        .arrow-down::after { content: " ▾"; font-size: 0.75rem; }
+        .arrow-right::after { content: " ▸"; font-size: 0.75rem; }
+        .arrow-left::after { content: " ◂"; font-size: 0.75rem; }
+
+        .theme-toggle-btn {
+            background: var(--bg-card);
+            border: var(--border-width) solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--accent-red);
+            color: #ffffff;
+        }
+
+       
+        .header2 {
+            background-color: #b91c1c !important;
+            color: #ffffff !important;
+            padding: 2rem 0;          
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header2::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('ffcc/materialrodante/locomotoras/diesel/alsthom2400/2407 sibambe.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.15;
+            z-index: 1;
+        }
+        .header2 h1 {
+            margin: 0;
+            font-size: 2.1rem;        
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+        .header2 .subtitle {
+            margin: 0.5rem 0 0 0;
+            font-size: 1.2rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* --- ESTILOS DE CONTENIDO --- */
+        h2 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            padding-left: 1.25rem;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 28px;
+            background: var(--accent-red);
+            border-radius: 4px;
+        }
+
+        .img-header {
+            height: 65px;          
+            width: auto;           
+            border-radius: 6px;    
+            object-fit: cover;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+        }
+
+        .fila-clickeable {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fila-clickeable:hover {
+            background-color: rgba(185, 28, 28, 0.15) !important;
+            border-left: 4px solid var(--accent-red);
+        }
+
+        .tabla-tecnica {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card);
+            border: var(--border-width) solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 3rem;
+        }
+        .tabla-tecnica tr:nth-child(even) { background-color: var(--bg-card); }
+        .tabla-tecnica tr:nth-child(odd) { background-color: var(--bg-card-alt); }
+
+        .tabla-tecnica th, .tabla-tecnica td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+        }
+        .tabla-tecnica th {
+            background-color: #a31313ef !important;
+            color: #ffffff !important;
+            padding: 1.2rem 1rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-align: center !important;
+        }
+        .tabla-tecnica td {
+            color: var(--text-primary) !important;
+            text-align: center !important;
+        }
+        .tabla-tecnica td:first-child {
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 600;
+        }
+
+        .btn-colores {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 0.55rem 1.1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin: 2rem 0 1rem;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .btn-colores:hover {
+            background: var(--bg-card-alt);
+        }
+        body.colores-activos .btn-colores {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+            color: #fff;
+        }
+
+        body.colores-activos .tabla-tecnica td.estado-servicio {
+            background-color: #00b60fc5 !important;
+            color: #ffffff !important;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 6px;
+        }
+        body.colores-activos .tabla-tecnica td.estado-apartada {
+            background-color: #ffd000c0 !important;
+            color: #1e293b !important;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 6px;
+        }
+        body.colores-activos .tabla-tecnica td.estado-chatarra {
+            background-color: #9e0000 !important;
+            color: #ffffff !important;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 6px;
+        }
+        body.colores-activos .tabla-tecnica td.estado-expuesta {
+            background-color: #0b00ac !important;
+            color: #ffffff !important;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 6px;
+        }
+
+        footer {
+            background-color: #921818 !important;
+            color: rgba(255, 255, 255, 0.9);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+
+        /* --- MODAL --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+        }
+        .modal-content {
+            max-width: 90%;
+            max-height: 90vh;
+            position: relative;
+            background: #111;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .modal-close {
+            position: absolute;
+            top: -15px; right: -15px;
+            background: #ef4444;
+            color: white;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .modal img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* Fondo semitransparente para ver el HTML detrás */
+    backdrop-filter: blur(4px); /* Efecto de desenfoque opcional */
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content-galeria {
+    position: relative;
+    background: var(--bg-card);
+    border: var(--border-width) solid var(--accent-red);
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 1100px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px; right: 20px;
+    color: var(--text-primary);
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.galeria-header {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.galeria-header h3 {
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Visor principal con vista previa */
+.galeria-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.contenedor-principal {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 620px;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.contenedor-principal img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.contenedor-preview {
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.contenedor-preview img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid var(--accent-red);
+    opacity: 0.8;
+}
+
+.preview-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.btn-nav {
+    background: var(--accent-red);
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-nav:hover {
+    background: var(--accent-red-hover);
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+    .galeria-body { flex-direction: column; }
+    .contenedor-preview { display: none; } /* Ocultar previa en móviles */
+    .contenedor-principal { height: 280px; }
+}
+
+        @media (max-width: 1024px) {
+            .via-decorativa { display: none; }
+            .container { padding: 0 1.5rem; }
+        }
+
+        @media (max-width: 768px) {
+            .tabla-tecnica {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                white-space: nowrap;
+            }
+            .header2 h1 { font-size: 1.8rem; }
+            .header2 .subtitle { font-size: 1rem; }
+            h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header2">
+    <div class="container2" style="display: flex; align-items: center; justify-content: center; gap: 18px;">
+        <div>
+            <h1>Listado de materialrodante</h1>
+            <p class="subtitle">Inventario general de parque de tracción diésel</p>
+        </div>
+        <img src="https://flagcdn.com/w80/ec.png" alt="Bandera de Ecuador" style="height: 45px; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); position: relative; z-index: 2;">
+    </div>
+</header>
+
+    
+    <nav class="top-navbar">
+        <div class="nav-container">
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                
+                <li>
+                    <a href="ffcc.html" class="arrow-down">FF.CC. Ecuador</a>
+                    <ul>
+                        <li>
+                            <a href="fcdelsur.html" class="arrow-right">F.C. del Sur </a>
+                            <ul>
+                                <li><a href="fcdelsur.html">Información y reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfcdelsur.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="g&q.html" class="arrow-right">G. & Q. (Guayaquil - Quito)</a>
+                            <ul>
+                                <li>
+                                    <a href="g&q.html">Información y reseña histórica</a>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                    <ul>
+                                        <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                        <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                        <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                        <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotorasvaporg&q.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul"</a></li>
+                                        <li><a href="consolidation.html">Baldwin 2-8-0 "Consolidation"</a></li>
+                                        <li>
+                                            <a href="listadolocomotoras.html" class="arrow-left">Históricas</a>
+                                            <ul>
+                                                <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul" 42" 12,8 metros</a></li>
+                                                <li></li><a href="g&q_mogul2-6-0_48.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                                <li><a href="lima-shay.html">Lima 0-4+4+4-0 "Shay"</a></li>
+                                                <li><a href="g&q_mallet0-6-6-0.html">Baldwin 0-6-6-0 "Mallet"</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_42.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_54.html">Baldwin 2-8-0 "Consolidation" 54" 16,4 metros</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_44.html">Baldwin 2-8-0 "Consolidation" 44" 13,4 metros</a></li>
+                                                <li><a href="g&q_garratt_2-6-2+2-6-2.html">Beyer Peacock 2-6-2+2-6-2 "Garratt"</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="extra_locomotoras.html">Locomotoras utilitarias y equipo auxiliar</a></li>
+                                <li>
+                                    <a href="listadocoches.html" class="arrow-left">Listado de coches de viajeros</a>
+                                    <ul>
+                                        <li><a href="coches250.html">Coches serie 250</a></li>
+                                        <li>
+                                            <a href="unidadescompletas.html" class="arrow-right">Composiciones remolcadas</a>
+                                            <ul>
+                                                <li><a href="unidadescompletaspanoramico.html">Moderno Panorámico</a></li>
+                                                <li><a href="unidadescompletascrucero.html">Moderno Crucero 1 & 2</a></li>
+                                                <li><a href="unidadescompletasmodernocut3.html">Moderno CUT3</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="cochescut4.html">Coches CUT4</a></li>
+                                        <li><a href="colonialmadera13.html">Coloniales madera 13m</a></li>
+                                        <li><a href="colonialmadera14.html">Coloniales madera 14m</a></li>
+                                        <li><a href="coches_metalicos_reciclados.html">Metálico reciclado</a></li>
+                                        <li><a href="cochesjaula.html">Coches Jaula</a></li>
+                                        <li><a href="coches3500.html">Coches UT3500</a></li>
+                                        <li><a href="feep_furgon_generador.html">Furgones generador</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="mantenimiento.jpg" class="arrow-left">Vagones</a>
+                                    <ul>
+                                        <li><a href="g&q_furgon_1500.html">Furgón Boxcar tipo "1500"</a></li>
+                                        <li><a href="g&q_tanquero_1100.html">Vagón tanquero tipo "1100"</a></li>
+                                        <li><a href="g&q_plataforma_300.html">Plataforma tipo "300"</a></li>
+                                        <li><a href="g&q_gondola_600.html">Góndola tipo "600"</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="listadoestaciones_g&q.html">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcquitosanlorenzo.html" class="arrow-right">F.C. Quito a San Lorenzo</a>
+                            <ul>
+                                <li><a href="fcquitosanlorenzo.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasvaporqsl.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="qsl_borsig4-6-0.html">Borsig 4-6-0 42" 12,8 metros</a></li>
+                                        <li><a href="norte_baldwin2-8-0.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                        <li><a href="curaray_baldwin2-6-0.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                    </ul>
+                                
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                        <ul>
+                                            <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                            <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                            <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                            <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                            <li><a href="extra_locomotoras.html">Otras locomotoras diésel utilitarias</a></li>
+                                        </ul>
+                                </li>
+                                <li><a href="mantenimiento.jpg">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcsibambecuenca.html" class="arrow-right">S. C. (Sibambe a Cuenca)</a>
+                            <ul>
+                                <li><a href="fcsibambecuenca.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorassc.html">Listado locomotoras de vapor</a></li>
+                                <li><a href="listadoestaciones_sc.html">Estaciones</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcalacosta.html" class="arrow-right">F.C. Guayaquil a Salinas</a>
+                            <ul>
+                                <li><a href="fcalacosta.html">Reseña histórica</a></li>
+                                <li>
+                                    <a href="listadolocomotorasvaporcosta.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="costa_henschel2-6-0.html">Henschel 2-6-0 "Mogul"</a></li>
+                                        <li><a href="costa_henschel4-6-0.html">Henschel 4-6-0</a></li>
+                                    </ul>
+                                </li>
+                                    
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcambatocuraray.html" class="arrow-right">F.C. Ambato a Curaray</a>
+                            <ul>
+                                <li><a href="fcambatocuraray.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoras_curaray.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcbahiachone.html" class="arrow-right">F.C. Bahía a Chone</a>
+                            <ul>
+                                <li><a href="fcbahiachone.html">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fccentral.html" class="arrow-right">F.C. Central del Ecuador</a>
+                            <ul>
+                                <li><a href="fccentral.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfccentral.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_loja.html" class="arrow-right">F.C. Puerto Bolívar y Pasaje</a>
+                            <ul>
+                                <li><a href="fcpuertobolivar_loja.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoraseloro.html">Listado materialrodante</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_piedras.html" class="arrow-right">F.C. Puerto Bolívar a Piedras</a>
+                            <ul>
+                                <li><a href="fcpuertobolivar_piedras.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoraseloro.html">Listado materialrodante</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="ffccaduana_guayaquil.html" class="arrow-right">F.C. Aduana de Guayaquil</a>
+                            <ul>
+                                <li><a href="ffccaduana_guayaquil.html">Reseña Histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="mantenimiento.jpg">FF.CC. no construidos</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="ffcc.html#indus" class="arrow-down">FF.CC. Industriales</a>
+                    <ul>
+                        <li><a href="mantenimiento.jpg">Ingenio Valdez</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio San Carlos</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Inés María</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Luz María y Matilde</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Rocafuerte</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Nugues</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Adelina María</a></li>
+                        <li><a href="mantenimiento.jpg">United Fruit Company</a></li>
+                        <li><a href="mantenimiento.jpg">Ecuadorian Oilfields</a></li>
+                        <li><a href="mantenimiento.jpg">Galápagos?</a></li>
+                    </ul>
+                
+                </li>
+
+                <li><a href="metroquito.html">Metro de Quito</a></li>
+                <li><a href="tranviacuenca.html">Tranvía Cuenca</a></li>
+                <li>
+                    <a href="#" class="arrow-down">Tranvías Históricos</a>
+                    <ul>
+                        <li><a href="antiguo_tranviaquito.html">Tranvía de Quito</a></li>
+                        <li><a href="antiguo_tranviaguayaquil.html">Tranvía de Guayaquil</a></li>
+                    </ul>
+                </li>
+                
+                <li><a href="mantenimiento.jpg">F.E.E.P (2010-2020)</a></li>
+                <li><a href="actualidad_trenes.html">Trenes en 2026</a></li>
+            </ul>
+
+            <button class="theme-toggle-btn" onclick="toggleTheme()">
+                <span id="themeIcon">Modo Oscuro</span>
+            </button>
+        </div>
+    </nav>
+
+    
+    <div class="wrapper-main">
+        <div class="via-decorativa via-izquierda"></div>
+        <div class="via-decorativa via-derecha"></div>
+
+        <main class="container">
+            <button class="btn-colores" id="btnColores" onclick="toggleColores()">
+                Colorear estados
+            </button>
+
+            <section id="serie-2000">
+                <h2 id="td2000" class="fila-clickeable" onclick="window.location='feep_td2000.html';">Serie "TD-2000"
+                    <img src="ffcc/materialrodante/locomotoras/diesel/td2000/td2000.jpg" alt="TD-2000" class="img-header">
+                </h2>
+                
+                <p>Todas de segunda mano procedentes de Euskotren en España, transportadas a Ecuador las tres juntas en el mismo buque en julio de 2015.</p>
+                <table class="tabla-tecnica">
+                    <thead>
+                        <tr>
+                            <th style="width: 12%;">Numeración</th>
+                            <th style="width: 15%;">Base Taller</th>
+                            <th style="width: 15%;">Estado</th>
+                            <th style="width: 15%;">Color</th>
+                            <th style="width: 10%;">Año</th>
+                            <th style="width: 33%;">Datos adicionales</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="fila-clickeable" onclick="abrirGaleria('2001', ['ffcc/materialrodante/locomotoras/diesel/td2000/2001.jpg', 'ffcc/materialrodante/locomotoras/diesel/td2000/2001b.jpg', ''])">
+                            <td>2001</td>
+                            <td>Chiriyacu</td>
+                            <td class="estado-apartada">Apartada</td>
+                            <td>Negro/Rojo</td>
+                            <td>2009</td>
+                            <td>ex-2008 Euskotren, vandalizada</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="abrirGaleria('2002', ['rutas/2001_1.jpg', 'rutas/2001_2.jpg', 'rutas/2001_3.jpg'])">>
+                            <td>2002</td>
+                            <td>Chiriyacu</td>
+                            <td class="estado-apartada">Apartada</td>
+                            <td>Negro/Rojo</td>
+                            <td>2009</td>
+                            <td>ex-2009 Euskotren, vandalizada</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="abrirGaleria('2001', ['ffcc/materialrodante/locomotoras/diesel/td2000/2003.jpg', 'ffcc/materialrodante/locomotoras/diesel/td2000/2003b.jpg', ''])">
+                            <td>2003</td>
+                            <td>Ibarra</td>
+                            <td class="estado-servicio">En servicio</td>
+                            <td>Negro/Rojo</td>
+                            <td>2009</td>
+                            <td>ex-2010 Euskotren</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="serie2400">
+                <h2 id="td2000" class="fila-clickeable" onclick="window.location='enfe_alsthom2400.html';">Serie 2400 "GEC Alsthom AD24"
+                    <img src="ffcc/materialrodante/locomotoras/diesel/alsthom2400/lateral.jpg" alt="2400" class="img-header">
+                </h2>
+                <p>Todas en color gris con bandera nacional y logo ENFE al salir de fábrica.</p>
+                <table class="tabla-tecnica">
+                    <thead>
+                        <tr>
+                            <th style="width: 12%;">Numeración</th>
+                            <th style="width: 15%;">Base Taller</th>
+                            <th style="width: 15%;">Estado</th>
+                            <th style="width: 15%;">Color</th>
+                            <th style="width: 10%;">Año</th>
+                            <th style="width: 33%;">Datos adicionales</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="fila-clickeable" onclick="window.location='2401.html';">
+                            <td>2401</td>
+                            <td>Riobamba</td>
+                            <td class="estado-apartada">Apartada</td>
+                            <td>Gris con bandera nacional</td>
+                            <td>1992</td>
+                            <td>En taller de Riobamba desde may-2020.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='2402.html';">
+                            <td>2402</td>
+                            <td>Ibarra</td>
+                            <td class="estado-servicio">En servicio</td>
+                            <td>Rojo/negro</td>
+                            <td>1992</td>
+                            <td>Mega topes amarillo-negro desde 2007?.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='2403.html';">
+                            <td><strong>2403</strong></td>
+                            <td>Riobamba</td>
+                            <td class="estado-apartada">Apartada</td>
+                            <td>Rojo/negro</td>
+                            <td>1992</td>
+                            <td>Reparada en El Berrón, España, jul-2011<br>Descarriló con el Tren Crucero en jun-2014 cerca de Cotopaxi.
+                                <br>Nueva placa frontal dorada desde nov-2025. <br> Apartada por avería en Alausí desde nov-2025.
+                            </td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='2404.html';">
+                            <td>2404</td>
+                            <td>Chiriyacu</td>
+                            <td class="estado-apartada">Apartada</td>
+                            <td>Rojo/negro</td>
+                            <td>1992</td>
+                            <td>Descarriló en Nariz del diablo oct-2004
+                                <p>En Chiriyacu desde mayo-2020, sin bogies, vandalizada</p>
+                            </td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='2405.html';">
+                            <td>2405</td>
+                            <td>Durán</td>
+                            <td class="estado-apartada">Apartada</td>
+                            <td>Gris/negro</td>
+                            <td>1992</td>
+                            <td>En Durán desde mar-2020</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='2406.html';">
+                            <td>2406</td>
+                            <td>Durán</td>
+                            <td class="estado-apartada">Apartada</td>
+                            <td>Rojo/negro 2014</td>
+                            <td>1992</td>
+                            <td>En Durán desde mar-2020</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='2407.html';">
+                            <td>2407</td>
+                            <td>Riobamba</td>
+                            <td class="estado-servicio">En servicio</td>
+                            <td>Gris con bandera nacional</td>
+                            <td>1992</td>
+                            <td>Nueva placa frontal dorada nov-2025</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='2408.html';">
+                            <td>2408</td>
+                            <td>Riobamba</td>
+                            <td class="estado-apartada">Apartada</td>
+                            <td>Rojo/negro</td>
+                            <td>1992</td>
+                            <td>Reparada en El Berrón, España jul-2011
+                                <p>Apartada en Riobamba desde may-2020</p></td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='2409.html';">
+                            <td>2409</td>
+                            <td>Chiriyacu</td>
+                            <td class="estado-apartada">Apartada</td>
+                            <td>Rojo/negro</td>
+                            <td>1992</td>
+                            <td>Reparada en El Berrón, España jul-2011</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="alco160">
+                <h2 id="alco160" class="fila-clickeable" onclick="window.location='g&q_alco_160.html';">Serie 160 "ALCo DL535-B"
+                    <img src="ffcc/materialrodante/locomotoras/diesel/alco/lateral.jpg" alt="alco160" class="img-header">
+                </h2>
+                <p>Todas construídas en Madrid, España y llegadas en barco a Ecuador en 1968.</p>
+                <p>Al ser los recambios para mantenimiento muy caros y la imposiblidad de fabricarlos en Ecuador se canibalizaron a los pocos años, no duraron mucho en buen estado y máquinas de vapor más antiguas tuvieron que sustituirlas.</p>
+                <table class="tabla-tecnica">
+                    <thead>
+                        <tr>
+                            <th style="width: 12%;">Numeración</th>
+                            <th style="width: 15%;">Base Taller</th>
+                            <th style="width: 15%;">Estado</th>
+                            <th style="width: 15%;">Color</th>
+                            <th style="width: 10%;">Año</th>
+                            <th style="width: 33%;">Datos adicionales</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="fila-clickeable" onclick="window.location='160.html';">
+                            <td>160</td>
+                            <td>-</td>
+                            <td class="estado-chatarra">Chatarreada</td>
+                            <td>-</td>
+                            <td>1968</td>
+                            <td>Apartada en taller de Chiriyacu en 2003.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='161.html';">
+                            <td>161</td>
+                            <td>-</td>
+                            <td class="estado-expuesta">Expuesta</td>
+                            <td>Rojo/azul</td>
+                            <td>1968</td>
+                            <td>En exposición en Durán en mal estado.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='162.html';">
+                            <td>162</td>
+                            <td>-</td>
+                            <td class="estado-chatarra">Chatarreada</td>
+                            <td>-</td>
+                            <td>1968</td>
+                            <td>Apartada en taller de Chiriyacu en 2003.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='163.html';">
+                            <td>163</td>
+                            <td>-</td>
+                            <td class="estado-chatarra">Chatarreada</td>
+                            <td>-</td>
+                            <td>1968</td>
+                            <td>-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='164.html';">
+                            <td>164</td>
+                            <td>-</td>
+                            <td class="estado-chatarra">Chatarreada</td>
+                            <td>-</td>
+                            <td>1968</td>
+                            <td>-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='165.html';">
+                            <td>165</td>
+                            <td>-</td>
+                            <td class="estado-chatarra">Chatarreada</td>
+                            <td>-</td>
+                            <td>1968</td>
+                            <td>Apartada en taller de Chiriyacu en 2003.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='166.html';">
+                            <td>166</td>
+                            <td>-</td>
+                            <td class="estado-chatarra">Chatarreada</td>
+                            <td>-</td>
+                            <td>1968</td>
+                            <td>-</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='167.html';">
+                            <td>167</td>
+                            <td>-</td>
+                            <td class="estado-chatarra">Chatarreada</td>
+                            <td>-</td>
+                            <td>1968</td>
+                            <td>Apartada en Bucay. <br> Chatarreada en Durán en 2012/2013.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='168.html';">
+                            <td>168</td>
+                            <td>-</td>
+                            <td class="estado-chatarra">Chatarreada</td>
+                            <td>-</td>
+                            <td>1968</td>
+                            <td>Canibalizada en Durán en 1988.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='169.html';">
+                            <td>169</td>
+                            <td>-</td>
+                            <td class="estado-expuesta">Expuesta</td>
+                            <td>Rojo/azul</td>
+                            <td>1968</td>
+                            <td>Apartada en taller de Chiriyacu en 2003. <br> En exposición en Quito-Chimbacalle mal estado.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="150">
+                <h2 id="bbb150" class="fila-clickeable" onclick="window.location='qsl_alsthomsulzer150.html';">Serie 150 "Alsthom BBB-150"
+                    <img src="ffcc/materialrodante/locomotoras/diesel/sulzer/perfil.jpg" alt="enfe150" class="img-header">
+                </h2>
+                <table class="tabla-tecnica">
+                    <thead>
+                        <tr>
+                            <th style="width: 12%;">Numeración</th>
+                            <th style="width: 15%;">Base Taller</th>
+                            <th style="width: 15%;">Estado</th>
+                            <th style="width: 15%;">Color</th>
+                            <th style="width: 10%;">Año</th>
+                            <th style="width: 33%;">Datos adicionales</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="fila-clickeable" onclick="window.location='151.html';">
+                            <td>151</td>
+                            <td>-</td>
+                            <td class="estado-expuesta">Expuesta</td>
+                            <td>Rojo/negro</td>
+                            <td>1956</td>
+                            <td>Expuesta en taller de Ibarra, exterior en buen estado.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='152.html';">
+                            <td>152</td>
+                            <td>-</td>
+                            <td class="estado-chatarra">Chatarreada</td>
+                            <td>-</td>
+                            <td>1956</td>
+                            <td>Parcialmente desmantelada en talleres de Ibarra en 2003. <br>Chatarreada en 2008.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='153.html';">
+                            <td>153</td>
+                            <td>-</td>
+                            <td class="estado-chatarra">Chatarreada</td>
+                            <td>-</td>
+                            <td>1956</td>
+                            <td>Parcialmente desmantelada en talleres de Ibarra en 2003. Chatarreada en 2008.</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='154.html';">
+                            <td>154</td>
+                            <td>-</td>
+                            <td class="estado-expuesta">Expuesta</td>
+                            <td>Rojo/negro</td>
+                            <td>1957</td>
+                            <td>En taller de Ibarra</td>
+                        </tr>
+                        <tr class="fila-clickeable" onclick="window.location='155.html';">
+                            <td>155</td>
+                            <td>-</td>
+                            <td class="estado-apartada">Apartada</td>
+                            <td>Rojo/blanco</td>
+                            <td>1957</td>
+                            <td>Última de la clase 150 en prestar servicio.
+                                <p>Dejó de funcionar en Alto Tambo en 2003.</p>
+                                <p>Trasladada a talleres de Ibarra en 2008.</p>
+                                <p>En taller de Ibarra, conserva placa frontal original.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <footer>
+                <div class="container">
+                    <p>&copy; 2026 RegistroFerroviario.ec</p>
+                    <p>Inventario Técnico General Particular de Harukaze • materialrodante Diésel</p>
+                </div>
+            </footer>     
+        </main>
+    </div>
+
+    <div id="modalGaleria" class="modal">
+    <div class="modal-content-galeria">
+        <span class="modal-close" onclick="cerrarGaleria()">&times;</span>
+        
+        <div class="galeria-header">
+            <h3 id="modalTituloGaleria">Locomotora</h3>
+        </div>
+
+        <div class="galeria-body">
+            <button class="btn-nav" onclick="cambiarFoto(-1)">&#10094;</button>
+
+            <div class="contenedor-principal">
+                <img id="imagenPrincipalModal" src="" alt="Foto principal">
+            </div>
+
+            <div class="contenedor-preview" id="boxPreview">
+                <span class="preview-label">Siguiente</span>
+                <img id="imagenSiguienteModal" src="" alt="Siguiente foto">
+            </div>
+
+            <button class="btn-nav" onclick="cambiarFoto(1)">&#10095;</button>
+        </div>
+    </div>
+</div>
+
+    <script>
+        // --- CONTROL DE TEMA MODO OSCURO/CLARO ---
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const label = document.getElementById('themeIcon');
+            if (label) {
+                label.textContent = theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
+
+        // --- COLOREAR ESTADOS ---
+        function toggleColores() {
+            document.body.classList.toggle('colores-activos');
+            const btn = document.getElementById('btnColores');
+            if (document.body.classList.contains('colores-activos')) {
+                btn.textContent = 'Quitar colores';
+            } else {
+                btn.textContent = 'Colorear estados';
+            }
+        }
+        let fotosGaleria = [];
+let indiceActual = 0;
+
+function abrirGaleria(titulo, listaImagenes) {
+    if (!listaImagenes || listaImagenes.length === 0) return;
+
+    fotosGaleria = listaImagenes;
+    indiceActual = 0;
+
+    document.getElementById('modalTituloGaleria').textContent = 'Locomotora ' + titulo;
+    actualizarGaleria();
+
+    document.getElementById('modalGaleria').style.display = 'flex';
+}
+
+function actualizarGaleria() {
+    // Foto actual
+    const imgPrincipal = document.getElementById('imagenPrincipalModal');
+    imgPrincipal.src = fotosGaleria[indiceActual];
+
+    // Foto siguiente (vista previa a la derecha)
+    const boxPreview = document.getElementById('boxPreview');
+    const imgSiguiente = document.getElementById('imagenSiguienteModal');
+
+    if (fotosGaleria.length > 1) {
+        boxPreview.style.display = 'flex';
+        let indiceSiguiente = (indiceActual + 1) % fotosGaleria.length;
+        imgSiguiente.src = fotosGaleria[indiceSiguiente];
+    } else {
+        boxPreview.style.display = 'none'; // Ocultar si solo hay 1 foto
+    }
+}
+
+function cambiarFoto(direccion) {
+    if (fotosGaleria.length <= 1) return;
+
+    indiceActual += direccion;
+
+    if (indiceActual < 0) {
+        indiceActual = fotosGaleria.length - 1;
+    } else if (indiceActual >= fotosGaleria.length) {
+        indiceActual = 0;
+    }
+
+    actualizarGaleria();
+}
+
+function cerrarGaleria() {
+    document.getElementById('modalGaleria').style.display = 'none';
+}
+
+// Cerrar al hacer clic fuera del recuadro
+window.onclick = function(event) {
+    const modal = document.getElementById('modalGaleria');
+    if (event.target === modal) {
+        cerrarGaleria();
+    }
+}
+    </script>
+</body>
+</html>

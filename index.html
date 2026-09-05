@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <link rel="icon" type="image/png" href="ico.jpg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página principal - Registroferroviario.ec</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================
+           VARIABLES DE TEMA (CLARO Y OSCURO MARINO)
+           ========================================== */
+        [data-theme="light"] {
+            --bg-body: #f8f6f4;
+            --bg-card: #ffffff;
+            --rail-color: rgba(159, 18, 57, 0.12);
+            --red-main: #9f1239;
+            --red-dark: #880e2f;
+            --red-soft: #ffe4e6;
+            --blue-main: #1d4ed8;
+            --blue-soft: #dbeafe;
+            --gray-main: #475569;
+            --gray-soft: #f1f5f9;
+            --yellow-accent: #d97706;
+            --border-card: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --shadow-card: rgba(0, 0, 0, 0.05);
+            --shadow-hover: rgba(0, 0, 0, 0.12);
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0a0e17; /* Negro Marino Profundo */
+            --bg-card: #121824; /* Azul Marino Oscuro */
+            --rail-color: rgba(186, 230, 253, 0.08);
+            --red-main: #e11d48; /* Rojo Suavizado */
+            --red-dark: #be123c;
+            --red-soft: rgba(225, 29, 72, 0.15);
+            --blue-main: #3b82f6; /* Azul Suavizado */
+            --blue-soft: rgba(59, 130, 246, 0.15);
+            --gray-main: #94a3b8;
+            --gray-soft: rgba(148, 163, 184, 0.12);
+            --yellow-accent: #f59e0b;
+            --border-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --shadow-card: rgba(0, 0, 0, 0.4);
+            --shadow-hover: rgba(0, 0, 0, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        /* Franja superior tricolor */
+        .top-stripe {
+            height: 8px;
+            background: linear-gradient(90deg, var(--red-dark) 0%, var(--red-main) 60%, var(--yellow-accent) 100%);
+            width: 100%;
+        }
+
+        /* Decoración de Rieles con Desplazamiento */
+        .rail-pattern {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.75;
+            will-change: background-position;
+        }
+
+        .rail-pattern-left {
+            left: 15px;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 18px,
+                var(--rail-color) 18px,
+                var(--rail-color) 22px
+            ),
+            linear-gradient(90deg, 
+                transparent 22px, 
+                var(--rail-color) 22px, 
+                var(--rail-color) 26px, 
+                transparent 26px, 
+                transparent 54px, 
+                var(--rail-color) 54px, 
+                var(--rail-color) 58px, 
+                transparent 58px
+            );
+        }
+
+        .rail-pattern-right {
+            right: 15px;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 18px,
+                var(--rail-color) 18px,
+                var(--rail-color) 22px
+            ),
+            linear-gradient(90deg, 
+                transparent 22px, 
+                var(--rail-color) 22px, 
+                var(--rail-color) 26px, 
+                transparent 26px, 
+                transparent 54px, 
+                var(--rail-color) 54px, 
+                var(--rail-color) 58px, 
+                transparent 58px
+            );
+        }
+
+        /* Botón Modo Claro/Oscuro */
+        .theme-toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: var(--bg-card);
+            border: 2px solid var(--red-main);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px var(--shadow-card);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-hover);
+            background: var(--red-main);
+            color: #ffffff;
+        }
+
+        .wrapper {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            padding: 25px 30px;
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            border-left: 6px solid var(--red-main);
+            box-shadow: 0 4px 20px var(--shadow-card);
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            transition: background-color 0.3s ease;
+        }
+
+        .header-info {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--red-main);
+            background-color: var(--red-soft);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 900;
+            line-height: 1.1;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        h1 span {
+            color: var(--red-main);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            max-width: 650px;
+        }
+
+        .flag-box {
+            width: 120px;
+            height: 80px;
+            border: 3px solid var(--yellow-accent);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px var(--shadow-card);
+            flex-shrink: 0;
+        }
+
+        .flag-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Secciones */
+        section {
+            margin-bottom: 50px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .section-line {
+            flex-grow: 1;
+            height: 2px;
+            background: linear-gradient(90deg, var(--red-main), transparent);
+        }
+
+        /* Grid de Sistemas Principales */
+        .pillar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 20px;
+        }
+
+        .pillar-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-top: 5px solid var(--card-color, var(--red-main));
+            border-radius: 12px;
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 4px 12px var(--shadow-card);
+            transition: all 0.3s ease;
+        }
+
+        /* Asignación de Colores por Sistema */
+        .card-ffcc { --card-color: var(--red-main); }
+        .card-metro { --card-color: var(--blue-main); }
+        .card-tranvia { --card-color: var(--red-main); }
+        .card-historicos { --card-color: var(--gray-main); }
+
+        .pillar-img-wrapper {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            position: relative;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .pillar-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .pillar-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .pillar-code {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--card-color, var(--yellow-accent));
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .pillar-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            color: var(--text-main);
+            transition: color 0.2s ease;
+        }
+
+        .pillar-desc {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .pillar-link {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--card-color, var(--red-main));
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pillar-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--card-color, var(--red-main));
+            box-shadow: 0 12px 25px var(--shadow-hover);
+        }
+
+        .pillar-card:hover .pillar-img-wrapper img {
+            transform: scale(1.06);
+        }
+
+        /* Grid Compacto para Catálogo y Enlaces Rápidos (Mitad de altura) */
+        /* Grid de Catálogo y Enlaces Rápidos (Doble de tamaño) */
+.quick-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); /* Columnas más anchas */
+    gap: 20px;
+}
+
+.quick-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-left: 6px solid var(--yellow-accent);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px;
+    height: 170px; /* Doble de altura (antes 85px) */
+    box-shadow: 0 4px 12px var(--shadow-card);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.quick-img {
+    width: 140px; /* Doble de ancho (antes 70px) */
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.quick-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+    overflow: hidden;
+    gap: 6px;
+}
+
+.quick-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.25rem; /* Tamaño de letra incrementado */
+    font-weight: 700;
+    white-space: normal; /* Permite múltiples líneas si el título es largo */
+    color: var(--text-main);
+    line-height: 1.25;
+}
+
+.quick-code {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--red-main);
+    letter-spacing: 1px;
+}
+
+.quick-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--red-main);
+    box-shadow: 0 10px 22px var(--shadow-hover);
+}
+
+.quick-card:hover .quick-title {
+    color: var(--red-main);
+}
+.section-title-link {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s ease;
+}
+
+.section-title-link:hover .section-title {
+    color: var(--red-main);
+}
+
+        /* Sección Últimas Noticias */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .news-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 12px;
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 12px var(--shadow-card);
+            transition: all 0.3s ease;
+        }
+
+        .news-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .news-content {
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .news-date {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--yellow-accent);
+            margin-bottom: 4px;
+        }
+
+        .news-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .news-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .news-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--red-main);
+            box-shadow: 0 10px 20px var(--shadow-hover);
+        }
+        .brand-heading {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+
+.text-yellow {
+    color: #ffdd00; 
+}
+
+
+.text-split-blue-red {
+    background: linear-gradient(90deg, #1d4ed8 0%, #1d4ed8 50%, #e11d48 50%, #e11d48 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+      
+        footer {
+            background-color: var(--bg-card);
+            border-top: 3px solid var(--red-main);
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            transition: background-color 0.3s ease;
+        }
+
+        @media (max-width: 1100px) {
+            .rail-pattern { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column-reverse; align-items: flex-start; }
+            .pillar-grid { grid-template-columns: 1fr; }
+            .quick-grid { grid-template-columns: 1fr; }
+            .news-grid { grid-template-columns: 1fr; }
+            .theme-toggle-btn { top: 10px; right: 10px; padding: 6px 12px; font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-stripe"></div>
+
+    <div class="rail-pattern rail-pattern-left" id="railLeft"></div>
+    <div class="rail-pattern rail-pattern-right" id="railRight"></div>
+
+    <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">
+        <span id="themeIcon">Modo Oscuro</span>
+    </button>
+
+    <div class="wrapper">
+
+        <header>
+            <div class="header-info">
+                <span class="badge">Archivo Digital</span>
+                <h1 class="brand-heading">
+    <span class="text-yellow">REGISTRO</span>
+    <span class="text-split-blue-red">FERROVIARIO</span>
+</h1>
+                <p class="subtitle">Una web dedicada a los trenes que han circulado y circulan por Ecuador.</p>
+            </div>
+            <div class="flag-box">
+                <img src="bandera.webp" alt="Bandera del Ecuador">
+            </div>
+        </header>
+
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Sistemas ferroviarios en Ecuador</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="pillar-grid">
+
+                <a href="ffcc.html" class="pillar-card card-ffcc">
+                    <div class="pillar-img-wrapper">
+                        <img src="7duran1988.jpg" alt="Ferrocarriles del Ecuador" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="pillar-content">
+                        <div>
+                            <span class="pillar-code">COLECCIÓN I</span>
+                            <h3 class="pillar-title">Ferrocarriles del Ecuador</h3>
+                            <p class="pillar-desc">Todos los ferrocarriles que han existido y existen a lo largo del país.</p>
+                        </div>
+                        <span class="pillar-link">Ingresar a la Colección &rarr;</span>
+                    </div>
+                </a>
+
+                <a href="metroquito.html" class="pillar-card card-metro">
+                    <div class="pillar-img-wrapper">
+                        <img src="metroquito/tren - copia.jpg" alt="Metro de Quito" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="pillar-content">
+                        <div>
+                            <span class="pillar-code">COLECCIÓN II</span>
+                            <h3 class="pillar-title">Metro de Quito</h3>
+                            <p class="pillar-desc">El primer sistema metropolitano del país.</p>
+                        </div>
+                        <span class="pillar-link">Ingresar a la Colección &rarr;</span>
+                    </div>
+                </a>
+
+                <a href="tranviacuenca.html" class="pillar-card card-tranvia">
+                    <div class="pillar-img-wrapper">
+                        <img src="tranvia cuenca/pruebas - copia.jpg" alt="Tranvía de Cuenca" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="pillar-content">
+                        <div>
+                            <span class="pillar-code">COLECCIÓN III</span>
+                            <h3 class="pillar-title">Tranvía de Cuenca</h3>
+                            <p class="pillar-desc">Tren ligero en la capital azuaya que recorre el casco histórico de la ciudad.</p>
+                        </div>
+                        <span class="pillar-link">Ingresar a la Colección &rarr;</span>
+                    </div>
+                </a>
+
+                <a href="antiguo_tranviaguayaquil.html" class="pillar-card card-historicos">
+                    <div class="pillar-img-wrapper">
+                        <img src="trnavia quito/tranviaquito.jpg" alt="Sistemas Históricos" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="pillar-content">
+                        <div>
+                            <span class="pillar-code">COLECCIÓN IV</span>
+                            <h3 class="pillar-title">Sistemas Históricos</h3>
+                            <p class="pillar-desc">Antiguas redes de tranvías urbanos de tracción animal, a vapor y eléctrica en Guayaquil y Quito.</p>
+                        </div>
+                        <span class="pillar-link">Ingresar a la Colección &rarr;</span>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Enlaces Rápidos</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="quick-grid">
+
+                <a href="listadocoches.html" class="quick-card">
+                    <img src="ffcc/materialrodante/coches/207.jpg" class="quick-img" alt="Listado de Coches" onerror="this.src='icotrian.png'">
+                    <div class="quick-info">
+                        <span class="quick-code">REG-01</span>
+                        <span class="quick-title">Listado de Coches</span>
+                    </div>
+                </a>
+
+                <a href="listadolocomotoras.html" class="quick-card">
+                    <img src="ffcc/materialrodante/locomotoras/diesel/alsthom2400/2402front.jpg" class="quick-img" alt="Locomotoras General" onerror="this.src='icotrian.png'">
+                    <div class="quick-info">
+                        <span class="quick-code">REG-02</span>
+                        <span class="quick-title">Listado de locomotoras diésel</span>
+                    </div>
+                </a>
+
+                <a href="listadolocomotorasvaporg&q.html" class="quick-card">
+                    <img src="ffcc/materialrodante/locomotoras/vapor/53 Durán 2018.jpg" class="quick-img" alt="Estaciones G&Q" onerror="this.src='icotrian.png'">
+                    <div class="quick-info">
+                        <span class="quick-code">REG-03</span>
+                        <span class="quick-title">Listado de locomotoras vapor G&Q</span>
+                    </div>
+                </a>
+
+                <a href="mq117.html" class="quick-card">
+                    <img src="metroquito/metroquito.png" class="quick-img" alt="Mat. Rodante Metro" onerror="this.src='icotrian.png'">
+                    <div class="quick-info">
+                        <span class="quick-code">REG-04</span>
+                        <span class="quick-title">Mat. Rodante Metro</span>
+                    </div>
+                </a>
+
+                <a href="fcdelsur.html" class="quick-card">
+                    <img src="historia/FC Sur/abfiP2.jpg" class="quick-img" alt="Tranvía de Cuenca" onerror="this.src='icotrian.png'">
+                    <div class="quick-info">
+                        <span class="quick-code">REG-05</span>
+                        <span class="quick-title">F.C. de Yaguachi</span>
+                    </div>
+                </a>
+
+                <a href="fccuraray.html" class="quick-card">
+                    <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/DDkRs2.jpg" class="quick-img" alt="Vapor G&Q" onerror="this.src='icotrian.png'">
+                    <div class="quick-info">
+                        <span class="quick-code">REG-06</span>
+                        <span class="quick-title">F.C. Pto. Bolívar a Pasaje (Machala)</span>
+                    </div>
+                </a>
+
+                <a href="actualidad_trenes.html" class="quick-card">
+                    <img src="ffcc/materialrodante/locomotoras/diesel/td2000/2003b.jpg" class="quick-img" alt="Ferrocarril El Oro" onerror="this.src='icotrian.png'">
+                    <div class="quick-info">
+                        <span class="quick-code">REG-07</span>
+                        <span class="quick-title">Trenes en 2026</span>
+                    </div>
+                </a>
+
+                <a href="unidadescompletas.html" class="quick-card">
+                    <img src="ffcc/materialrodante/coches/crucero/yaguachi.jpg" class="quick-img" alt="Ferrocarril del Sur" onerror="this.src='icotrian.png'">
+                    <div class="quick-info">
+                        <span class="quick-code">REG-08</span>
+                        <span class="quick-title">Composiciones remolcadas de "FEEP"</span>
+                    </div>
+                </a>
+
+                <a href="listadolocomotorasvaporqsl.html" class="quick-card">
+                    <img src="ffcc/historia/norte/ysgLN222.jpg" class="quick-img" alt="Índice materialrodante" onerror="this.src='icotrian.png'">
+                    <div class="quick-info">
+                        <span class="quick-code">REG-09</span>
+                        <span class="quick-title">Listado locomotoras QSL</span>
+                    </div>
+                </a>
+
+                <a href="monumentos_dedicados.html" class="quick-card">
+                    <img src="monumentos/loc15.jpg" class="quick-img" alt="Índice materialrodante" onerror="this.src='icotrian.png'">
+                    <div class="quick-info">
+                        <span class="quick-code">REG-10</span>
+                        <span class="quick-title">Monumentos al ferrocarril.</span>
+                    </div>
+                </a>
+
+                <a href="listadolocomotoras_curaray.html" class="quick-card">
+                    <img src="ffcc/historia/fccuraray/Ambato a Curacay2.png" class="quick-img" alt="Índice materialrodante" onerror="this.src='icotrian.png'">
+                    <div class="quick-info">
+                        <span class="quick-code">REG-11</span>
+                        <span class="quick-title">Listado locomotoras F.C. al Curaray</span>
+                    </div>
+                </a>
+
+                <a href="g&q_material_rodante.html" class="quick-card">
+                    <img src="ffcc/materialrodante/locomotoras/diesel/alco/160.jpg" class="quick-img" alt="Índice materialrodante" onerror="this.src='icotrian.png'">
+                    <div class="quick-info">
+                        <span class="quick-code">REG-12</span>
+                        <span class="quick-title">materialrodante G&Q-ENFE-FEEP</span>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+    <section>
+        <div class="section-header">
+            <a href="seccion_noticias.html" class="section-title-link">
+                <h2 class="section-title">Últimas Noticias & Actualizaciones</h2>
+            </a>
+            <div class="section-line"></div>
+        </div>
+
+
+    
+        <div class="news-grid" id="index-news-grid">
+            <p>Cargando noticias...</p>
+        </div>
+    </section>
+
+    <section>
+            <div class="section-header">
+                <h2 class="section-title">Acceso rápido a "Fichas técnicas de materialrodante"</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="pillar-grid">
+                
+                <a href="colonialmadera13.html" class="pillar-card card-ffcc">
+                    <div class="pillar-img-wrapper">
+                        <img src="ffcc/materialrodante/coches/colonialmadera/115duran2.jpg" alt="Diesel Sulzer" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="pillar-content">
+                        <div>
+                            <span class="pillar-code">COCHES</span>
+                            <h3 class="pillar-title">G&Q Colonial madera 13m</h3>
+                            <p class="pillar-desc">Coches clásicos de madera de estilo colonial.</p>
+                        </div>
+                        <span class="pillar-link">Ver Ficha Técnica &rarr;</span>
+                    </div>
+                </a>
+
+                <a href="cochescut4.html" class="pillar-card card-ffcc">
+                    <div class="pillar-img-wrapper">
+                        <img src="ffcc/materialrodante/coches/cut4/00122.jpg" alt="Diesel Sulzer" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="pillar-content">
+                        <div>
+                            <span class="pillar-code">COCHES</span>
+                            <h3 class="pillar-title">FEEP CUT 4</h3>
+                            <p class="pillar-desc">Coches de segunda mano españoles para trenes turísticos de FEEP entre 2014 y 2020.</p>
+                        </div>
+                        <span class="pillar-link">Ver Ficha Técnica &rarr;</span>
+                    </div>
+                </a>
+
+                <a href="feep_td2000.html" class="pillar-card card-ffcc">
+                    <div class="pillar-img-wrapper">
+                        <img src="ffcc/materialrodante/locomotoras/diesel/td2000/2003b.jpg" alt="Diesel Sulzer" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="pillar-content">
+                        <div>
+                            <span class="pillar-code">MAQUINARIA</span>
+                            <h3 class="pillar-title">FEEP 2000</h3>
+                            <p class="pillar-desc">Locomotoras duales de segunda mano españolas para trenes turísticos de FEEP entre 2015 y 2020.</p>
+                        </div>
+                        <span class="pillar-link">Ver Ficha Técnica &rarr;</span>
+                    </div>
+                </a>
+
+                <a href="lima-shay.html" class="pillar-card card-ffcc">
+                    <div class="pillar-img-wrapper">
+                        <img src="ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg" alt="Lima-Shay" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="pillar-content">
+                        <div>
+                            <span class="pillar-code">MAQUINARIA</span>
+                            <h3 class="pillar-title">G&Q Lima-Shay</h3>
+                            <p class="pillar-desc">Locomotoras de vapor articuladas con transmisión por engranajes.</p>
+                        </div>
+                        <span class="pillar-link">Ver Ficha Técnica &rarr;</span>
+                    </div>
+                </a>
+
+                <a href="g&q_mogul2-6-0_42.html" class="pillar-card card-ffcc">
+                    <div class="pillar-img-wrapper">
+                        <img src="ffcc/materialrodante/locomotoras/vapor/2-6-0.jpg" alt="Mogul 2-6-0" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="pillar-content">
+                        <div>
+                            <span class="pillar-code">MAQUINARIA</span>
+                            <h3 class="pillar-title">G&Q Baldwin 2-6-0 "Mogul"</h3>
+                            <p class="pillar-desc">Locomotoras de tracción a vapor para carga y transporte de pasajeros.</p>
+                        </div>
+                        <span class="pillar-link">Ver Ficha Técnica &rarr;</span>
+                    </div>
+                </a>
+
+                <a href="g&q_garratt_2-6-2+2-6-2.html" class="pillar-card card-ffcc">
+                    <div class="pillar-img-wrapper">
+                        <img src="ffcc/materialrodante/locomotoras/vapor/garrat/oLOgTcrop.jpg" alt="Garratt" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="pillar-content">
+                        <div>
+                            <span class="pillar-code">MAQUINARIA</span>
+                            <h3 class="pillar-title">G&Q Beyer Peacock Garratt 2-6-2 + 2-6-2</h3>
+                            <p class="pillar-desc">Locomotoras articuladas diseñadas para cargas pesadas en fuerte pendiente.</p>
+                        </div>
+                        <span class="pillar-link">Ver Ficha Técnica &rarr;</span>
+                    </div>
+                </a>
+
+                <a href="qsl_alsthomsulzer150.html" class="pillar-card card-ffcc">
+                    <div class="pillar-img-wrapper">
+                        <img src="ffcc/materialrodante/locomotoras/diesel/sulzer/8tfaL.png" alt="Diesel Sulzer" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="pillar-content">
+                        <div>
+                            <span class="pillar-code">MAQUINARIA</span>
+                            <h3 class="pillar-title">QSL Alsthom-Sulzer <br> BBB-150</h3>
+                            <p class="pillar-desc">Locomotoras diésel de doble sección de origen francés.</p>
+                        </div>
+                        <span class="pillar-link">Ver Ficha Técnica &rarr;</span>
+                    </div>
+                </a>
+
+                <a href="qsl_borsig4-6-0.html" class="pillar-card card-ffcc">
+                    <div class="pillar-img-wrapper">
+                        <img src="ffcc/historia/norte/ysgLN22.jpg" alt="Diesel Sulzer" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="pillar-content">
+                        <div>
+                            <span class="pillar-code">MAQUINARIA</span>
+                            <h3 class="pillar-title">QSL Borsig 4-6-0</h3>
+                            <p class="pillar-desc">Primeras locomotoras del Ferrocarril Quito a San Lorenzo en 1926.</p>
+                        </div>
+                        <span class="pillar-link">Ver Ficha Técnica &rarr;</span>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <footer>
+            <div><strong>registroferroviario.ec</strong> — Archivo Histórico Particular de Harukaze</div>
+            <div>Ecuador</div>
+        </footer>
+
+    </div>
+
+    <script>
+        
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const label = document.getElementById('themeIcon');
+            if (theme === 'dark') {
+                label.textContent = 'Modo Claro';
+            } else {
+                label.textContent = 'Modo Oscuro';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
+
+        
+        const railLeft = document.getElementById('railLeft');
+        const railRight = document.getElementById('railRight');
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const position = scrolled * 0.4; 
+            railLeft.style.backgroundPositionY = `${position}px`;
+            railRight.style.backgroundPositionY = `${position}px`;
+        });
+
+        fetch('seccion_noticias.json')
+    .then(response => response.json())
+    .then(noticias => {
+        const grid = document.getElementById('index-news-grid');
+        grid.innerHTML = '';
+
+        // Tomar solo los primeros 3 elementos del archivo JSON
+        const ultimasNoticias = noticias.slice(0, 3);
+
+        ultimasNoticias.forEach(noticia => {
+            grid.innerHTML += `
+                <a href="noticia.html?id=${noticia.id}" class="news-card">
+                    <img src="${noticia.imagen}" class="news-img" alt="${noticia.titulo}" onerror="this.src='icotrian.png'">
+                    <div class="news-content">
+                        <span class="news-date">${noticia.fecha.toUpperCase()}</span>
+                        <h3 class="news-title">${noticia.titulo}</h3>
+                        <p class="news-desc">${noticia.resumen}</p>
+                    </div>
+                </a>
+            `;
+        });
+    })
+    .catch(error => {
+        console.error('Error al cargar noticias:', error);
+        document.getElementById('index-news-grid').innerHTML = '<p>No se pudieron cargar las noticias recientes.</p>';
+    });
+    </script>
+
+</body>
+</html>

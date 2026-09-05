@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <link rel="icon" type="image/png" href="ico.jpg">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Costa Henschel 2-6-0 "Mogul" - RegistroFerroviario</title>
+  <meta name="description" content="Características técnicas y reseña histórica de las locomotoras Beyer Peacock Garratt">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+      /* --- VARIABLES DE COLOR Y ESTILOS DE TEMA --- */
+      [data-theme="light"] {
+          --bg-body: #f8fafc;
+          --bg-card: #ffffff;
+          --bg-card-alt: #f1f5f9;
+          --text-primary: #0f172a;
+          --text-secondary: #475569;
+          --accent-red: #06b6d4;
+          --accent-red-hover: #06b6d4;
+          
+          --border-color: #06b6d4; 
+          --border-table-line: #cbd5e1;
+          --border-width: 2px;
+          
+          --table-header-bg: #06b6d4;
+          --shadow: 0 4px 15px rgba(15, 23, 42, 0.12);
+
+          --dropdown-bg: #ffffff;
+          --dropdown-hover: #14532d;
+          --dropdown-text-hover: #ffffff;
+          --dropdown-border: #64748b;
+
+          --via-color: #cbd5e1;
+          --via-rail: #94a3b8;
+      }
+
+      [data-theme="dark"] {
+          --bg-body: #0b132b;
+          --bg-card: #1c2541;
+          --bg-card-alt: #0f172a;
+          --text-primary: #f1f5f9;
+          --text-secondary: #94a3b8;
+          --accent-red: #16a34a;
+          --accent-red-hover: #16a34a;
+          
+          --border-color: #14532d;
+          --border-table-line: #1e293b;
+          --border-width: 1px;
+
+          --table-header-bg: #16a34a;
+          --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+
+          --dropdown-bg: #0f172a;
+          --dropdown-hover: #14532d;
+          --dropdown-text-hover: #ffffff;
+          --dropdown-border: #334155;
+
+          --via-color: #1e293b;
+          --via-rail: #334155;
+      }
+
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+
+      body {
+          font-family: 'Inter', sans-serif;
+          background-color: var(--bg-body);
+          color: var(--text-primary);
+          transition: background-color 0.3s ease, color 0.3s ease;
+          line-height: 1.6;
+          overflow-x: hidden;
+      }
+
+      .top-stripe {
+          height: 8px;
+          background: linear-gradient(90deg, #ffcc00 0%, #003399 50%, #cc0000 100%);
+          width: 100%;
+      }
+
+      .header2 {
+          position: relative;
+          padding: 3rem 0;
+          text-align: center;
+          color: #ffffff;
+          background-image: 
+              linear-gradient(#16a34a,#06b6d4), 
+              url('ffcc/historia/FC\ a\ la\ Costa/yzuew.jpg');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-blend-mode: multiply;
+      }
+
+      .header2 .container {
+          position: relative;
+          z-index: 2;
+      }
+
+      .header2 h1 {
+          font-family: 'Outfit', sans-serif;
+          margin: 0;
+          font-size: 2.5rem;
+          font-weight: 800;
+          text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+
+      .header2 .subtitle {
+          margin: 0.4rem 0 0 0;
+          font-size: 1.1rem;
+          opacity: 0.95;
+          text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+      }
+
+      .top-navbar {
+          background-color: var(--bg-card);
+          border-bottom: calc(var(--border-width) + 2px) solid var(--accent-red);
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+          box-shadow: 0 4px 15px var(--shadow);
+          transition: background-color 0.3s ease;
+      }
+
+      .nav-container {
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 0 24px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 20px;
+          height: 55px;
+      }
+
+      .nav-links {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          list-style: none;
+          height: 100%;
+      }
+
+      .nav-links li {
+          position: relative;
+          height: 100%;
+          display: flex;
+          align-items: center;
+      }
+
+      .nav-links a {
+          text-decoration: none;
+          color: var(--text-primary);
+          font-size: 0.88rem;
+          font-weight: 600;
+          padding: 8px 14px;
+          border-radius: 6px;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          white-space: nowrap;
+      }
+
+      .nav-links a:hover,
+      .nav-links li:hover > a,
+      .nav-links a.active {
+          background-color: var(--bg-card-alt);
+          color: var(--accent-red);
+      }
+
+      .nav-links ul {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          background-color: var(--dropdown-bg);
+          border: var(--border-width) solid var(--dropdown-border);
+          border-radius: 8px;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+          list-style: none;
+          min-width: 260px;
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(10px);
+          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+          padding: 6px 0;
+          z-index: 1001;
+      }
+
+      .nav-links li:hover > ul {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+      }
+
+      .nav-links ul ul {
+          top: 0;
+          left: 100%;
+          margin-left: 2px;
+      }
+
+      .nav-links ul li {
+          width: 100%;
+          height: auto;
+          position: relative;
+      }
+
+      .nav-links ul a {
+          width: 100%;
+          padding: 10px 16px;
+          font-size: 0.85rem;
+          font-weight: 500;
+          border-radius: 0;
+          color: var(--text-primary);
+          justify-content: space-between;
+      }
+
+      .nav-links ul a:hover,
+      .nav-links ul li:hover > a {
+          background-color: var(--dropdown-hover);
+          color: var(--dropdown-text-hover) !important;
+      }
+
+      .arrow-down::after { content: " ▾"; font-size: 0.75rem; }
+      .arrow-right::after { content: " ▸"; font-size: 0.75rem; }
+      .arrow-left::after { content: " ◂"; font-size: 0.75rem; }
+
+      .theme-toggle-btn {
+          background: var(--bg-card);
+          border: var(--border-width) solid var(--accent-red);
+          color: var(--accent-red);
+          padding: 6px 14px;
+          border-radius: 30px;
+          font-size: 0.82rem;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          white-space: nowrap;
+      }
+
+      .theme-toggle-btn:hover {
+          background: var(--accent-red);
+          color: #ffffff;
+      }
+
+      .wrapper-main {
+          position: relative;
+          max-width: 1400px;
+          margin: 0 auto;
+      }
+
+      .via-decorativa {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: 24px;
+          z-index: 1;
+          pointer-events: none;
+          opacity: 0.7;
+          background-image: 
+              linear-gradient(90deg, var(--via-rail) 0, var(--via-rail) 3px, transparent 3px, transparent 21px, var(--via-rail) 21px, var(--via-rail) 24px),
+              repeating-linear-gradient(0deg, transparent, transparent 12px, var(--via-color) 12px, var(--via-color) 16px);
+      }
+
+      .via-izquierda { left: 10px; }
+      .via-derecha { right: 10px; }
+
+      .container {
+          max-width: 1300px;
+          margin: 0 auto;
+          padding: 0 2.5rem;
+          position: relative;
+          z-index: 2;
+      }
+
+      h2 {
+          font-family: 'Outfit', sans-serif;
+          font-size: 1.8rem;
+          font-weight: 800;
+          color: var(--text-primary);
+          padding-left: 1.25rem;
+          margin-top: 3rem;
+          margin-bottom: 1.5rem;
+          position: relative;
+      }
+
+      h2::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 6px;
+          height: 28px;
+          background: var(--accent-red);
+          border-radius: 4px;
+      }
+
+      .ficha {
+          max-width: 1200px;
+          margin: 2.5rem auto;
+          background: var(--bg-card);
+          border: var(--border-width) solid var(--border-color);
+          border-radius: 16px;
+          box-shadow: var(--shadow);
+          overflow: hidden;
+          color: var(--text-primary);
+      }
+
+      .ficha .cabecera {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          padding: 1.5rem 2rem 1rem;
+          border-bottom: var(--border-width) solid var(--border-color);
+          background: var(--bg-card-alt);
+      }
+
+      .ficha .cabecera h1 {
+          font-family: 'Outfit', sans-serif;
+          font-size: 1.6rem;
+          font-weight: 800;
+          color: var(--text-primary);
+          margin: 0;
+      }
+
+      .ficha .cabecera .meta {
+          text-align: right;
+          font-size: 0.95rem;
+          color: var(--text-secondary);
+          font-weight: 600;
+      }
+
+      .ficha .foto-contenedor {
+          padding: 1.5rem 2rem;
+          background: var(--bg-card-alt);
+          text-align: center;
+          border-bottom: var(--border-width) solid var(--border-color);
+      }
+
+      .ficha .foto-contenedor img {
+          max-width: 100%;
+          height: auto;
+          max-height: 380px;
+          border-radius: 10px;
+          object-fit: cover;
+          border: var(--border-width) solid var(--border-color);
+          box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+          cursor: pointer;
+      }
+
+      .ficha .contenido {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2.5rem;
+          padding: 2rem;
+      }
+
+      .ficha .seccion {
+          margin-bottom: 1.5rem;
+      }
+
+      .ficha .seccion-titulo {
+          display: inline-block;
+          background: #16a34a;
+          color: #ffffff;
+          font-size: 0.82rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          padding: 0.35rem 0.8rem;
+          border-radius: 6px;
+          margin-bottom: 0.8rem;
+          letter-spacing: 0.5px;
+      }
+
+      .ficha table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 0.93rem;
+      }
+
+      .ficha table tr {
+          border-bottom: 1px solid var(--border-table-line);
+      }
+
+      .ficha table tr:last-child {
+          border-bottom: none;
+      }
+
+      .ficha table td {
+          padding: 0.2rem 0;
+          background: transparent !important;
+      }
+
+      .ficha table td:first-child {
+          color: var(--text-secondary);
+          width: 55%;
+          font-weight: 500;
+          border-right: none !important;
+          text-align: left;
+      }
+
+      .ficha table td:last-child {
+          color: var(--text-primary);
+          font-weight: 700;
+          text-align: right;
+      }
+
+      .ficha .nota {
+          padding: 0.8rem 2rem 1.5rem;
+          font-size: 0.88rem;
+          color: var(--text-secondary);
+          font-style: italic;
+      }
+
+      .carrusel-continuo-contenedor {
+          width: 100%;
+          overflow: hidden;
+          background: var(--bg-card);
+          border: var(--border-width) solid var(--border-color);
+          padding: 1.5rem 0;
+          border-radius: 12px;
+          position: relative;
+          box-shadow: var(--shadow);
+      }
+
+      .carrusel-continuo-track {
+          display: flex;
+          gap: 20px;
+          animation: desplazarContinuo 25s linear infinite;
+          width: max-content;
+      }
+
+      .carrusel-continuo-contenedor:hover .carrusel-continuo-track {
+          animation-play-state: paused;
+      }
+
+      .carrusel-continuo-track img {
+          width: 400px;
+          height: 280px;
+          object-fit: cover;
+          border-radius: 8px;
+          border: var(--border-width) solid var(--border-color);
+          display: block;
+      }
+
+      @keyframes desplazarContinuo {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+      }
+      .ficha .foto-credito {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-top: 0.5rem;
+    text-align: right; 
+    max-width: 100%;
+}
+
+      .modal-overlay {
+          display: none;
+          position: fixed;
+          top: 0; left: 0;
+          width: 100vw; height: 100vh;
+          background: rgba(15, 23, 42, 0.88);
+          backdrop-filter: blur(8px);
+          z-index: 2000;
+          justify-content: center;
+          align-items: center;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+      }
+
+      .modal-overlay.activo {
+          display: flex;
+          opacity: 1;
+      }
+
+      .modal-body img {
+          max-width: 85vw;
+          max-height: 78vh;
+          border-radius: 10px;
+          border: 2px solid var(--border-color);
+      }
+
+      .modal-caption {
+          color: #ffffff;
+          margin-top: 10px;
+          font-size: 1rem;
+          text-align: center;
+          font-family: 'Outfit', sans-serif;
+      }
+
+      .modal-close {
+          position: absolute;
+          top: 20px; right: 30px;
+          color: #ffffff;
+          font-size: 2.5rem;
+          cursor: pointer;
+      }
+
+      footer {
+          background-color: var(--bg-card);
+          border-top: calc(var(--border-width) + 1px) solid var(--accent-red);
+          border-bottom: var(--border-width) solid var(--border-color);
+          border-left: var(--border-width) solid var(--border-color);
+          border-right: var(--border-width) solid var(--border-color);
+          color: var(--text-secondary);
+          padding: 2rem 0;
+          text-align: center;
+          margin-top: 4rem;
+          border-radius: 12px 12px 0 0;
+          font-size: 0.9rem;
+      }
+
+      @media (max-width: 1024px) {
+          .via-decorativa { display: none; }
+          .container { padding: 0 1.5rem; }
+      }
+
+      @media (max-width: 720px) {
+          .ficha .contenido { grid-template-columns: 1fr; }
+          .ficha .cabecera { flex-direction: column; gap: 0.5rem; }
+          .ficha .cabecera .meta { text-align: left; }
+      }
+  </style>
+</head>
+<body>
+
+    <div class="top-stripe"></div>
+
+    <!-- ENCABEZADO SUPERIOR -->
+    <header class="header2">
+        <div class="container">
+            <h1>F.C. a la Costa</h1>
+            <p class="subtitle">Costa • Henschel 4-6-0</p>
+        </div>
+    </header>
+
+    <<nav class="top-navbar">
+        <div class="nav-container">
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                
+                <li>
+                    <a href="ffcc.html" class="arrow-down">FF.CC. Ecuador</a>
+                    <ul>
+                        <li>
+                            <a href="fcdelsur.html" class="arrow-right">F.C. del Sur </a>
+                            <ul>
+                                <li><a href="fcdelsur.html">Información y reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfcdelsur.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="g&q.html" class="arrow-right">G. & Q. (Guayaquil - Quito)</a>
+                            <ul>
+                                <li>
+                                    <a href="g&q.html">Información y reseña histórica</a>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                    <ul>
+                                        <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                        <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                        <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                        <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotorasvaporg&q.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul"</a></li>
+                                        <li><a href="consolidation.html">Baldwin 2-8-0 "Consolidation"</a></li>
+                                        <li>
+                                            <a href="listadolocomotoras.html" class="arrow-left">Históricas</a>
+                                            <ul>
+                                                <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul" 42" 12,8 metros</a></li>
+                                                <li></li><a href="g&q_mogul2-6-0_48.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                                <li><a href="lima-shay.html">Lima 0-4+4+4-0 "Shay"</a></li>
+                                                <li><a href="g&q_mallet0-6-6-0.html">Baldwin 0-6-6-0 "Mallet"</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_42.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_54.html">Baldwin 2-8-0 "Consolidation" 54" 16,4 metros</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_44.html">Baldwin 2-8-0 "Consolidation" 44" 13,4 metros</a></li>
+                                                <li><a href="g&q_garratt_2-6-2+2-6-2.html">Beyer Peacock 2-6-2+2-6-2 "Garratt"</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="extra_locomotoras.html">Locomotoras utilitarias y equipo auxiliar</a></li>
+                                <li>
+                                    <a href="listadocoches.html" class="arrow-left">Listado de coches de viajeros</a>
+                                    <ul>
+                                        <li><a href="coches250.html">Coches serie 250</a></li>
+                                        <li>
+                                            <a href="unidadescompletas.html" class="arrow-right">Composiciones remolcadas</a>
+                                            <ul>
+                                                <li><a href="unidadescompletaspanoramico.html">Moderno Panorámico</a></li>
+                                                <li><a href="unidadescompletascrucero.html">Moderno Crucero 1 & 2</a></li>
+                                                <li><a href="unidadescompletasmodernocut3.html">Moderno CUT3</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="cochescut4.html">Coches CUT4</a></li>
+                                        <li><a href="colonialmadera13.html">Coloniales madera 13m</a></li>
+                                        <li><a href="colonialmadera14.html">Coloniales madera 14m</a></li>
+                                        <li><a href="coches_metalicos_reciclados.html">Metálico reciclado</a></li>
+                                        <li><a href="cochesjaula.html">Coches Jaula</a></li>
+                                        <li><a href="coches3500.html">Coches UT3500</a></li>
+                                        <li><a href="feep_furgon_generador.html">Furgones generador</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="mantenimiento.jpg" class="arrow-left">Vagones</a>
+                                    <ul>
+                                        <li><a href="g&q_furgon_1500.html">Furgón Boxcar tipo "1500"</a></li>
+                                        <li><a href="g&q_tanquero_1100.html">Vagón tanquero tipo "1100"</a></li>
+                                        <li><a href="g&q_plataforma_300.html">Plataforma tipo "300"</a></li>
+                                        <li><a href="g&q_gondola_600.html">Góndola tipo "600"</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="listadoestaciones_g&q.html">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcquitosanlorenzo.html" class="arrow-right">F.C. Quito a San Lorenzo</a>
+                            <ul>
+                                <li><a href="fcquitosanlorenzo.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasvaporqsl.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="qsl_borsig4-6-0.html">Borsig 4-6-0 42" 12,8 metros</a></li>
+                                        <li><a href="norte_baldwin2-8-0.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                        <li><a href="curaray_baldwin2-6-0.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                    </ul>
+                                
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                        <ul>
+                                            <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                            <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                            <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                            <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                            <li><a href="extra_locomotoras.html">Otras locomotoras diésel utilitarias</a></li>
+                                        </ul>
+                                </li>
+                                <li><a href="mantenimiento.jpg">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcsibambecuenca.html" class="arrow-right">S. C. (Sibambe a Cuenca)</a>
+                            <ul>
+                                <li><a href="fcsibambecuenca.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorassc.html">Listado locomotoras de vapor</a></li>
+                                <li><a href="listadoestaciones_sc.html">Estaciones</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcalacosta.html" class="arrow-right">F.C. Guayaquil a Salinas</a>
+                            <ul>
+                                <li><a href="fcalacosta.html">Reseña histórica</a></li>
+                                <li>
+                                    <a href="listadolocomotorasvaporcosta.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="costa_henschel2-6-0.html">Henschel 2-6-0 "Mogul"</a></li>
+                                        <li><a href="costa_henschel4-6-0.html">Henschel 4-6-0</a></li>
+                                    </ul>
+                                </li>
+                                    
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcambatocuraray.html" class="arrow-right">F.C. Ambato a Curaray</a>
+                            <ul>
+                                <li><a href="fcambatocuraray.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoras_curaray.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcbahiachone.html" class="arrow-right">F.C. Bahía a Chone</a>
+                            <ul>
+                                <li><a href="fcbahiachone.html">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fccentral.html" class="arrow-right">F.C. Central del Ecuador</a>
+                            <ul>
+                                <li><a href="fccentral.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfccentral.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_loja.html" class="arrow-right">F.C. Puerto Bolívar y Pasaje</a>
+                            <ul>
+                                <li><a href="fcpuertobolivar_loja.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoraseloro.html">Listado materialrodante</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_piedras.html" class="arrow-right">F.C. Puerto Bolívar a Piedras</a>
+                            <ul>
+                                <li><a href="fcpuertobolivar_piedras.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoraseloro.html">Listado materialrodante</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="ffccaduana_guayaquil.html" class="arrow-right">F.C. Aduana de Guayaquil</a>
+                            <ul>
+                                <li><a href="ffccaduana_guayaquil.html">Reseña Histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="mantenimiento.jpg">FF.CC. no construidos</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="ffcc.html#indus" class="arrow-down">FF.CC. Industriales</a>
+                    <ul>
+                        <li><a href="mantenimiento.jpg">Ingenio Valdez</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio San Carlos</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Inés María</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Luz María y Matilde</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Rocafuerte</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Nugues</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Adelina María</a></li>
+                        <li><a href="mantenimiento.jpg">United Fruit Company</a></li>
+                        <li><a href="mantenimiento.jpg">Ecuadorian Oilfields</a></li>
+                        <li><a href="mantenimiento.jpg">Galápagos?</a></li>
+                    </ul>
+                
+                </li>
+
+                <li><a href="metroquito.html">Metro de Quito</a></li>
+                <li><a href="tranviacuenca.html">Tranvía Cuenca</a></li>
+                <li>
+                    <a href="#" class="arrow-down">Tranvías Históricos</a>
+                    <ul>
+                        <li><a href="antiguo_tranviaquito.html">Tranvía de Quito</a></li>
+                        <li><a href="antiguo_tranviaguayaquil.html">Tranvía de Guayaquil</a></li>
+                    </ul>
+                </li>
+                
+                <li><a href="mantenimiento.jpg">F.E.E.P (2010-2020)</a></li>
+                <li><a href="actualidad_trenes.html">Trenes en 2026</a></li>
+            </ul>
+
+            <button class="theme-toggle-btn" onclick="toggleTheme()">
+                <span id="themeIcon">Modo Oscuro</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- WRAPPER CON LAS VÍAS DECORATIVAS LATERALES -->
+    <div class="wrapper-main">
+        <div class="via-decorativa via-izquierda"></div>
+        <div class="via-decorativa via-derecha"></div>
+
+        <main class="container">
+            <!-- FICHA TÉCNICA -->
+            <div class="ficha">
+                <div class="cabecera">
+                    <h1>Costa · Henschel 2-6-0 "Mogul"</h1>
+                    <div class="meta">
+                        Ecuador · 1922<br>
+                        1 unidad construidas
+                    </div>
+                </div>
+
+                <div class="foto-contenedor">
+                    <img src="ffcc/historia/fcalacosta/yzuew.jpg" alt="Locomotora Beyer Peacock Garratt G&Q" onclick="abrirModal(this)">
+                </div>
+
+                <div class="contenido">
+                    <div>
+                        <div class="seccion">
+                            <div class="seccion-titulo">General</div>
+                            <table>
+                                <tr>
+                                    <td>Año de construcción</td>
+                                    <td>1922</td>
+                                </tr>
+                                <tr>
+                                    <td>Fabricante</td>
+                                    <td>Henschel</td>
+                                </tr>
+                                <tr>
+                                    <td>Modelo</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Disposición de ejes</td>
+                                    <td>2-6-0 "Mogul"</td>
+                                </tr>
+                                <tr>
+                                    <td>Ancho de vía</td>
+                                    <td>1.435 mm</td>
+                                </tr>
+                                <tr>
+                                    <td>Cabinas</td>
+                                    <td>Monocabina unidireccional</td>
+                                </tr>
+                                <tr>
+                                    <td>Numeración</td>
+                                    <td>2</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="seccion">
+                            <div class="seccion-titulo">Dimensiones y pesos</div>
+                            <table>
+                                <tr>
+                                    <td>Longitud entre extremos</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Anchura de caja</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Altura máxima</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Peso total</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Peso en servicio</td>
+                                    <td>- t</td>
+                                </tr>
+                                <tr>
+                                    <td>Peso adherido</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Peso por eje</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Distancia entre ejes</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Distancia entre ejes rígida motrices</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Distancia total entre ejes</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Tipo de combustible</td>
+                                    <td>¿?</td>
+                                </tr>
+                                <tr>
+                                    <td>Capacidad de combustible</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Capacidad de agua</td>
+                                    <td>¿?</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="seccion">
+                            <div class="seccion-titulo">Caldera</div>
+                            <table>
+                                <tr>
+                                    <td>Zona de rejilla</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Zona de bombeo</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Zona de calentamiento de tubos</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Zona de calentamiento evaporativo</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Zona de sobrecalentador</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Zona total de calentamiento</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Diámetro de ruedas motrices</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Presión de caldera</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Tipo de expansión</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Cilindros</td>
+                                    <td>-</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="seccion">
+                            <div class="seccion-titulo">Planta Motriz</div>
+                            <table>
+                                <tr>
+                                    <td>Potencia Nominal</td>
+                                    <td>¿?</td>
+                                </tr>
+                                <tr>
+                                    <td>Esfuerzo de tracción inicial con presión de caldera (75%)¹ (85%)²</td>
+                                    <td>¿?</td>
+                                </tr>
+                                <tr>
+                                    <td>Esfuerzo de tracción contínuo</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Factor de adherencia</td>
+                                    <td>¿?</td>
+                                </tr>
+                                <tr>
+                                    <td>Velocidad máxima</td>
+                                    <td>¿?</td>
+                                </tr>
+                                <tr>
+                                    <td>Velocidad óptima</td>
+                                    <td>¿?</td>
+                                </tr>
+                                <tr>
+                                    <td>Freno dinámico</td>
+                                    <td>¿?</td>
+                                </tr>
+                                <tr>
+                                    <td>Freno neumático</td>
+                                    <td>¿?</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="nota">.</div>
+            </div>
+
+            <!-- CARRUSEL DE FOTOS -->
+            <section id="fotos">
+                <h2>Últimas Fotografías</h2>
+                <div class="carrusel-continuo-contenedor">
+                    <div class="carrusel-continuo-track" id="carrusel-track">
+                        <a href="#" title="Ver foto 1">
+                            <img src="ffcc/materialrodante/locomotoras/vapor/garrat/103cpy.png" alt="Beyer Peacock Garratt" onclick="abrirModal(this); return false;">
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RESEÑA HISTÓRICA -->
+            <section id="reseña">
+                <h2>Reseña Histórica</h2>
+            </section>
+
+            <div id="imageModal" class="modal-overlay" onclick="cerrarModal()">
+    <span class="modal-close" onclick="cerrarModal()">&times;</span>
+    <button class="modal-nav prev" onclick="event.stopPropagation(); cambiarFoto(-1);">&#10094;</button>
+    <div class="modal-body" onclick="event.stopPropagation()">
+        <img id="modalImage" src="" alt="Imagen ampliada">
+        <div id="modalCaption" class="modal-caption"></div>
+    </div>
+    <button class="modal-nav next" onclick="event.stopPropagation(); cambiarFoto(1);">&#10095;</button>
+</div>
+            
+            <footer>
+                <div class="container">
+                    <p>&copy; 2026 RegistroFerroviario.ec — Archivo Histórico Particular de Harukaze</p>
+                    <p>Locomotora Borsig 4-6-0 • QSL</p>
+                </div>
+            </footer>     
+        </main>
+    </div>
+
+    <script>
+        // --- CONTROL DE TEMA Y MODO OSCURO/CLARO ---
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const label = document.getElementById('themeIcon');
+            if (label) {
+                label.textContent = theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
+
+        // --- CARRUSEL CONTINUO ---
+        document.addEventListener("DOMContentLoaded", function() {
+            const track = document.getElementById('carrusel-track');
+            if (track) {
+                const contenidoOriginal = track.innerHTML;
+                track.innerHTML = contenidoOriginal + contenidoOriginal;
+            }
+        });
+
+        // --- LIGHTBOX MODAL ---
+        let fotosGaleria = [];
+        let indiceActual = 0;
+
+        function obtenerFotosCarrusel() {
+            const track = document.getElementById('carrusel-track');
+            if (!track) return [];
+            // Toma únicamente el primer grupo de fotos (ignora el duplicado del bucle)
+            const enlaces = track.querySelectorAll('a');
+            const mitad = Math.ceil(enlaces.length / 2);
+            const enlacesOriginales = Array.from(enlaces).slice(0, mitad > 0 ? mitad : enlaces.length);
+            
+            return enlacesOriginales.map(a => a.querySelector('img')).filter(img => img !== null);
+        }
+
+        function abrirModal(elementoImg) {
+            fotosGaleria = obtenerFotosCarrusel();
+            
+            // Busca la imagen dentro del arreglo
+            indiceActual = fotosGaleria.findIndex(img => img.src === elementoImg.src);
+            
+            // Si la foto es la de la ficha técnica principal
+            if (indiceActual === -1) {
+                fotosGaleria = [elementoImg];
+                indiceActual = 0;
+            }
+
+            actualizarModal();
+
+            const modal = document.getElementById('imageModal');
+            modal.classList.add('activo');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function actualizarModal() {
+            if (fotosGaleria.length === 0) return;
+            
+            const imgActual = fotosGaleria[indiceActual];
+            const modalImg = document.getElementById('modalImage');
+            const modalCaption = document.getElementById('modalCaption');
+            const btnPrev = document.querySelector('.modal-nav.prev');
+            const btnNext = document.querySelector('.modal-nav.next');
+
+            modalImg.src = imgActual.src;
+            modalCaption.textContent = imgActual.alt || imgActual.nextElementSibling?.textContent || '';
+
+            // Muestra u oculta los botones si hay una o más fotos
+            if (fotosGaleria.length <= 1) {
+                btnPrev.style.display = 'none';
+                btnNext.style.display = 'none';
+            } else {
+                btnPrev.style.display = 'block';
+                btnNext.style.display = 'block';
+            }
+        }
+
+        function cambiarFoto(direccion) {
+            if (fotosGaleria.length <= 1) return;
+            
+            indiceActual += direccion;
+            if (indiceActual < 0) {
+                indiceActual = fotosGaleria.length - 1;
+            } else if (indiceActual >= fotosGaleria.length) {
+                indiceActual = 0;
+            }
+            actualizarModal();
+        }
+
+        function cerrarModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('activo');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Navegación con teclado (Flechas y Escape)
+        document.addEventListener('keydown', function(event) {
+            const modal = document.getElementById('imageModal');
+            if (!modal.classList.contains('activo')) return;
+
+            if (event.key === "Escape") {
+                cerrarModal();
+            } else if (event.key === "ArrowLeft") {
+                cambiarFoto(-1);
+            } else if (event.key === "ArrowRight") {
+                cambiarFoto(1);
+            }
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('mobile-open');
+        });
+
+        
+        const parentItems = document.querySelectorAll('.nav-links li');
+
+        parentItems.forEach(item => {
+            const link = item.querySelector(':scope > a');
+            const subMenu = item.querySelector(':scope > ul');
+
+            if (subMenu && link) {
+                link.addEventListener('click', (e) => {
+                   
+                    if (window.innerWidth <= 900) {
+                        
+                        if (!item.classList.contains('open')) {
+                            e.preventDefault(); 
+                            
+                            
+                            const siblings = item.parentElement.querySelectorAll(':scope > li.open');
+                            siblings.forEach(sibling => sibling.classList.remove('open'));
+
+                            item.classList.add('open');
+                        }
+                        
+                    }
+                });
+            }
+        });
+    });
+    </script>
+</body>
+</html>

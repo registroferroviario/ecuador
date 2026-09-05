@@ -1,0 +1,279 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    /* Fondo ligeramente cálido (blanco hueso mate) para reducir el destello de la pantalla */
+    background-color: #fcfaf9; 
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+.header {
+    /* Degradado sutil entre un borgoña oscuro y un rojo vino mate, muy elegante */
+    background: linear-gradient(135deg, #6b1d1d, #991b1b);
+    color: white;
+    padding: 2.5rem 0;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    font-size: 1.3rem;
+    opacity: 0.9;
+    font-weight: 400;
+}
+
+/* Navegación */
+.nav {
+    background: #1f2937; /* Carbón oscuro clásico que balancea el rojo del cabecero */
+    color: white;
+    padding: 1rem 0;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 1rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.nav a:hover {
+    color: #fca5a5; /* Tono coral suave que ilumina el menú sin deslumbrar */
+}
+
+.nav a.active {
+    color: #fca5a5;
+    border-bottom: 2px solid #fca5a5;
+    padding-bottom: 2px;
+}
+
+/* Secciones y Títulos */
+section {
+    margin: 3rem 0;
+}
+
+h2 {
+    color: #7f1d1d; /* Rojo óxido/vino profundo para títulos legibles */
+    border-bottom: 3px solid #991b1b;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Tablas de Especificaciones Técnicas (Se adaptan automáticamente) */
+.tabla-tecnica {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 4px 12px rgba(107, 29, 29, 0.05); /* Sombra con un levísimo matiz rojizo */
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.tabla-tecnica th,
+.tabla-tecnica td {
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.tabla-tecnica th {
+    background: #881337; /* Tono vino profundo mate para las cabeceras */
+    color: white;
+    width: 38%;
+    font-weight: 600;
+}
+
+.tabla-tecnica tr:last-child td {
+    border-bottom: none;
+}
+
+/* Carrusel de Fotos de la Página de Inicio (index) */
+.carrusel-contenedor {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: #000;
+}
+
+.carrusel-diapositivas {
+    display: table;
+    width: 300%;
+    table-layout: fixed;
+    animation: rotarCarrusel 15s infinite ease-in-out;
+}
+
+.diapositiva {
+    display: table-cell;
+    width: 33.333%;
+    position: relative;
+    vertical-align: middle;
+}
+
+.diapositiva img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    display: block;
+    opacity: 0.85;
+}
+
+.diapositiva-texto {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0));
+    color: white;
+    padding: 2.5rem 2rem 1.5rem 2rem;
+}
+
+.diapositiva-texto h3 {
+    font-size: 1.6rem;
+    margin-bottom: 0.4rem;
+    color: #fca5a5; /* Coral suave */
+}
+
+.diapositiva-texto p {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+@keyframes rotarCarrusel {
+    0%, 28%  { transform: translateX(0); }
+    33%, 61% { transform: translateX(-33.333%); }
+    66%, 95% { transform: translateX(-66.666%); }
+    100%     { transform: translateX(0); }
+}
+
+/* Cuadrícula de Tarjetas del index */
+.cuadrula-tarjetas {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    border-spacing: 20px 0;
+    margin: 0 -20px;
+}
+
+.tarjeta-enlace {
+    display: table-cell;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    border: 1px solid #f3f4f6;
+    vertical-align: top;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta-enlace:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(107, 29, 29, 0.1);
+}
+
+.tarjeta-cuerpo {
+    padding: 1.8rem;
+}
+
+.etiqueta-serie {
+    display: inline-block;
+    background: #fee2e2; /* Fondo rosa pastel muy discreto y relajante */
+    color: #991b1b; /* Texto rojo vino */
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    margin-bottom: 0.8rem;
+}
+
+.tarjeta-cuerpo h3 {
+    color: #1f2937;
+    font-size: 1.3rem;
+    margin-bottom: 0.6rem;
+}
+
+.tarjeta-cuerpo p {
+    color: #4b5563;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+}
+
+.boton-enlace {
+    display: inline-block;
+    color: #991b1b; /* Enlace en rojo vino */
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.boton-enlace:hover {
+    color: #b91c1c;
+}
+
+/* Footer */
+footer {
+    background: #1f2937;
+    color: #9ca3af;
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 3rem;
+}
+
+/* Responsive / Adaptabilidad Móvil */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2.2rem;
+    }
+    
+    .nav a {
+        margin: 0 0.7rem;
+        font-size: 0.95rem;
+    }
+    .carrusel-diapositivas {
+        animation: none;
+        width: 100%;
+        display: block;
+    }
+    .diapositiva {
+        display: none;
+    }
+    .diapositiva:first-child {
+        display: block;
+    }
+    .diapositiva img {
+        height: 300px;
+    }
+    .cuadrula-tarjetas {
+        display: block;
+        margin: 0;
+    }
+    .tarjeta-enlace {
+        display: block;
+        width: 100%;
+        margin-bottom: 1.5rem;
+    }
+    .locomotora-img-contenedor {
+            width: 100%;
+            height: 220px;
+            background-color: #f3f4f6;
+            overflow: hidden;
+        }
+        
+}

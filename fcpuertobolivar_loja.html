@@ -1,0 +1,1952 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <link rel="icon" type="image/png" href="ico.jpg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F.C. Puerto Bolívar y Pasaje - Registroferroviario.ec</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================
+           VARIABLES DE TEMA (AMARILLO / NEGRO / BLANCO)
+           ========================================== */
+        [data-theme="light"] {
+            --bg-body: #f4f4f5;
+            --bg-card: #ffffff;
+            --rail-color: rgba(0, 0, 0, 0.12);
+            --main-accent: #d97706; /* Amarillo/Ámbar de alto contraste para fondo claro */
+            --main-dark: #09090b;
+            --main-soft: #fef3c7;
+            --secondary-accent: #b45309;
+            --border-card: #e4e4e7;
+            --text-main: #09090b;
+            --text-muted: #71717a;
+            --shadow-card: rgba(0, 0, 0, 0.05);
+
+            /* Submenús Claro */
+            --dropdown-bg: #ffffff;
+            --dropdown-hover: #d97706;
+            --dropdown-text-hover: #ffffff;
+            --dropdown-border: #e4e4e7;
+        }
+
+        [data-theme="dark"] {
+    --bg-body: #121214;                    /* Pizarra oscuro mate (no negro puro) */
+    --bg-card: #1c1c21;                    /* Tarjetas en tono carbón suave */
+    --rail-color: rgba(245, 158, 11, 0.1); /* Rieles sutiles en ámbar mate */
+    --main-accent: #f59e0b;                /* Ámbar/dorado cálido (sin efecto neón) */
+    --main-dark: #f4f4f5;
+    --main-soft: rgba(245, 158, 11, 0.12); /* Fondos secundarios ámbar tenue */
+    --secondary-accent: #d97706;
+    --border-card: #2d2d35;                /* Bordes discretos de bajo contraste */
+    --text-main: #f4f4f5;                  /* Blanco cálido para evitar deslumbramiento */
+    --text-muted: #9ca3af;                /* Gris medio suave para descripciones */
+    --shadow-card: rgba(0, 0, 0, 0.4);
+
+    /* Submenús Oscuros */
+    --dropdown-bg: #1c1c21;
+    --dropdown-hover: #f59e0b;
+    --dropdown-text-hover: #121214;
+    --dropdown-border: #2d2d35;
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        .top-stripe {
+    height: 8px;
+    background: linear-gradient(90deg, #ffcc00 0%, #003399 50%, #cc0000 100%);
+    width: 100%;
+}
+
+        .rail-pattern {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.75;
+            will-change: background-position;
+        }
+
+        .rail-pattern-left {
+            left: 15px;
+            background: repeating-linear-gradient(0deg, transparent, transparent 18px, var(--rail-color) 18px, var(--rail-color) 22px),
+            linear-gradient(90deg, transparent 22px, var(--rail-color) 22px, var(--rail-color) 26px, transparent 26px, transparent 54px, var(--rail-color) 54px, var(--rail-color) 58px, transparent 58px);
+        }
+
+        .rail-pattern-right {
+            right: 15px;
+            background: repeating-linear-gradient(0deg, transparent, transparent 18px, var(--rail-color) 18px, var(--rail-color) 22px),
+            linear-gradient(90deg, transparent 22px, var(--rail-color) 22px, var(--rail-color) 26px, transparent 26px, transparent 54px, var(--rail-color) 54px, var(--rail-color) 58px, transparent 58px);
+        }
+
+        /* NAVEGACIÓN Y DESPLEGABLES MULTINIVEL */
+        .top-navbar {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-card);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px var(--shadow-card);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            height: 60px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            list-style: none;
+            height: 100%;
+        }
+
+        .nav-links li {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover,
+        .nav-links li:hover > a,
+        .nav-links a.active {
+            background-color: var(--main-soft);
+            color: var(--main-accent);
+        }
+        .nav-links ul {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--dropdown-bg);
+            border: 1px solid var(--dropdown-border);
+            border-top: 2px solid var(--main-accent);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            list-style: none;
+            min-width: 260px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 6px 0;
+            z-index: 1001;
+        }
+
+        .nav-links li:hover > ul {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-links ul ul {
+            top: 0;
+            left: 100%;
+            margin-left: 2px;
+            border-top: 1px solid var(--dropdown-border);
+            border-left: 2px solid var(--main-accent);
+            border-radius: 0 8px 8px 8px;
+        }
+
+        .nav-links ul li {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+
+        .nav-links ul a {
+            width: 100%;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 0;
+            color: var(--text-main);
+            justify-content: space-between;
+        }
+
+        .nav-links ul a:hover,
+        .nav-links ul li:hover > a {
+            background-color: var(--dropdown-hover);
+            color: var(--dropdown-text-hover) !important;
+        }
+
+        .arrow-down::after { content: " ▾"; font-size: 0.75rem; color: var(--main-accent); }
+        .arrow-right::after { content: " ▸"; font-size: 0.75rem; color: var(--main-accent); }
+        .arrow-left::after { content: " ◂"; font-size: 0.75rem; color: var(--main-accent); }
+
+        .theme-toggle-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--main-accent);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--main-accent);
+            color: #000000;
+            border-color: var(--main-accent);
+        }
+
+        .wrapper {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            position: relative;
+            z-index: 1;
+        }
+        header {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-card);
+            border-left: 4px solid var(--main-accent);
+            box-shadow: 0 6px 25px var(--shadow-card);
+            margin-bottom: 40px;
+            overflow: hidden;
+            display: flex;
+            align-items: stretch;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .header-info {
+            padding: 30px;
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .header-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .brand-logo-small {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: #092011;
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .brand-logo-small .tri-yellow { color: #ffcc00 !important; }
+        .brand-logo-small .tri-blue   { color: #3388ff !important; }
+        .brand-logo-small .tri-red    { color: #ff3333 !important; }
+
+        .flag-box {
+            width: 60px;
+            height: 38px;
+            border: 1px solid var(--border-card);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px var(--shadow-card);
+            flex-shrink: 0;
+        }
+
+        .flag-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%);
+        }
+
+        .main-railway-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.2rem, 3.8vw, 3.2rem);
+            font-weight: 900;
+            color: var(--text-main);
+            line-height: 1.1;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 600px;
+        }
+
+        .header-photo-container {
+            position: relative;
+            width: 40%;
+            min-width: 280px;
+            background-color: var(--bg-body);
+            overflow: hidden;
+            border-left: 1px solid var(--border-card);
+        }
+
+        .header-photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.5s ease;
+        }
+
+        .header-photo-container:hover img {
+            transform: scale(1.05);
+        }
+
+        .header-photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 16px;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.95) 100%);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-align: right;
+            border-top: 1px solid var(--border-card);
+        }
+
+        /* SECCIONES GENÉRICAS */
+        section {
+            margin-bottom: 50px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--main-accent);
+            letter-spacing: -0.5px;
+        }
+
+        .section-line {
+            flex-grow: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--main-accent), transparent);
+        }
+
+        
+        .infinite-carousel {
+            overflow: hidden;
+            width: 100%;
+            border-radius: 16px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            box-shadow: 0 8px 25px var(--shadow-card);
+            position: relative;
+            padding: 15px 0;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 20px;
+            width: max-content;
+            animation: scrollContinuous 25s linear infinite;
+        }
+
+        .infinite-carousel:hover .carousel-track {
+            animation-play-state: paused;
+        }
+
+        .carousel-card {
+            width: calc((1280px - 88px - 40px) / 3); 
+            height: 320px;
+            flex-shrink: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border-card);
+            box-shadow: 0 4px 12px var(--shadow-card);
+            transition: border-color 0.3s ease;
+        }
+
+        .carousel-card:hover {
+            border-color: var(--main-accent);
+        }
+
+        .carousel-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .carousel-card:hover img {
+            transform: scale(1.06);
+        }
+
+        .carousel-card-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 15px 12px;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.95) 100%);
+            color: #ffffff;
+        }
+
+        .carousel-card-caption h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+            color: var(--main-accent);
+        }
+
+        .carousel-card-caption p {
+            font-size: 0.8rem;
+            color: #a1a1aa;
+        }
+
+        @keyframes scrollContinuous {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-50% - 10px)); }
+        }
+
+        /* TABLA TÉCNICA */
+        .tech-table-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 22px var(--shadow-card);
+        }
+
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .tech-table th {
+            background-color: var(--main-soft);
+            color: var(--main-accent);
+            padding: 16px 24px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-card);
+        }
+
+        .tech-table td.param-title {
+            background-color: var(--bg-body);
+            color: var(--text-muted);
+            font-weight: 700;
+            width: 38%;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--border-card);
+            border-right: 1px solid var(--border-card);
+        }
+
+        .tech-table td.param-value {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            font-weight: 400;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--border-card);
+        }
+
+        .tech-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tech-table tr:hover td.param-title,
+        .tech-table tr:hover td.param-value {
+            background-color: var(--main-soft);
+        }
+
+        .btn-table-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--main-accent);
+            color: #000000 !important;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.25s ease;
+        }
+
+        .btn-table-link:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        
+        .history-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-top: 3px solid var(--main-accent);
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 6px 20px var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .history-row {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .history-row.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .history-image-box {
+            width: 38%;
+            min-width: 260px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-card);
+            box-shadow: 0 4px 12px var(--shadow-card);
+            position: relative;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .history-image-box:hover {
+            border-color: var(--main-accent);
+        }
+
+        .history-image-box img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .history-image-box:hover img {
+            transform: scale(1.05);
+        }
+
+        .history-image-box span {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            color: #ffffff;
+            font-size: 0.75rem;
+            padding: 8px 10px;
+            text-align: center;
+            font-weight: 600;
+            border-top: 1px solid var(--border-card);
+        }
+
+        .history-content {
+            flex: 1;
+            font-size: 0.98rem;
+            color: var(--text-main);
+        }
+
+        .history-content h3 {
+            color: var(--main-accent);
+        }
+
+        .history-content p {
+            margin-bottom: 10px;
+        }
+
+        .history-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .history-content blockquote {
+            border-left: 3px solid var(--main-accent);
+            padding: 10px 14px;
+            margin: 12px 0;
+            font-style: italic;
+            color: var(--text-main);
+            background-color: var(--main-soft);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.92rem;
+        }
+
+        .photo-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .gallery-item {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px var(--shadow-card);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px var(--shadow-card);
+            border-color: var(--main-accent);
+        }
+
+        .gallery-image-container {
+            width: 100%;
+            aspect-ratio: 16 / 9; 
+            overflow: hidden;
+            position: relative;
+            background-color: var(--bg-body); 
+            cursor: pointer;
+        }
+
+        .gallery-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .gallery-item:hover .gallery-image-container img {
+            transform: scale(1.08);
+        }
+
+        .gallery-info {
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-grow: 1;
+        }
+
+        .gallery-info h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .gallery-info p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 0 25px rgba(255, 234, 0, 0.2);
+            border: 1px solid var(--main-accent);
+            object-fit: contain;
+        }
+
+        .modal-caption {
+            margin-top: 15px;
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: var(--main-accent);
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .close-modal:hover {
+            color: #ffffff;
+        }
+
+        .floating-map-btn {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    z-index: 1000;
+    background-color: var(--main-accent);
+    color: #000000;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.floating-map-btn:hover {
+    transform: scale(1.05);
+    opacity: 0.95;
+}
+
+/* MODAL DEL MAPA Y CONTROLES DE ZOOM */
+.map-modal {
+    display: none;
+    position: fixed;
+    z-index: 2500;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+}
+
+.map-modal-content {
+    background-color: var(--bg-card);
+    border: 1px solid var(--main-accent);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 1000px;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.map-modal-header {
+    padding: 15px 20px;
+    background-color: var(--bg-body);
+    border-bottom: 1px solid var(--border-card);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.map-modal-header h3 {
+    font-family: 'Outfit', sans-serif;
+    color: var(--main-accent);
+    margin: 0;
+}
+
+.close-map-btn {
+    background: none;
+    border: none;
+    color: var(--text-main);
+    font-size: 1.8rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.map-viewport {
+    flex: 1;
+    overflow: hidden;
+    cursor: grab;
+    background-color: #0a0a0c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.map-viewport:active {
+    cursor: grabbing;
+}
+
+.map-viewport img {
+    max-width: 150%;
+    max-height: 150%;
+    object-fit: contain;
+}
+
+.zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 6px;
+    border-radius: 8px;
+    border: 1px solid var(--border-card);
+}
+
+.zoom-controls button {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid var(--border-card);
+    border-radius: 4px;
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.zoom-controls button:hover {
+    background: var(--main-accent);
+    color: #000;
+}
+
+
+
+        footer {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-top: 2px solid var(--main-accent);
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        footer strong {
+            color: var(--main-accent);
+        }
+        .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .menu-toggle {
+        display: block; 
+    }
+
+    .nav-links {
+        display: none; 
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--bg-card);
+        border-bottom: 2px solid var(--accent-red);
+        height: auto;
+        padding: 10px 0;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    
+    .nav-links.mobile-open {
+        display: flex;
+    }
+
+    .nav-links li {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+    }
+
+    .nav-links a {
+        width: 100%;
+        padding: 12px 20px;
+    }
+
+    
+    .nav-links ul {
+        position: static;
+        width: 100%;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        border: none;
+        background-color: var(--bg-card-alt);
+        display: none; 
+        padding-left: 15px;
+    }
+
+    
+    .nav-links li.open > ul {
+        display: block;
+    }
+}
+
+        @media (max-width: 1100px) {
+            .rail-pattern { display: none; }
+            .carousel-card { width: 300px; }
+        }
+
+        @media (max-width: 850px) {
+            header { flex-direction: column; }
+            .header-photo-container { width: 100%; height: 220px; border-left: none; border-top: 1px solid var(--border-card); }
+            .tech-table th, .tech-table td { padding: 10px 14px; font-size: 0.88rem; }
+            .tech-table td.param-title { width: 45%; }
+            .carousel-card { width: 260px; height: 260px; }
+            
+            .photo-gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .history-row, .history-row.reverse {
+                flex-direction: column;
+            }
+            .history-image-box {
+                width: 100%;
+            }
+        }
+    </style>
+    <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+</head>
+<body>
+
+    <div class="top-stripe"></div>
+
+    <div class="rail-pattern rail-pattern-left" id="railLeft"></div>
+    <div class="rail-pattern rail-pattern-right" id="railRight"></div>
+
+    <nav class="top-navbar">
+        <div class="nav-container">
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                
+                <li>
+                    <a href="ffcc.html" class="arrow-down">FF.CC. Ecuador</a>
+                    <ul>
+                        <li>
+                            <a href="fcdelsur.html" class="arrow-right">F.C. del Sur </a>
+                            <ul>
+                                <li><a href="fcdelsur.html">Información y reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfcdelsur.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="g&q.html" class="arrow-right">G. & Q. (Guayaquil - Quito)</a>
+                            <ul>
+                                <li>
+                                    <a href="g&q.html">Información y reseña histórica</a>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                    <ul>
+                                        <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                        <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                        <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                        <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotorasvaporg&q.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul"</a></li>
+                                        <li><a href="consolidation.html">Baldwin 2-8-0 "Consolidation"</a></li>
+                                        <li>
+                                            <a href="listadolocomotoras.html" class="arrow-left">Históricas</a>
+                                            <ul>
+                                                <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul" 42" 12,8 metros</a></li>
+                                                <li></li><a href="g&q_mogul2-6-0_48.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                                <li><a href="lima-shay.html">Lima 0-4+4+4-0 "Shay"</a></li>
+                                                <li><a href="g&q_mallet0-6-6-0.html">Baldwin 0-6-6-0 "Mallet"</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_42.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_54.html">Baldwin 2-8-0 "Consolidation" 54" 16,4 metros</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_44.html">Baldwin 2-8-0 "Consolidation" 44" 13,4 metros</a></li>
+                                                <li><a href="g&q_garratt_2-6-2+2-6-2.html">Beyer Peacock 2-6-2+2-6-2 "Garratt"</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="extra_locomotoras.html">Locomotoras utilitarias y equipo auxiliar</a></li>
+                                <li>
+                                    <a href="listadocoches.html" class="arrow-left">Listado de coches de viajeros</a>
+                                    <ul>
+                                        <li><a href="coches250.html">Coches serie 250</a></li>
+                                        <li>
+                                            <a href="unidadescompletas.html" class="arrow-right">Composiciones remolcadas</a>
+                                            <ul>
+                                                <li><a href="unidadescompletaspanoramico.html">Moderno Panorámico</a></li>
+                                                <li><a href="unidadescompletascrucero.html">Moderno Crucero 1 & 2</a></li>
+                                                <li><a href="unidadescompletasmodernocut3.html">Moderno CUT3</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="cochescut4.html">Coches CUT4</a></li>
+                                        <li><a href="colonialmadera13.html">Coloniales madera 13m</a></li>
+                                        <li><a href="colonialmadera14.html">Coloniales madera 14m</a></li>
+                                        <li><a href="coches_metalicos_reciclados.html">Metálico reciclado</a></li>
+                                        <li><a href="cochesjaula.html">Coches Jaula</a></li>
+                                        <li><a href="coches3500.html">Coches UT3500</a></li>
+                                        <li><a href="feep_furgon_generador.html">Furgones generador</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="mantenimiento.jpg" class="arrow-left">Vagones</a>
+                                    <ul>
+                                        <li><a href="g&q_furgon_1500.html">Furgón Boxcar tipo "1500"</a></li>
+                                        <li><a href="g&q_tanquero_1100.html">Vagón tanquero tipo "1100"</a></li>
+                                        <li><a href="g&q_plataforma_300.html">Plataforma tipo "300"</a></li>
+                                        <li><a href="g&q_gondola_600.html">Góndola tipo "600"</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="listadoestaciones_g&q.html">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcquitosanlorenzo.html" class="arrow-right">F.C. Quito a San Lorenzo</a>
+                            <ul>
+                                <li><a href="fcquitosanlorenzo.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasvaporqsl.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="qsl_borsig4-6-0.html">Borsig 4-6-0 42" 12,8 metros</a></li>
+                                        <li><a href="norte_baldwin2-8-0.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                        <li><a href="curaray_baldwin2-6-0.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                    </ul>
+                                
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                        <ul>
+                                            <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                            <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                            <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                            <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                            <li><a href="extra_locomotoras.html">Otras locomotoras diésel utilitarias</a></li>
+                                        </ul>
+                                </li>
+                                <li><a href="mantenimiento.jpg">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcsibambecuenca.html" class="arrow-right">S. C. (Sibambe a Cuenca)</a>
+                            <ul>
+                                <li><a href="fcsibambecuenca.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorassc.html">Listado locomotoras de vapor</a></li>
+                                <li><a href="listadoestaciones_sc.html">Estaciones</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcalacosta.html" class="arrow-right">F.C. Guayaquil a Salinas</a>
+                            <ul>
+                                <li><a href="fcalacosta.html">Reseña histórica</a></li>
+                                <li>
+                                    <a href="listadolocomotorasvaporcosta.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="costa_henschel2-6-0.html">Henschel 2-6-0 "Mogul"</a></li>
+                                        <li><a href="costa_henschel4-6-0.html">Henschel 4-6-0</a></li>
+                                    </ul>
+                                </li>
+                                    
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcambatocuraray.html" class="arrow-right">F.C. Ambato a Curaray</a>
+                            <ul>
+                                <li><a href="fcambatocuraray.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoras_curaray.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcbahiachone.html" class="arrow-right">F.C. Bahía a Chone</a>
+                            <ul>
+                                <li><a href="fcbahiachone.html">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fccentral.html" class="arrow-right">F.C. Central del Ecuador</a>
+                            <ul>
+                                <li><a href="fccentral.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfccentral.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_loja.html" class="arrow-right">F.C. Puerto Bolívar y Pasaje</a>
+                            <ul>
+                                <li><a href="fcpuertobolivar_loja.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoraseloro.html">Listado materialrodante</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_piedras.html" class="arrow-right">F.C. Puerto Bolívar a Piedras</a>
+                            <ul>
+                                <li><a href="fcpuertobolivar_piedras.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoraseloro.html">Listado materialrodante</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="ffccaduana_guayaquil.html" class="arrow-right">F.C. Aduana de Guayaquil</a>
+                            <ul>
+                                <li><a href="ffccaduana_guayaquil.html">Reseña Histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="mantenimiento.jpg">FF.CC. no construidos</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="ffcc.html#indus" class="arrow-down">FF.CC. Industriales</a>
+                    <ul>
+                        <li><a href="mantenimiento.jpg">Ingenio Valdez</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio San Carlos</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Inés María</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Luz María y Matilde</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Rocafuerte</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Nugues</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Adelina María</a></li>
+                        <li><a href="mantenimiento.jpg">United Fruit Company</a></li>
+                        <li><a href="mantenimiento.jpg">Ecuadorian Oilfields</a></li>
+                        <li><a href="mantenimiento.jpg">Galápagos?</a></li>
+                    </ul>
+                
+                </li>
+
+                <li><a href="metroquito.html">Metro de Quito</a></li>
+                <li><a href="tranviacuenca.html">Tranvía Cuenca</a></li>
+                <li>
+                    <a href="#" class="arrow-down">Tranvías Históricos</a>
+                    <ul>
+                        <li><a href="antiguo_tranviaquito.html">Tranvía de Quito</a></li>
+                        <li><a href="antiguo_tranviaguayaquil.html">Tranvía de Guayaquil</a></li>
+                    </ul>
+                </li>
+                
+                <li><a href="mantenimiento.jpg">F.E.E.P (2010-2020)</a></li>
+                <li><a href="actualidad_trenes.html">Trenes en 2026</a></li>
+            </ul>
+
+            <button class="theme-toggle-btn" onclick="toggleTheme()">
+                <span id="themeIcon">Modo Oscuro</span>
+            </button>
+        </div>
+    </nav>
+
+    <button class="floating-map-btn" onclick="openMapModal()">
+    Ver Mapa de línea
+    </button>
+
+    <div class="wrapper">
+
+        <header>
+            <div class="header-info">
+                <div class="header-top-row">
+                   
+                    <div class="brand-logo-small">
+                        <span class="tri-yellow">REGISTRO</span>
+                        <span class="tri-blue">FERRO</span><span class="tri-red">VIARIO</span>
+                    </div>
+
+                    <div class="flag-box">
+                        <img src="bandera.webp" alt="Bandera del Ecuador" onerror="this.src='icotrian.png'">
+                    </div>
+                </div>
+
+                <h1 class="main-railway-title">Ferrocarril <br> Puerto Bolívar y Pasaje</h1>
+                <p class="subtitle">Ferrocarril pensado como tren industrial para las plantaciones de cacao y plátano de la zona.</p>
+            </div>
+
+            <div class="header-photo-container">
+                <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/SZ47M.jpg" alt="Paso por la Nariz del Diablo" onerror="this.src='ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg'">
+                <div class="header-photo-overlay">Coche de viajeros de madera en una de las estaciones de la línea.</div>
+            </div>
+        </header>
+
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Galería Fotográfica en Movimiento</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="infinite-carousel">
+                <div class="carousel-track">
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/6.jpg" alt="Locomotora Shay" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>Locomotora 0-4-4T </h4>
+                            <p>Locomotora 0-4-4T #1 o #2 en la estación de Machala año desconocido.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/Coche mixto.jpg" alt="Locomotora Shay" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>Coche de viajeros mixto.</h4>
+                            <p>Un coche de madera para viajeros con compartimiento de primera y segunda clase.</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/5.jpg" alt="Locomotora Alsthom" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>Hacienda Unión Colombiana en Pasaje</h4>
+                            <p>Tren en la Hacienda Unión Colombiana en Pasaje años 60. </p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/4.jpg" alt="Estación Salcedo" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>Estación de Machala</h4>
+                            <p>Vista de una de la estaciones con un tren al fondo.</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/1909.jpg" alt="Coche de Pasajeros" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>Playa de vías en Pto. Bolívar</h4>
+                            <p>Vista de la playa de vías en 1909.</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/6.jpg" alt="Locomotora Shay" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>Autoferro en 1930</h4>
+                            <p>Autocarril en Santa Elena en 1930.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/Coche mixto.jpg" alt="Locomotora Shay" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>Tren de trabajos</h4>
+                            <p>Obreros en un tramo en construcción en 1922.</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/5.jpg" alt="Locomotora Alsthom" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>Locomotora Henschel 2-6-0 #1 accidentada</h4>
+                            <p>Estado de la locomotora tras choque frontal con autocarril 22-jun-1950.</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/4.jpg" alt="Estación Salcedo" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>Vía férrea</h4>
+                            <p>Vista de un tramo de vía en buen estado durante la operación.</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/1909.jpg" alt="Coche de Pasajeros" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>Autocarril de lujo</h4>
+                            <p>Equipamiento histórico restaurado</p>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Información Técnica e Infraestructura</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="tech-table-container">
+                <table class="tech-table">
+                    <thead>
+                        <tr>
+                            <th>Especificación / Parámetro</th>
+                            <th>Detalle Técnico</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="param-title">Nombre</td>
+                            <td class="param-value">Ferrocarril Puerto Bolívar y Pasaje</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Constructor</td>
+                            <td class="param-value">-Ing. Azael Dana Piper (1892-1893) <br> -Ing. Gastón Thoret (desde 1894)</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Tipo</td>
+                            <td class="param-value">Ferrocarril ordinario, Línea principal</td>
+                        </tr>
+                         <tr>
+                            <td class="param-title">Ancho de vía</td>
+                            <td class="param-value"><span>-914 mm (1898-1909)</span> <br> <strong>-1067 mm</strong> (desde 1910)</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Número de estaciones</td>
+                            <td class="param-value"><strong>7</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Estado de operación</td>
+                            <td class="param-value">Desmantelado</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Punto de partida</td>
+                            <td class="param-value">Puerto Bolívar</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Última estación</td>
+                            <td class="param-value"><strong>Pasaje</strong> (línea principal) <br><strong>-El Guabo</strong> (línea ramal)</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Apertura de servicio</td>
+                            <td class="param-value"><strong>19 de marzo de 1899</strong> (Primer tramo de 6km entre Puerto Bolívar y Machala).</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Apertura Total</td>
+                            <td class="param-value"><strong>10 de agosto de 1903</strong> (Llegada del primer tren a Pasaje desde Machala).</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Última circulación</td>
+                            <td class="param-value"><strong>22 de enero de 1971</strong> (fecha de liquidación por decreto presidencial).</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Longitud</td>
+                            <td class="param-value">25 km</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Dueño</td>
+                            <td class="param-value">-Municipalidad de Guayaquil (1912-1925)<br>-Estado ecuatoriano (1925-1954)</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Operador</td>
+                            <td class="param-value">-F.C. de El Oro (1899-1951?) <br> -Municipalidad de Machala y Municipalidad de Pasaje (1951-1971).</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Velocidad máxima</td>
+                            <td class="param-value">40 km/h</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">materialrodante utilizado</td>
+                            <td class="param-value">
+                                <a href="listadolocomotoraseloro.html" class="btn-table-link">
+                                    Ver materialrodante &rarr;
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Reseña Histórica</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="history-card">
+                
+                <div class="history-row">
+                    
+                    <div class="history-content">
+                         <h3><strong>Orígenes y motivación (1903-1909)</strong></h3><br>
+                        <p>En 1892, mediante un Decreto Legislativo, se autorizó a la Municipalidad de Machala a construir un ferrocarril en la provincia de El Oro. 
+                            La línea debía partir desde Puerto Bolívar y llegar hasta Machala y Pasaje, entonces los principales centros poblados de la zona.
+                            La obra se financiaría con un impuesto especial sobre el café, el cacao, el banano, el tabaco y el aguardiente. 
+                            El proyecto quedó bajo la dirección de una Junta de Ferrocarriles y respondía a la petición de las poblaciones del cantón Machala, 
+                            que necesitaban una salida rápida y económica hacia el mar.
+                        </p>
+
+                        <h3><strong>Inicio de las obras (1893-1895)</strong></h3>
+                        <p>En 1893 el Municipio contrató al ingeniero inglés Azahel Dana Piper. 
+                            Las obras debían arrancar desde un muelle destinado a la carga y descarga de embarcaciones. 
+                            Sin embargo, los trabajos se suspendieron hasta marzo de 1894.
+                            En 1895 la dirección pasó al ingeniero francés Gastón Thoret, amigo personal del general Eloy Alfaro, 
+                            quien retomó la construcción de los terraplenes desde Puerto Bolívar con la ayuda de su asistente Antonio Troyani. 
+                            El gobernador de la provincia, Antonio Jurado, respaldó el proyecto por su importancia para una zona de gran producción agrícola.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="history-row reverse">
+                    <div class="history-image-box" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/machala1.jpg', 'Locomotora #1 modelo Pittsburg 0-4-4T de 1898 nombrada Machala')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/machala1.jpg" alt="Inauguración en Quito" onerror="this.src='ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg'">
+                        <span>Locomotora #1 modelo Pittsburg 0-4-4T de 1898 nombrada "Machala"</span>
+                    </div>
+                    <div class="history-content">
+                        <h3><strong>Estado de las obras hacia 1898</strong></h3><br>
+                        <p>Según el informe del Administrador Gerente del Ferrocarril de El Oro (1898), 
+                            para esa fecha se habían logrado avances considerables: terraplenes terminados en 6 kilómetros, 
+                            6 kilómetros de vía enrielada, un muelle provisional en servicio y la trocha hacia Pasaje ya abierta como camino carretero.
+                        </p>
+                        <p>
+                            Ese mismo año llegó la primera locomotora de la línea: la “Machala”, una 0-4-4T construida en 1898 por la Pittsburgh Locomotive Works 
+                            (número de fábrica 1842), con cilindros de 10 × 16 pulgadas y ruedas de 37 pulgadas. 
+                            <br> Fue la máquina que se utilizó para los trenes de prueba.
+                        </p>
+                        <p>
+                            El 9 de mayo de 1902 se inauguró solemnemente el muelle de Puerto Bolívar, obra también dirigida por Gastón Thoret. 
+                            Asistieron los generales Eloy Alfaro y Manuel Serrano. 
+                            Este muelle dio una gran ventaja comercial a la provincia al conectar directamente el ferrocarril con el tráfico marítimo.
+                        </p>
+                        <blockquote>
+                            <h3>Nota sobre el ancho de vía</h3>
+                        Aunque el ancho estándar de 1.435 mm fue el elegido y aprobado para este ferrocarril, 
+                        en la práctica la vía construida en 914 mm (3 pies) antes de las primeras pruebas de 1899. 
+                        </blockquote>
+                    </div>
+                </div>
+
+
+                <div class="history-row">
+                    <div class="history-image-box" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/6.jpg', '.')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/6.jpg" alt="Inauguración en Quito" onerror="this.src='ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg'">
+                        <span>.</span>
+                    </div>
+                    <div class="history-content">
+                        <h3><strong>Primeros viajes e inauguración (1898-1900)</strong></h3><br>
+                        <p>El 16 de enero de 1898 se realizaron los primeros viajes de prueba entre Puerto Bolívar y Machala. 
+                            Aunque el recorrido aún no estaba completo, el acto se consideró una pre-inauguración.
+                            El 19 de marzo de 1899 se efectuó el primer viaje completo del tramo de 6 kilómetros Puerto Bolívar–Machala, 
+                            precisamente con la locomotora “Machala”.
+                            Finalmente, el 23 de abril de 1900 llegó a Machala la primera locomotora procedente de Puerto Bolívar, 
+                            lo que se considera la inauguración oficial del sistema ferroviario de El Oro.
+                        </p>
+                        <h3><strong>Extensión a Pasaje y nuevos material (1903-1909)</strong></h3>
+                        <p>
+                            El 10 de agosto de 1903 se inauguró el tramo Machala–Pasaje. <br> El transporte de pasajeros y mercancía comenzó de inmediato, 
+                            aunque la estación definitiva se construyó e inauguró en 1908.
+                            Por esos años se incorporaron al menos dos locomotoras adicionales tipo 0-4-4T construidas por ALCo (American Locomotive Company) en 1903 y 1909.
+                            <br> 
+                            Una de ellas, con número de fábrica 29536, también llegó a llevar el nombre “Machala” en algún momento y prestó servicio en la línea. 
+                            Posteriormente fue reconstruida al ancho de 1.067 mm.
+                            <br> Se proyectaron varias extensiones que nunca se completaron: hacia Guabo y Buenavista, 
+                            hacia Loja (solo llegó a Santa Rosa en 1930), hacia Cuenca y hacia Durán (alcanzó únicamente Río Seco).
+                        </p>
+                        
+                        
+                    </div>
+                </div>
+
+                <div class="history-row reverse">
+                    <div class="history-image-box" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/Ferrocarril en Machala-El Oro 1890-1909.jpg', 'Locomotora Pittsburg 0-4-4T #1 1909 (izq) y Alco 0-4-4T #2 1903 (der) con su dotación posando para la foto.')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/Ferrocarril en Machala-El Oro 1890-1909.jpg" alt="Inauguración en Quito" onerror="this.src='ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg'">
+                        <span>Locomotora Pittsburg 0-4-4T #1 1909 (izq) y Alco 0-4-4T #2 1903 (der) con su dotación posando para la foto.</span>
+                    </div>
+                    <div class="history-content">
+                        <h3><strong>El ramal del Guabo y su destrucción (1907-1909)</strong></h3><br>
+                        <p>Una de las extensiones más ambiciosas del Ferrocarril de El Oro fue el ramal que debía llegar hasta El Guabo y Buenavista, 
+                            dos puertos fluviales de gran importancia comercial para Machala y Pasaje. 
+                            Estos puntos permitían conectar la producción agrícola del interior con el tráfico de ríos y, a través de ellos, con el mar.
+                        </p>
+                        <p>Hacia 1908, la vía ya había avanzado considerablemente en esa dirección. 
+                            En la hacienda “La Iberia” el trazado se dividió en dos partes (la Iberia de El Guabo y la Iberia de Machala), 
+                            hecho que dio origen a la creación de la parroquia El Cambio. Ese mismo año los trabajos habían alcanzado el sector de Río Seco, 
+                            en el cantón El Guabo.
+                        </p>
+                        <p>
+                            Entre 1907 y 1909 los trenes circulaban regularmente hasta El Guabo. 
+                            Una de las locomotoras que realizó estos servicios fue precisamente la que había inaugurado la línea (la “Machala” o su sucesora cercana).
+                            Así fue hasta 1909 cuando el río Jubones cambió bruscamente de cauce y destruyó 
+                            por completo el tramo de vía que llegaba hasta El Guabo. La infraestructura quedó irrecuperable.
+                        </p>
+                        <p>
+                           A pesar de la importancia económica del ramal, la línea nunca fue reconstruida. 
+                           <br> A partir de ese momento el servicio ferroviario se limitó exclusivamente al trayecto Puerto Bolívar – Machala – Pasaje, 
+                           y los trenes dejaron de circular hacia el Guabo.
+                        </p>
+                        
+                    </div>
+                </div>
+
+                <div class="history-row">
+                    <div class="history-image-box" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/estación pasaje, calles Azuay y Machala.jpg', 'Tren con la locomotora #1 o #2 en la estacion de Pasaje')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/estación pasaje, calles Azuay y Machala.jpg" alt="Inauguración en Quito" onerror="this.src='ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg'">
+                        <span>Tren con la locomotora #1 o #2 en la estacion de Pasaje.</span>
+                    </div>
+                    <div class="history-content">
+                        <h3><strong>Cambio de ancho de vía de 1910 y locomotoras transferidas</strong></h3>
+                        <p>
+                            En 1910, ante la amenaza de guerra con Perú y el mal estado de la vía se decidió 
+                            realizar la conversión del ancho 914mm a 1.067mm, que traería consigo la posiblidad de operar
+                            locomotoras procedentes del Ferrocarril del Sur ya renombrado como (G.& Q.). 
+                            <br>Entre ellas llegaron:
+                            <br>
+                            -La 2-6-0 Baldwin de 1880 “Ocho de Setiembre” (ex FC del Sur / G&Q Nº 4). <br>
+                            -La 4-4-0 Baldwin de 1880 “General I. de Veintemilla” (ex FC del Sur / G&Q Nº 5). <br>
+                        </p>
+                        <p>
+                            Estas máquinas, ya antiguas en ese momento, fueron renumeradas en el Ferrocarril de El Oro (posiblemente como 12 y 22). 
+                            No se tiene certeza de si alguna vez regresaron a la red del G&Q.
+                            <br>También se menciona la presencia posterior de la Baldwin 2-6-0 de 1901 (Nº 8, número de fábrica 19154), que tan importante fue 
+                            debido a que es la locomotora con la que llegó el primer tren a Quito el 25 de junio de 1908, que años después aparecería abandonada en Machala (ver foto ·), 
+                            aunque no está claro si realmente prestó servicio regular 
+                            en la línea de El Oro o si fue trasladada desde Durán ya en mal estado.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="history-row reverse">
+                    <div class="history-image-box" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/pasaje1968plazanueva.jpg', 'Estado de la vía en Pasaje zona Plaza Nueva en 1968.')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/pasaje1968plazanueva.jpg" alt="Inauguración en Quito" onerror="this.src='ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg'">
+                        <span>Estado de la vía en Pasaje zona Plaza Nueva en 1968.</span>
+                    </div>
+                    <div class="history-content">
+                        <h3><strong>Conflictos con el centralismo y declive</strong></h3>
+                        <p>Los ferrocarriles de El Oro fueron siempre una tentación para el centralismo. 
+                           <br> En 1910 el propio Eloy Alfaro tuvo que exigir que se devolviera la autonomía a estas líneas. 
+                           En 1916 se eliminó la Junta de Ferrocarriles de El Oro y el sistema entró en un lento deterioro.
+                        </p>
+                        
+                        <h3><strong>Liquidación final</strong></h3>
+                        <p>
+                            En 1951 los ferrocarriles fueron concedidos a las Municipalidades de Machala y Pasaje. 
+                            <br> Sin embargo, estas no lograron sostenerlos. Finalmente, el 22 de enero de 1971, 
+                            el presidente José María Velasco Ibarra liquidó definitivamente el ferrocarril. 
+                            <br> Durante los últimos años se produjeron robos de rieles y usurpación de terrenos e instalaciones.
+                        </p>
+                    
+                        
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Galería Fotográfica</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="photo-gallery-grid">
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/1909.jpg', 'Playa de vía en Pto. Bolívar en 1909')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/1909.jpg" alt="Descripción 1" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Playa de vía en Pto. Bolívar en 1909</h3>
+                        <p>Foto del libro "Ferro-Carril de El Oro" de Vicente Poma Mendoza.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/a.jpg', 'Línea férrea entre esteros y manglares en Pto. Bolívar.')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/a.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Línea férrea entre esteros y manglares en Pto. Bolívar</h3>
+                        <p>Foto del libro "Ferro-Carril de El Oro" de Vicente Poma Mendoza.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/2.jpg', '')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/2.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Vía del ferrocarril atravesando Machala</h3>
+                        <p>La vía atravesaba toda la calle Azuay por el centro de la ciudad.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/4.jpg', '')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/4.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Tren en estación de Machala</h3>
+                        <p></p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/5.jpg', '')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/5.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Hacienda Unión Colombiana en Pasaje</h3>
+                        <p>Un tren en la estación del ferrocarril en la Hacienda Unión Colombiana en Pasaje.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/6.jpg', '')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/6.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3></h3>
+                        <p></p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/7.jpg', '')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/7.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Terminal en la estación de Machala</h3>
+                        <p></p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/8.jpg', '')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/8.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Vista aérea de las vías en Pto. Bolívar</h3>
+                        <p></p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/coche mixto.jpg', '')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/Coche mixto.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Coche mixto de la línea</h3>
+                        <p>Coche de pasajeros de madera de fabricación estadounidense con separación entre asientos de primera y segunda clase.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/estación pasaje, calles Azuay y Machala.jpg', '')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/estación pasaje, calles Azuay y Machala.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3></h3>
+                        <p></p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/bn.jpg', '')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/bn.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3></h3>
+                        <p></p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/Ferrocarril en Machala-El Oro 1890-1909.jpg', '')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/Ferrocarril en Machala-El Oro 1890-1909.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Locomotoras en la estación de Machala</h3>
+                        <p>Locomotora Pittsburg 0-4-4T #1 1909 (izq) y Alco 0-4-4T #2 1903 (der) con su dotación posando para la foto.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/machala1.jpg', '')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/machala1.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Locomotora #1 "Machala"</h3>
+                        <p>Locomotora #1 modelo Pittsburg 0-4-4T de 1898 nombrada "Machala" en el catálogo Pittsburgh Locomotive Works de junio de 1901.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/pasaje1960plazanueva.jpg', '')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/pasaje1960plazanueva.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3></h3>
+                        <p></p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/pasaje1968plazanueva.jpg', '')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/pasaje1968plazanueva.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3></h3>
+                        <p></p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/9.jpg', '')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/9.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3></h3>
+                        <p></p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/FC El Oro/ptobolivarpasajes/loco8.jpg', '')">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/loco8.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3></h3>
+                        <p></p>
+                    </div>
+                </div>
+
+
+                
+
+
+            </div>
+        </section>
+
+        <footer>
+            <div><strong>registroferroviario.ec</strong> — Archivo Histórico Particular de Harukaze</div>
+            <div>Ecuador</div>
+        </footer>
+
+    </div>
+
+    
+
+<!-- Ventana Emergente (Modal) con Controles de Zoom -->
+<div id="mapModal" class="map-modal" onclick="closeMapModal(event)">
+    <div class="map-modal-content" onclick="event.stopPropagation()">
+        <div class="map-modal-header">
+            <h3>Mapa del Recorrido</h3>
+            <button class="close-map-btn" onclick="closeMapModal()">&times;</button>
+        </div>
+        <div class="map-viewport">
+            
+            <img id="zoomableMap" src="ffcc/historia/FC El Oro/ptobolivarpasajes/mapa.jpg" alt="Mapa de la línea férrea">
+        </div>
+        <div class="zoom-controls">
+            <button id="zoomInBtn" title="Acercar">+</button>
+            <button id="zoomOutBtn" title="Alejar">-</button>
+            <button id="zoomResetBtn" title="Restablecer">↺</button>
+        </div>
+    </div>
+</div>
+
+    <div id="imageModal" class="image-modal" onclick="closeModal()">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="imgModalSrc">
+        <div id="captionModal" class="modal-caption"></div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const label = document.getElementById('themeIcon');
+            if (label) {
+                label.textContent = theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        }
+
+        
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(savedTheme);
+
+        
+        const railLeft = document.getElementById('railLeft');
+        const railRight = document.getElementById('railRight');
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const position = scrolled * 0.4;
+            if (railLeft) railLeft.style.backgroundPositionY = `${position}px`;
+            if (railRight) railRight.style.backgroundPositionY = `${position}px`;
+        });
+
+        function openModal(imageSrc, captionText) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('imgModalSrc');
+            const caption = document.getElementById('captionModal');
+
+            modal.style.display = 'flex';
+            modalImg.src = imageSrc;
+            caption.textContent = captionText;
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeModal();
+            }
+        });
+        let panzoomInstance = null;
+
+function openMapModal() {
+    const modal = document.getElementById('mapModal');
+    const elem = document.getElementById('zoomableMap');
+    
+    modal.style.display = 'flex';
+
+    if (!panzoomInstance) {
+        panzoomInstance = Panzoom(elem, {
+            maxScale: 5,
+            minScale: 1,
+            contain: 'outside'
+        });
+
+        elem.parentElement.addEventListener('wheel', panzoomInstance.zoomWithWheel);
+
+        
+        document.getElementById('zoomInBtn').addEventListener('click', panzoomInstance.zoomIn);
+        document.getElementById('zoomOutBtn').addEventListener('click', panzoomInstance.zoomOut);
+        document.getElementById('zoomResetBtn').addEventListener('click', panzoomInstance.reset);
+    }
+}
+
+function closeMapModal(event) {
+    if (!event || event.target.id === 'mapModal' || event.classList?.contains('close-map-btn')) {
+        document.getElementById('mapModal').style.display = 'none';
+        if (panzoomInstance) {
+            panzoomInstance.reset();
+        }
+    }
+}
+document.addEventListener('DOMContentLoaded', () => {
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('mobile-open');
+        });
+
+        
+        const parentItems = document.querySelectorAll('.nav-links li');
+
+        parentItems.forEach(item => {
+            const link = item.querySelector(':scope > a');
+            const subMenu = item.querySelector(':scope > ul');
+
+            if (subMenu && link) {
+                link.addEventListener('click', (e) => {
+               
+                    if (window.innerWidth <= 900) {
+                        
+                        if (!item.classList.contains('open')) {
+                            e.preventDefault(); 
+                            
+                           
+                            const siblings = item.parentElement.querySelectorAll(':scope > li.open');
+                            siblings.forEach(sibling => sibling.classList.remove('open'));
+
+                            item.classList.add('open');
+                        }
+                        
+                    }
+                });
+            }
+        });
+    });
+    </script>
+</body>
+</html>

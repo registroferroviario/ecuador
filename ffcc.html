@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <link rel="icon" type="image/png" href="ico.jpg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFCC del Ecuador - RegistroFerroviario.ec</title>
+    <meta name="description" content="Archivo completo del Ferrocarril del Ecuador: líneas históricas, materialrodante y patrimonio ferroviario.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        
+        [data-theme="light"] {
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-card-alt: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-red: #e11d48;
+            --accent-red-hover: #be123c;
+            
+            --border-color: #64748b; 
+            --border-table-line: #cbd5e1;
+            --border-width: 2px;
+            
+            --table-header-bg: #991b1b;
+            --shadow: 0 4px 15px rgba(15, 23, 42, 0.12);
+
+            --dropdown-bg: #ffffff;
+            --dropdown-hover: #e11d48;
+            --dropdown-text-hover: #ffffff;
+            --dropdown-border: #64748b;
+
+            --via-color: #cbd5e1;
+            --via-rail: #94a3b8;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0b132b;
+            --bg-card: #1c2541;
+            --bg-card-alt: #0f172a;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-red: #b91c1c;
+            --accent-red-hover: #dc2626;
+            
+            --border-color: #334155;
+            --border-table-line: #1e293b;
+            --border-width: 1px;
+
+            --table-header-bg: #801313;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+
+            --dropdown-bg: #0f172a;
+            --dropdown-hover: #b91c1c;
+            --dropdown-text-hover: #ffffff;
+            --dropdown-border: #334155;
+
+            --via-color: #1e293b;
+            --via-rail: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .top-stripe {
+            height: 8px;
+            background: linear-gradient(90deg, #ffcc00 0%, #003399 50%, #cc0000 100%);
+            width: 100%;
+        }
+
+       
+        .header {
+            position: relative;
+            background: #0f172a;
+            color: #ffffff;
+            padding: 2rem 0 2rem;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url('ffcc/historia/Durán 1988.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.22;
+            z-index: 1;
+        }
+
+        .header::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(15, 23, 42, 0.55) 0%,
+                rgba(15, 23, 42, 0.85) 70%,
+                var(--bg-body) 100%
+            );
+            z-index: 2;
+        }
+
+        .header .container {
+            position: relative;
+            z-index: 3;
+        }
+
+        .header h1 {
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            font-size: clamp(2.3rem, 5vw, 3.1rem);
+            font-weight: 800;
+            letter-spacing: -0.8px;
+        }
+
+        .subtitle {
+            margin: 0.85rem auto 0;
+            font-size: 1.15rem;
+            color: #94a3b8;
+            font-weight: 400;
+            max-width: 520px;
+        }
+
+        
+        .top-navbar {
+            background-color: var(--bg-card);
+            border-bottom: calc(var(--border-width) + 1px) solid var(--accent-red);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px var(--shadow);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            height: 55px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            list-style: none;
+            height: 100%;
+        }
+
+        .nav-links li {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover,
+        .nav-links li:hover > a,
+        .nav-links a.active {
+            background-color: var(--bg-card-alt);
+            color: var(--accent-red);
+        }
+
+        
+        .nav-links ul {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--dropdown-bg);
+            border: var(--border-width) solid var(--dropdown-border);
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            list-style: none;
+            min-width: 260px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 6px 0;
+            z-index: 1001;
+        }
+
+        .nav-links li:hover > ul {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-links ul ul {
+            top: 0;
+            left: 100%;
+            margin-left: 2px;
+        }
+
+        .nav-links ul li {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+
+        .nav-links ul a {
+            width: 100%;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 0;
+            color: var(--text-primary);
+            justify-content: space-between;
+        }
+
+        .nav-links ul a:hover,
+        .nav-links ul li:hover > a {
+            background-color: var(--dropdown-hover);
+            color: var(--dropdown-text-hover) !important;
+        }
+
+        .arrow-down::after { content: " ▾"; font-size: 0.75rem; }
+        .arrow-right::after { content: " ▸"; font-size: 0.75rem; }
+        .arrow-left::after { content: " ◂"; font-size: 0.75rem; }
+
+        .theme-toggle-btn {
+            background: var(--bg-card);
+            border: var(--border-width) solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--accent-red);
+            color: #ffffff;
+        }
+
+       
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        main h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-top: 3.2rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .descripcion {
+            color: var(--text-secondary);
+            font-size: 1.02rem;
+            margin-bottom: 2.4rem;
+        }
+
+        .cuadrula {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.4rem;
+            margin-bottom: 4rem;
+        }
+
+        .tarjeta {
+   
+    --card-accent: var(--border-color); 
+    background: var(--bg-card);
+    border-radius: 12px;
+    border: var(--border-width) solid var(--card-accent);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: var(--shadow);
+}
+
+        .tarjeta:hover {
+    border-color: var(--card-accent);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.tarjeta .tag {
+    background: color-mix(in srgb, var(--card-accent) 15%, transparent);
+    color: var(--card-accent);
+}
+
+.tarjeta .btn {
+    background: var(--bg-card-alt);
+    color: var(--text-primary);
+    border: 1px solid var(--card-accent);
+}
+
+.tarjeta .btn:hover {
+    background: var(--card-accent);
+    color: #ffffff;
+}
+
+        .tarjeta-imagen {
+            height: 195px;
+            overflow: hidden;
+            background: var(--bg-card-alt);
+        }
+
+        .tarjeta-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .tarjeta:hover .tarjeta-imagen img {
+            transform: scale(1.04);
+        }
+
+        .tarjeta-cuerpo {
+            padding: 1.4rem 1.4rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .tarjeta-cuerpo h3 {
+            font-family: 'Outfit', sans-serif;
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .tarjeta-cuerpo p {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            line-height: 1.55;
+            margin: 0 0 1.4rem 0;
+            flex-grow: 1;
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.22rem 0.65rem;
+            border-radius: 4px;
+            align-self: flex-start;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .btn {
+            margin-top: auto;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.88rem;
+            padding: 0.6rem 1.15rem;
+            border-radius: 7px;
+            text-align: center;
+            transition: background 0.2s, color 0.2s;
+            display: inline-block;
+        }
+
+        .borde-fcsur        { --card-accent: #f43f5e; } 
+.borde-gyq          { --card-accent: #b91c1c; } 
+.borde-sanlorenzo   { --card-accent: #0891b2; } 
+.borde-cuenca       { --card-accent: #eab308; } 
+.borde-curaray      { --card-accent: #a1a1aa; } 
+.borde-costa        { --card-accent: #16a34a; }
+.borde-central      { --card-accent: #1d4ed8; } 
+.borde-chemins      { --card-accent: #1d4ed8; } 
+.borde-pasaje       { --card-accent: #d97706; } 
+.borde-loja         { --card-accent: #d97706; } 
+.borde-aduana       { --card-accent: #a1a1aa; }
+.borde-ingenios     { --card-accent: #10b981; } 
+
+
+.tarjeta[class*="borde-"]:hover {
+    filter: brightness(1.15);
+
+}
+
+        .brand-logo-small {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    background: #092011; 
+    padding: 6px 16px;
+    border-radius: 20px;
+    display: inline-block;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    margin-bottom: 12px; 
+}
+
+
+.brand-logo-small .tri-yellow { color: #ffcc00 !important; }
+.brand-logo-small .tri-blue   { color: #3388ff !important; }
+.brand-logo-small .tri-red    { color: #ff3333 !important; }
+
+.cuadrula-compacta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+    gap: 1rem;
+    margin-bottom: 4rem;
+}
+
+
+.tarjeta-compacta .tarjeta-imagen {
+    height: 110px; 
+}
+
+.tarjeta-compacta .tarjeta-cuerpo {
+    padding: 0.85rem 0.85rem 1rem;
+}
+
+.tarjeta-compacta .tarjeta-cuerpo h3 {
+    font-size: 0.98rem;
+    margin-bottom: 0.3rem;
+}
+
+.tarjeta-compacta .btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.78rem;
+}
+
+
+        
+
+        footer {
+            background-color: var(--bg-card);
+            border-top: calc(var(--border-width) + 1px) solid var(--accent-red);
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 2.6rem 0;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+
+        footer p {
+            margin: 0.25rem 0;
+        }
+
+        @media (max-width: 700px) {
+            .header {
+                padding: 4rem 0 4.5rem;
+            }
+            .cuadrula {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-stripe"></div>
+
+    <header class="header">
+    <div class="container">
+        
+        
+        <div class="brand-logo-small">
+            <span class="tri-yellow">REGISTRO</span><span class="tri-blue">FERRO</span><span class="tri-red">VIARIO</span>
+        </div>
+
+        <h1>Ferrocarriles del Ecuador</h1>
+    </div>
+</header>
+
+    
+    <nav class="top-navbar">
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                
+                <li>
+                    <a href="ffcc.html" class="arrow-down">FF.CC. Ecuador</a>
+                    <ul>
+                        <li>
+                            <a href="fcdelsur.html" class="arrow-right">F.C. del Sur </a>
+                            <ul>
+                                <li><a href="fcdelsur.html">Información y reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfcdelsur.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="g&q.html" class="arrow-right">G. & Q. (Guayaquil - Quito)</a>
+                            <ul>
+                                <li><a href="g&q.html">Información y reseña histórica</a></li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                    <ul>
+                                        <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                        <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                        <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                        <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                        <li><a href="extra_locomotoras.html">Otras locomotoras diésel utilitarias</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotorasvaporg&q.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul"</a></li>
+                                        <li><a href="consolidation.html">Baldwin 2-8-0 "Consolidation"</a></li>
+                                        <li>
+                                            <a href="listadolocomotoras.html" class="arrow-left">Históricas</a>
+                                            <ul>
+                                                <li><a href="historica1.html">Baldwin 2-6-0 "Mogul" 42" 12,8 metros</a></li>
+                                                <li></li><a href="historica2.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                                <li><a href="lima-shay.html">Lima 0-4+4+4-0 "Shay"</a></li>
+                                                <li><a href="historica3.html">Baldwin 0-6-6-0 "Mallet"</a></li>
+                                                <li><a href="historica3.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                                <li><a href="historica3.html">Baldwin 2-8-0 "Consolidation" 54" 16,4 metros</a></li>
+                                                <li><a href="historica3.html">Baldwin 2-8-0 "Consolidation" 44" 13,4 metros</a></li>
+                                                <li><a href="g&q_garratt_2-6-2+2-6-2.html">Beyer Peacock 2-6-2+2-6-2 "Garratt"</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="listadocoches.html" class="arrow-left">Listado de coches de viajeros</a>
+                                    <ul>
+                                        <li><a href="coches250.html">Coches serie 250</a></li>
+                                        <li>
+                                            <a href="unidadescompletas.html" class="arrow-right">Composiciones remolcadas</a>
+                                            <ul>
+                                                <li><a href="unidadescompletaspanoramico.html">Moderno Panorámico</a></li>
+                                                <li><a href="unidadescompletascrucero.html">Moderno Crucero 1 & 2</a></li>
+                                                <li><a href="unidadescompletasmodernocut3.html">Moderno CUT3</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="cochescut4.html">Coches CUT4</a></li>
+                                        <li><a href="colonialmadera13.html">Coloniales madera 13m</a></li>
+                                        <li><a href="colonialmadera14.html">Coloniales madera 14m</a></li>
+                                        <li><a href="cochesjaula.html">Coches Jaula</a></li>
+                                        <li><a href="coches3500.html">Coches UT3500</a></li>
+                                        <li><a href="feep_furgon_generador.html">Furgones generador</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="listadoestaciones_g&q.html">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcquitosanlorenzo.html" class="arrow-right">F.C. Quito a San Lorenzo</a>
+                            <ul>
+                                <li><a href="fcquitosanlorenzo.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasvaporqsl.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="qsl_borsig4-6-0.html">Borsig 4-6-0 42" 12,8 metros</a></li>
+                                        <li><a href="norte_baldwin2-8-0.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                    </ul>
+                                
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                        <ul>
+                                            <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                            <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                            <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                            <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                            <li><a href="extra_locomotoras.html">Otras locomotoras diésel utilitarias</a></li>
+                                        </ul>
+                                </li>
+                                <li><a href="MANTENIMIENTO.jpg">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcsibambecuenca.html" class="arrow-right">S. C. (Sibambe a Cuenca)</a>
+                            <ul>
+                                <li><a href="">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorassc.html">Listado locomotoras de vapor</a></li>
+                                <li><a href="mantenimiento.jpg">Estaciones</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcalacosta.html" class="arrow-right">F.C. Guayaquil a Salinas</a>
+                            <ul>
+                                <li><a href="fcalacosta.html">Reseña histórica</a></li>
+                                <li>
+                                    <a href="listadolocomotorasvaporcosta.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="costa_henschel2-6-0.html">Henschel 2-6-0 "Mogul"</a></li>
+                                        <li><a href="costa_henschel4-6-0.html">Henschel 4-6-0</a></li>
+                                    </ul>
+                                </li>
+                                    
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcambatocuraray.html" class="arrow-right">F.C. Ambato a Curaray</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcbahiachone.html" class="arrow-right">F.C. Bahía a Chone</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fccentral.html" class="arrow-right">F.C. Central del Ecuador</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_loja.html" class="arrow-right">F.C. Puerto Bolívar y Pasaje</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_piedras.html" class="arrow-right">F.C. Puerto Bolívar a Piedras</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="ffccaduana_guayaquil.html" class="arrow-right">F.C. Aduana de Guayaquil</a>
+                            <ul>
+                                <li><a href="ffccaduana_guayaquil.html">Reseña Histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="mantenimiento.jpg">FF.CC. no construidos</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li><a href="">FF.CC. Industriales</a></li>
+
+                <li><a href="metroquito.html">Metro de Quito</a></li>
+                <li><a href="tranviacuenca.html">Tranvía Cuenca</a></li>
+                <li>
+                    <a href="#" class="arrow-down">Tranvías Históricos</a>
+                    <ul>
+                        <li><a href="antiguo_tranviaquito.html">Tranvía de Quito</a></li>
+                        <li><a href="antiguo_tranviaguayaquil.html">Tranvía de Guayaquil</a></li>
+                    </ul>
+                </li>
+                
+                <li><a href="mantenimiento.jpg">F.E.E.P (2010-2020)</a></li>
+                <li><a href="actualidad_trenes.html">Trenes en 2026</a></li>
+            </ul>
+
+            <button class="theme-toggle-btn" onclick="toggleTheme()">
+                <span id="themeIcon">Modo Oscuro</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section>
+            <h2>Líneas y rutas</h2>
+            <p class="descripcion">Líneas de FFCC que conformaron la red ferroviaria ecuatoriana. También se ha incluido un apartado para los ingenios.</p>
+            
+            <div class="cuadrula">
+                <div class="tarjeta borde-fcsur">
+                    <div class="tarjeta-imagen">
+                        <img src="historia/FC Sur/abfiP.jpg" alt="Ferrocarril G&Q" onerror="this.src=''">
+                    </div>
+                    <div class="tarjeta-cuerpo">
+                        <span class="tag">Línea Principal</span>
+                        <h3>Ferrocarril del Sur</h3>
+                        <p>Primero nombrado Ferrocarril de Yaguachi es el primero de todos los ferrocarriles en el Ecuador.</p>
+                        <a href="fcdelsur.html" class="btn">Ver Detalles</a>
+                    </div>
+                </div>
+
+                <div class="tarjeta tarjeta-roja borde-gyq">
+                    <div class="tarjeta-imagen">
+                        <img src="ffcc/historia/Durán 1988.jpg" alt="Ferrocarril G&Q" onerror="this.src=''">
+                    </div>
+                    <div class="tarjeta-cuerpo">
+                        <span class="tag">Línea Principal</span>
+                        <h3>Guayaquil & Quito</h3>
+                        <p>La legendaria línea transandina de 446km que conectó la costa con la sierra. Historia, estaciones y materialrodante emblemático.</p>
+                        <a href="g&q.html" class="btn">Ver Detalles</a>
+                    </div>
+                </div>
+
+                <div class="tarjeta borde-sanlorenzo">
+                    <div class="tarjeta-imagen">
+                        <img src="ffcc/historia/norte/153 coloreada.png" alt="Quito a San Lorenzo" onerror="this.src=''">
+                    </div>
+                    <div class="tarjeta-cuerpo">
+                        <span class="tag">Línea Principal</span>
+                        <h3>Quito a San Lorenzo</h3>
+                        <p>Ruta de 373km desde Quito a Esmeraldas a través de Pinchincha e Imbabura.</p>
+                        <a href="fcquitosanlorenzo.html" class="btn">Ver Detalles</a>
+                    </div>
+                </div>
+
+                <div class="tarjeta tarjeta-roja borde-gyq">
+                    <div class="tarjeta-imagen">
+                        <img src="ffcc/historia/Santa Rosa 1988, Sibambe-Cuenca.jpg" alt="Sibambe a Cuenca" onerror="this.src=''">
+                    </div>
+                    <div class="tarjeta-cuerpo">
+                        <span class="tag">Línea Secundaria</span>
+                        <h3>Sibambe a Cuenca</h3>
+                        <p>Ramal de 145km desde Sibambe a la ciudad de Cuenca atravesando la provincia de Cañar.</p>
+                        <a href="fcsibambecuenca.html" class="btn">Ver Detalles</a>
+                    </div>
+                </div>
+
+                <div class="tarjeta borde-curaray">
+                    <div class="tarjeta-imagen">
+                        <img src="ffcc/historia/fccuraray/1puente.png" alt="Ambato a Curaray" onerror="this.src=''">
+                    </div>
+                    <div class="tarjeta-cuerpo">
+                        <span class="tag">Ramal</span>
+                        <h3>F.C. Ambato a Curaray</h3>
+                        <p>Ramal de 34km desde Ambato al poblado de Pelileo en un intento de gran ferrocarril a la Amazonía.</p>
+                        <a href="fcambatocuraray.html" class="btn">Ver Detalles</a>
+                    </div>
+                </div>
+
+                <div class="tarjeta borde-costa">
+                    <div class="tarjeta-imagen">
+                        <img src="ffcc/historia/fcalacosta/Santa Elena o Salinas año desconocido crop.jpg" alt="Ferrocarril a la Costa" onerror="this.src=''">
+                    </div>
+                    <div class="tarjeta-cuerpo">
+                        <span class="tag">Línea de Costa</span>
+                        <h3>Ferrocarril a la Costa</h3>
+                        <p>De Guayaquil a Salinas a través de Santa Elena y La Libertad.</p>
+                        <a href="fcalacosta.html" class="btn">Ver Detalles</a>
+                    </div>
+                </div>
+
+                <div class="tarjeta borde-chemins">
+                    <div class="tarjeta-imagen">
+                        <img src="ffcc/historia/Central/Trenes en Manabí color (1).png" alt="Ferrocarril Central" onerror="this.src=''">
+                    </div>
+                    <div class="tarjeta-cuerpo">
+                        <span class="tag">Manabí</span>
+                        <h3>Ferrocarril Central del Ecuador</h3>
+                        <p>Ruta histórico y desaparecida de Manta a Santa pasando por Montecristi y Portoviejo.</p>
+                        <a href="fccentral.html" class="btn">Ver Detalles</a>
+                    </div>
+                </div>
+
+                <div class="tarjeta borde-chemins">
+                    <div class="tarjeta-imagen">
+                        <img src="ffcc/historia/fccentral/Ferrocarril llegando a Bahía de Caráquez 1913 color.png" alt="Chemins de Fer" onerror="this.src=''">
+                    </div>
+                    <div class="tarjeta-cuerpo">
+                        <span class="tag">Manabí</span>
+                        <h3>Chemins de Fer de l’Equateur</h3>
+                        <p>Ferrocarril con capital francés que operaba en la ruta Bahía de Caraquez a Chone con parada en Calceta.</p>
+                        <a href="fcbahiachone.html" class="btn">Ver Detalles</a>
+                    </div>
+                </div>
+
+                <div class="tarjeta borde-pasaje">
+                    <div class="tarjeta-imagen">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarpasajes/SZ47M.jpg" alt="Puerto Bolívar a Pasaje" onerror="this.src=''">
+                    </div>
+                    <div class="tarjeta-cuerpo">
+                        <span class="tag">El Oro</span>
+                        <h3>F.C. Puerto Bolívar a Pasaje</h3>
+                        <p>Ferrocarril de Puerto Bolívar a Pasaje con ramal a Guabo.</p>
+                        <a href="fcpuertobolivar_loja.html" class="btn">Ver Detalles</a>
+                    </div>
+                </div>
+
+                <div class="tarjeta borde-loja">
+                    <div class="tarjeta-imagen">
+                        <img src="ffcc/historia/FC El Oro/ptobolivarapiedras/o7PSd.jpg" alt="Puerto Bolívar a Loja" onerror="this.src=''">
+                    </div>
+                    <div class="tarjeta-cuerpo">
+                        <span class="tag">El Oro</span>
+                        <h3>F.C. Puerto Bolívar a Loja</h3>
+                        <p>Ferrocarril con capital estadounidense hacia Piedras.</p>
+                        <a href="fcpuertobolivar_piedras.html" class="btn">Ver Detalles</a>
+                    </div>
+                </div>
+
+                <div class="tarjeta borde-aduana">
+                    <div class="tarjeta-imagen">
+                        <img src="ffcc/historia/aduana/NNnDu.jpg" alt="Puerto Bolívar a Loja" onerror="this.src=''">
+                    </div>
+                    <div class="tarjeta-cuerpo">
+                        <span class="tag">Guayaquil</span>
+                        <h3>F.C. Aduana de Guayaquil</h3>
+                        <p>Ferrocarril local del malecón de Guayaquil para la aduana.</p>
+                        <a href="ffccaduana_guayaquil.html" class="btn">Ver Detalles</a>
+                    </div>
+                </div>
+
+                <div class="tarjeta borde-aduana">
+                    <div class="tarjeta-imagen">
+                        <img src="" alt="NO HAY FOTO XD" onerror="this.src=''">
+                    </div>
+                    <div class="tarjeta-cuerpo">
+                        <span class="tag">Guayaquil</span>
+                        <h3>Ferrocarril del Estero Salado</h3>
+                        <p>Servicio ferroviario a través de la Av. 9 de octubre, fue incorpado al tranvía de Guayaquil.</p>
+                        <a href="fcpuertobolivar_piedras.html" class="btn">Ver Detalles</a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="indus">
+    <h2>Ferrocarriles industriales</h2>
+    <p class="descripcion">Red complementaria de ingenios azucareros y pequeños ramales industriales.</p>
+    
+    
+    <div class="cuadrula cuadrula-compacta">
+        
+        
+        <div class="tarjeta borde-ingenios tarjeta-compacta">
+            <div class="tarjeta-imagen">
+                <img src="ffcc/ingenios/valdez/dolores19882.jpg" alt="Ingenio Valdez" onerror="this.src=''">
+            </div>
+            <div class="tarjeta-cuerpo">
+                <span class="tag">Ingenio</span>
+                <h3>Ingenio Valdez</h3>
+                <a href="#" class="btn">Explorar</a>
+            </div>
+        </div>
+
+        <div class="tarjeta borde-ingenios tarjeta-compacta">
+            <div class="tarjeta-imagen">
+                <img src="ffcc/ingenios/sancarlos/6loco1988.jpg" alt="Ingenio San Carlos" onerror="this.src=''">
+            </div>
+            <div class="tarjeta-cuerpo">
+                <span class="tag">Ingenio</span>
+                <h3>Ingenio San Carlos</h3>
+                <a href="#" class="btn">Explorar</a>
+            </div>
+        </div>
+
+        <div class="tarjeta borde-ingenios tarjeta-compacta">
+            <div class="tarjeta-imagen">
+                <img src="ffcc/ingenios/sancarlos/6loco1988.jpg" alt="Ingenio San Carlos" onerror="this.src=''">
+            </div>
+            <div class="tarjeta-cuerpo">
+                <span class="tag">Ingenio</span>
+                <h3>Ingenio Inés María</h3>
+                <a href="#" class="btn">Explorar</a>
+            </div>
+        </div>
+
+        <div class="tarjeta borde-ingenios tarjeta-compacta">
+            <div class="tarjeta-imagen">
+                <img src="ffcc/ingenios/sancarlos/6loco1988.jpg" alt="Ingenio San Carlos" onerror="this.src=''">
+            </div>
+            <div class="tarjeta-cuerpo">
+                <span class="tag">Ingenio</span>
+                <h3>Ingenio Luz María y Matilde</h3>
+                <a href="#" class="btn">Explorar</a>
+            </div>
+        </div>
+
+        <div class="tarjeta borde-ingenios tarjeta-compacta">
+            <div class="tarjeta-imagen">
+                <img src="ffcc/ingenios/sancarlos/6loco1988.jpg" alt="Ingenio San Carlos" onerror="this.src=''">
+            </div>
+            <div class="tarjeta-cuerpo">
+                <span class="tag">Ingenio</span>
+                <h3>Ingenio Rocafuerte</h3>
+                <a href="#" class="btn">Explorar</a>
+            </div>
+        </div>
+
+        <div class="tarjeta borde-ingenios tarjeta-compacta">
+            <div class="tarjeta-imagen">
+                <img src="ffcc/ingenios/sancarlos/6loco1988.jpg" alt="Ingenio San Carlos" onerror="this.src=''">
+            </div>
+            <div class="tarjeta-cuerpo">
+                <span class="tag">Ingenio</span>
+                <h3>Ingenio Nugues</h3>
+                <a href="#" class="btn">Explorar</a>
+            </div>
+        </div>
+
+        <div class="tarjeta borde-ingenios tarjeta-compacta">
+            <div class="tarjeta-imagen">
+                <img src="ffcc/ingenios/sancarlos/6loco1988.jpg" alt="Ingenio San Carlos" onerror="this.src=''">
+            </div>
+            <div class="tarjeta-cuerpo">
+                <span class="tag">Ingenio</span>
+                <h3>Ingenio Adelina María</h3>
+                <a href="#" class="btn">Explorar</a>
+            </div>
+        </div>
+
+        <div class="tarjeta borde-ingenios tarjeta-compacta">
+            <div class="tarjeta-imagen">
+                <img src="ffcc/ingenios/unitedfruit/vq1gM.jpg" alt="Ingenio San Carlos" onerror="this.src=''">
+            </div>
+            <div class="tarjeta-cuerpo">
+                <span class="tag">Ingenio</span>
+                <h3>United Fruit Company</h3>
+                <a href="#" class="btn">Explorar</a>
+            </div>
+        </div>
+
+        <div class="tarjeta borde-ingenios tarjeta-compacta">
+            <div class="tarjeta-imagen">
+                <img src="ffcc/ingenios/anglo/szSDI.jpg" alt="Ingenio San Carlos" onerror="this.src=''">
+            </div>
+            <div class="tarjeta-cuerpo">
+                <span class="tag">Petrolera</span>
+                <h3>Ecuadorian Oilfields</h3>
+                <a href="#" class="btn">Explorar</a>
+            </div>
+        </div>
+
+        <div class="tarjeta borde-ingenios tarjeta-compacta">
+            <div class="tarjeta-imagen">
+                <img src="ffcc/ingenios/galap/wnDIN.jpg" alt="Ingenio San Carlos" onerror="this.src=''">
+            </div>
+            <div class="tarjeta-cuerpo">
+                <span class="tag">Ingenio</span>
+                <h3>Galápagos?</h3>
+                <a href="#" class="btn">Explorar</a>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+    </div>
+</section>
+
+        
+
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 RegistroFerroviario.ec - Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <script>
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const label = document.getElementById('themeIcon');
+            if (label) {
+                label.textContent = theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(savedTheme);
+    </script>
+</body>
+</html>

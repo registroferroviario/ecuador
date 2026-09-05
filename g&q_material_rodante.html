@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <link rel="icon" type="image/png" href="ico.jpg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G&Q materialrodante - RegistroFerroviario.ec</title>
+    <meta name="description" content="Catálogo completo de materialrodante: locomotoras a vapor, diésel, coches y vagones.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- VARIABLES DE COLOR Y ESTILOS DE TEMA (Extraídos de cochescut4.html) --- */
+        [data-theme="light"] {
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-card-alt: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-red: #e11d48;
+            --accent-red-hover: #be123c;
+            
+            --border-color: #64748b; 
+            --border-table-line: #cbd5e1;
+            --border-width: 2px;
+            
+            --table-header-bg: #991b1b;
+            --shadow: 0 4px 15px rgba(15, 23, 42, 0.12);
+
+            --dropdown-bg: #ffffff;
+            --dropdown-hover: #e11d48;
+            --dropdown-text-hover: #ffffff;
+            --dropdown-border: #64748b;
+
+            --via-color: #cbd5e1;
+            --via-rail: #94a3b8;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0b132b;
+            --bg-card: #1c2541;
+            --bg-card-alt: #0f172a;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-red: #ef4444;
+            --accent-red-hover: #dc2626;
+            
+            --border-color: #334155;
+            --border-table-line: #1e293b;
+            --border-width: 1px;
+
+            --table-header-bg: #801313;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+
+            --dropdown-bg: #0f172a;
+            --dropdown-hover: #ef4444;
+            --dropdown-text-hover: #ffffff;
+            --dropdown-border: #334155;
+
+            --via-color: #1e293b;
+            --via-rail: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .top-stripe {
+            height: 8px;
+            background: linear-gradient(90deg, #ffcc00 0%, #003399 50%, #cc0000 100%);
+            width: 100%;
+        }
+
+        /* ENCABEZADO ESTILO cochescut4.html */
+        .header2 {
+            position: relative;
+            padding: 3rem 0;
+            text-align: center;
+            color: #ffffff;
+            background-image: 
+                linear-gradient(rgba(128, 19, 19, 0.85), rgba(128, 19, 19, 0.85)), 
+                url('ffcc/materialrodante/coches/cut4/0012crop.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-blend-mode: multiply;
+        }
+
+        .header2 .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header2 h1 {
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .header2 .subtitle {
+            margin: 0.4rem 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.95;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        /* NAVEGACIÓN ESTILO cochescut4.html */
+        .top-navbar {
+            background-color: var(--bg-card);
+            border-bottom: calc(var(--border-width) + 1px) solid var(--accent-red);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px var(--shadow);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            height: 55px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            list-style: none;
+            height: 100%;
+        }
+
+        .nav-links li {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover,
+        .nav-links li:hover > a,
+        .nav-links a.active {
+            background-color: var(--bg-card-alt);
+            color: var(--accent-red);
+        }
+
+        .nav-links ul {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--dropdown-bg);
+            border: var(--border-width) solid var(--dropdown-border);
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            list-style: none;
+            min-width: 260px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 6px 0;
+            z-index: 1001;
+        }
+
+        .nav-links li:hover > ul {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-links ul ul {
+            top: 0;
+            left: 100%;
+            margin-left: 2px;
+        }
+
+        .nav-links ul li {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+
+        .nav-links ul a {
+            width: 100%;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 0;
+            color: var(--text-primary);
+            justify-content: space-between;
+        }
+
+        .nav-links ul a:hover,
+        .nav-links ul li:hover > a {
+            background-color: var(--dropdown-hover);
+            color: var(--dropdown-text-hover) !important;
+        }
+
+        .arrow-down::after { content: " ▾"; font-size: 0.75rem; }
+        .arrow-right::after { content: " ▸"; font-size: 0.75rem; }
+        .arrow-left::after { content: " ◂"; font-size: 0.75rem; }
+
+        .theme-toggle-btn {
+            background: var(--bg-card);
+            border: var(--border-width) solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--accent-red);
+            color: #ffffff;
+        }
+
+        /* --- VÍAS DECORATIVAS LATERALES --- */
+        .wrapper-main {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .via-decorativa {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 24px;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.7;
+            background-image: 
+                linear-gradient(90deg, var(--via-rail) 0, var(--via-rail) 3px, transparent 3px, transparent 21px, var(--via-rail) 21px, var(--via-rail) 24px),
+                repeating-linear-gradient(0deg, transparent, transparent 12px, var(--via-color) 12px, var(--via-color) 16px);
+        }
+
+        .via-izquierda { left: 10px; }
+        .via-derecha { right: 10px; }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 2.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ENCABEZADOS DE SECCIÓN CON LÍNEA ROJA (cochescut4.html) */
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            padding-left: 1.25rem;
+            margin-top: 3.5rem;
+            margin-bottom: 0.4rem;
+            position: relative;
+        }
+
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 28px;
+            background: var(--accent-red);
+            border-radius: 4px;
+        }
+
+        .descripcion {
+            color: var(--text-secondary);
+            font-size: 1.02rem;
+            margin-bottom: 2rem;
+        }
+
+        /* GRID CONFIGURADO A EXACTAMENTE 4 COLUMNAS */
+        .cuadrula-cuatro {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.2rem;
+            margin-bottom: 3.5rem;
+        }
+
+        /* ESTILO DE TARJETAS (ffcc.html adaptado con CSS de cochescut4.html) */
+        .tarjeta {
+            --card-accent: var(--border-color);
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: var(--border-width) solid var(--card-accent);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .tarjeta:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            filter: brightness(1.05);
+        }
+
+        .tarjeta-imagen {
+            height: 160px;
+            overflow: hidden;
+            background: var(--bg-card-alt);
+        }
+
+        .tarjeta-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .tarjeta:hover .tarjeta-imagen img {
+            transform: scale(1.05);
+        }
+
+        .tarjeta-cuerpo {
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 0.2rem 0.55rem;
+            border-radius: 4px;
+            align-self: flex-start;
+            margin-bottom: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            background: color-mix(in srgb, var(--card-accent) 15%, transparent);
+            color: var(--card-accent);
+        }
+
+        .tarjeta-cuerpo h3 {
+            font-family: 'Outfit', sans-serif;
+            margin: 0 0 0.4rem 0;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .tarjeta-cuerpo p {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            line-height: 1.5;
+            margin: 0 0 1.2rem 0;
+            flex-grow: 1;
+        }
+
+        .btn {
+            margin-top: auto;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.82rem;
+            padding: 0.55rem 1rem;
+            border-radius: 7px;
+            text-align: center;
+            transition: background 0.2s, color 0.2s;
+            display: inline-block;
+            background: var(--bg-card-alt);
+            color: var(--text-primary);
+            border: 1px solid var(--card-accent);
+        }
+
+        .btn:hover {
+            background: var(--card-accent);
+            color: #ffffff;
+        }
+
+        /* VARIANTES DE BORDES/ACENTOS */
+        .borde-vapor    { --card-accent: #d97706; }
+        .borde-diesel   { --card-accent: #b91c1c; }
+        .borde-coches   { --card-accent: #0891b2; }
+        .borde-vagones  { --card-accent: #16a34a; }
+
+        .header-brand-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.brand-logo-header {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    background: #ffffff15;
+    padding: 8px 24px;
+    border-radius: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.brand-logo-header .tri-yellow { color: #ffcc00 !important; }
+.brand-logo-header .tri-blue { color: #3388ff !important; }
+.brand-logo-header .tri-red { color: #ff3333 !important; }
+
+.flag-box {
+    width: 80px;
+    height: 55px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+}
+
+.flag-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(20%);
+    display: block;
+}
+
+        footer {
+            background-color: var(--bg-card);
+            border-top: calc(var(--border-width) + 1px) solid var(--accent-red);
+            border-bottom: var(--border-width) solid var(--border-color);
+            border-left: var(--border-width) solid var(--border-color);
+            border-right: var(--border-width) solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-radius: 12px 12px 0 0;
+            font-size: 0.9rem;
+        }
+
+        /* RESPONSIVIDAD PARA EL GRID */
+        @media (max-width: 1200px) {
+            .cuadrula-cuatro {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .via-decorativa {
+                display: none;
+            }
+            .container {
+                padding: 0 1.5rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .cuadrula-cuatro {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-stripe"></div>
+
+    <header class="header2">
+    <div class="container">
+        <div class="header-brand-container">
+            
+            <div class="brand-logo-header">
+                <span class="tri-yellow">REGISTRO</span><span class="tri-blue">FERRO</span><span class="tri-red">VIARIO</span>
+            </div>
+            <div class="flag-box">
+                <img src="bandera.webp" alt="Bandera Ecuador">
+            </div>
+        </div>
+        <p class="subtitle">materialrodante • Archivo Histórico</p>
+    </div>
+</header>
+
+    <nav class="top-navbar">
+        <div class="nav-container">
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                
+                <li>
+                    <a href="ffcc.html" class="arrow-down">FF.CC. Ecuador</a>
+                    <ul>
+                        <li>
+                            <a href="fcdelsur.html" class="arrow-right">F.C. del Sur </a>
+                            <ul>
+                                <li><a href="fcdelsur.html">Información y reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfcdelsur.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="g&q.html" class="arrow-right">G. & Q. (Guayaquil - Quito)</a>
+                            <ul>
+                                <li>
+                                    <a href="g&q.html">Información y reseña histórica</a>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                    <ul>
+                                        <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                        <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                        <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                        <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotorasvaporg&q.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul"</a></li>
+                                        <li><a href="consolidation.html">Baldwin 2-8-0 "Consolidation"</a></li>
+                                        <li>
+                                            <a href="listadolocomotoras.html" class="arrow-left">Históricas</a>
+                                            <ul>
+                                                <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul" 42" 12,8 metros</a></li>
+                                                <li></li><a href="g&q_mogul2-6-0_48.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                                <li><a href="lima-shay.html">Lima 0-4+4+4-0 "Shay"</a></li>
+                                                <li><a href="g&q_mallet0-6-6-0.html">Baldwin 0-6-6-0 "Mallet"</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_42.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_54.html">Baldwin 2-8-0 "Consolidation" 54" 16,4 metros</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_44.html">Baldwin 2-8-0 "Consolidation" 44" 13,4 metros</a></li>
+                                                <li><a href="g&q_garratt_2-6-2+2-6-2.html">Beyer Peacock 2-6-2+2-6-2 "Garratt"</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="extra_locomotoras.html">Locomotoras utilitarias y equipo auxiliar</a></li>
+                                <li>
+                                    <a href="listadocoches.html" class="arrow-left">Listado de coches de viajeros</a>
+                                    <ul>
+                                        <li><a href="coches250.html">Coches serie 250</a></li>
+                                        <li>
+                                            <a href="unidadescompletas.html" class="arrow-right">Composiciones remolcadas</a>
+                                            <ul>
+                                                <li><a href="unidadescompletaspanoramico.html">Moderno Panorámico</a></li>
+                                                <li><a href="unidadescompletascrucero.html">Moderno Crucero 1 & 2</a></li>
+                                                <li><a href="unidadescompletasmodernocut3.html">Moderno CUT3</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="cochescut4.html">Coches CUT4</a></li>
+                                        <li><a href="colonialmadera13.html">Coloniales madera 13m</a></li>
+                                        <li><a href="colonialmadera14.html">Coloniales madera 14m</a></li>
+                                        <li><a href="coches_metalicos_reciclados.html">Metálico reciclado</a></li>
+                                        <li><a href="cochesjaula.html">Coches Jaula</a></li>
+                                        <li><a href="coches3500.html">Coches UT3500</a></li>
+                                        <li><a href="feep_furgon_generador.html">Furgones generador</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="mantenimiento.jpg" class="arrow-left">Vagones</a>
+                                    <ul>
+                                        <li><a href="g&q_furgon_1500.html">Furgón Boxcar tipo "1500"</a></li>
+                                        <li><a href="g&q_tanquero_1100.html">Vagón tanquero tipo "1100"</a></li>
+                                        <li><a href="g&q_plataforma_300.html">Plataforma tipo "300"</a></li>
+                                        <li><a href="g&q_gondola_600.html">Góndola tipo "600"</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="listadoestaciones_g&q.html">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcquitosanlorenzo.html" class="arrow-right">F.C. Quito a San Lorenzo</a>
+                            <ul>
+                                <li><a href="fcquitosanlorenzo.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasvaporqsl.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="qsl_borsig4-6-0.html">Borsig 4-6-0 42" 12,8 metros</a></li>
+                                        <li><a href="norte_baldwin2-8-0.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                        <li><a href="curaray_baldwin2-6-0.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                    </ul>
+                                
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                        <ul>
+                                            <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                            <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                            <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                            <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                            <li><a href="extra_locomotoras.html">Otras locomotoras diésel utilitarias</a></li>
+                                        </ul>
+                                </li>
+                                <li><a href="mantenimiento.jpg">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcsibambecuenca.html" class="arrow-right">S. C. (Sibambe a Cuenca)</a>
+                            <ul>
+                                <li><a href="fcsibambecuenca.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorassc.html">Listado locomotoras de vapor</a></li>
+                                <li><a href="listadoestaciones_sc.html">Estaciones</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcalacosta.html" class="arrow-right">F.C. Guayaquil a Salinas</a>
+                            <ul>
+                                <li><a href="fcalacosta.html">Reseña histórica</a></li>
+                                <li>
+                                    <a href="listadolocomotorasvaporcosta.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="costa_henschel2-6-0.html">Henschel 2-6-0 "Mogul"</a></li>
+                                        <li><a href="costa_henschel4-6-0.html">Henschel 4-6-0</a></li>
+                                    </ul>
+                                </li>
+                                    
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcambatocuraray.html" class="arrow-right">F.C. Ambato a Curaray</a>
+                            <ul>
+                                <li><a href="fcambatocuraray.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoras_curaray.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcbahiachone.html" class="arrow-right">F.C. Bahía a Chone</a>
+                            <ul>
+                                <li><a href="fcbahiachone.html">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fccentral.html" class="arrow-right">F.C. Central del Ecuador</a>
+                            <ul>
+                                <li><a href="fccentral.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfccentral.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_loja.html" class="arrow-right">F.C. Puerto Bolívar y Pasaje</a>
+                            <ul>
+                                <li><a href="fcpuertobolivar_loja.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoraseloro.html">Listado materialrodante</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_piedras.html" class="arrow-right">F.C. Puerto Bolívar a Piedras</a>
+                            <ul>
+                                <li><a href="fcpuertobolivar_piedras.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoraseloro.html">Listado materialrodante</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="ffccaduana_guayaquil.html" class="arrow-right">F.C. Aduana de Guayaquil</a>
+                            <ul>
+                                <li><a href="ffccaduana_guayaquil.html">Reseña Histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="mantenimiento.jpg">FF.CC. no construidos</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="ffcc.html#indus" class="arrow-down">FF.CC. Industriales</a>
+                    <ul>
+                        <li><a href="mantenimiento.jpg">Ingenio Valdez</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio San Carlos</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Inés María</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Luz María y Matilde</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Rocafuerte</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Nugues</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Adelina María</a></li>
+                        <li><a href="mantenimiento.jpg">United Fruit Company</a></li>
+                        <li><a href="mantenimiento.jpg">Ecuadorian Oilfields</a></li>
+                        <li><a href="mantenimiento.jpg">Galápagos?</a></li>
+                    </ul>
+                
+                </li>
+
+                <li><a href="metroquito.html">Metro de Quito</a></li>
+                <li><a href="tranviacuenca.html">Tranvía Cuenca</a></li>
+                <li>
+                    <a href="#" class="arrow-down">Tranvías Históricos</a>
+                    <ul>
+                        <li><a href="antiguo_tranviaquito.html">Tranvía de Quito</a></li>
+                        <li><a href="antiguo_tranviaguayaquil.html">Tranvía de Guayaquil</a></li>
+                    </ul>
+                </li>
+                
+                <li><a href="mantenimiento.jpg">F.E.E.P (2010-2020)</a></li>
+                <li><a href="actualidad_trenes.html">Trenes en 2026</a></li>
+            </ul>
+
+            <button class="theme-toggle-btn" onclick="toggleTheme()">
+                <span id="themeIcon">Modo Oscuro</span>
+            </button>
+        </div>
+    </nav>
+
+    
+    <div class="wrapper-main">
+        <div class="via-decorativa via-izquierda"></div>
+        <div class="via-decorativa via-derecha"></div>
+
+        <main class="container">
+
+            
+            <section>
+                <h2>Locomotoras a Vapor</h2>
+                <p class="descripcion">Unidades históricas a vapor que prestaron servicio en las distintas líneas del país.</p>
+
+                <div class="cuadrula-cuatro">
+                    <div class="tarjeta borde-vapor">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/locomotoras/vapor/2-6-0.jpg" alt="Baldwin Mogul 2-6-0" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Vapor</span>
+                            <h3>Baldwin 2-6-0 "Mogul" 42" 12,8 metros</h3>
+                            <p>Emblemáticas locomotoras utilizadas ampliamente en la red transandina G&Q.</p>
+                            <a href="g&q_mogul2-6-0_42.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-vapor">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/locomotoras/vapor/260de48.jpg" alt="Baldwin Consolidation" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Vapor</span>
+                            <h3>Baldwin 2-6-0 "Mogul" 48" 14,6 metros</h3>
+                            <p>Unidades de gran potencia diseñadas para superar los pasos de montaña exigentes.</p>
+                            <a href="g&q_mogul2-6-0_48.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-vapor">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/locomotoras/vapor/shay/17color.jpg" alt="Lima Shay" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Vapor</span>
+                            <h3>Lima 0-4+4+4-0 "Shay"</h3>
+                            <p>Locomotora de engranajes diseñada para trazados de alta pendiente y curvas cerradas.</p>
+                            <a href="lima-shay.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-vapor">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/locomotoras/vapor/mallet plano.png" alt="Beyer Peacock Garratt" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Vapor</span>
+                            <h3>Baldwin 0-6-6-0 "Mallet"</h3>
+                            <p>Locomotora articulada especial para cargas pesadas y trazados complicados.</p>
+                            <a href="mantenimiento.jpg" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-vapor">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/locomotoras/vapor/23color.jpg" alt="Beyer Peacock Garratt" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Vapor</span>
+                            <h3>Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</h3>
+                            <p>Locomotora articulada especial para cargas pesadas y trazados complicados.</p>
+                            <a href="g&q_consolidation2-8-0_42.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-vapor">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/locomotoras/vapor/53 Durán 2018.jpg" alt="Beyer Peacock Garratt" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Vapor</span>
+                            <h3>Baldwin 2-8-0 "Consolidation" 54" 16,4 metros</h3>
+                            <p>Locomotora articulada especial para cargas pesadas y trazados complicados.</p>
+                            <a href="g&q_consolidation2-8-0_54.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-vapor">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/locomotoras/vapor/172013.jpg" alt="Beyer Peacock Garratt" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Vapor</span>
+                            <h3>Baldwin 2-8-0 "Consolidation" 44" 13,4 metros</h3>
+                            <p>Locomotora articulada especial para cargas pesadas y trazados complicados.</p>
+                            <a href="g&q_consolidation2-8-0_44.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-vapor">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/locomotoras/vapor/garrat/oLOgTcrop.jpg" alt="Beyer Peacock Garratt" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Vapor 1929</span>
+                            <h3>Beyer Peacock Garratt <br> 2-6-2 + 2-6-2</h3>
+                            <p>Locomotora articulada especial para cargas pesadas y trazados complicados.</p>
+                            <a href="g&q_garratt_2-6-2+2-6-2.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            
+            <section>
+                <h2>Locomotoras Diésel</h2>
+                <p class="descripcion">Flota diésel introducida para la modernización del transporte ferroviario.</p>
+
+                <div class="cuadrula-cuatro">
+                    <div class="tarjeta borde-diesel">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/locomotoras/diesel/td2000/2003.png" alt="Ingeteam TD-2000" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Diésel</span>
+                            <h3>Ingeteam TD-2000</h3>
+                            <p>Moderna locomotora diésel electro-mecánica adaptada a la geografía ecuatoriana.</p>
+                            <a href="feep_td2000.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-diesel">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/locomotoras/diesel/alsthom2400/2402.jpg" alt="GEC Alsthom AD 2400" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Diésel</span>
+                            <h3>GEC Alsthom AD "2400"</h3>
+                            <p>Locomotoras de maniobras y servicios principales en la red nacional.</p>
+                            <a href="enfe_alsthom2400.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-diesel">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/locomotoras/diesel/alco/164cotopaxi1988crop.jpg" alt="ALCo DL-535B" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Diésel</span>
+                            <h3>ALCo DL-535B "160"</h3>
+                            <p>Robusta locomotora de origen estadounidense para el servicio de carga y pasajeros.</p>
+                            <a href="g&q_alco_160.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-diesel">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/locomotoras/diesel/sulzer/rXj.jpg" alt="Alsthom-Sulzer BBB-150" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Diésel</span>
+                            <h3>Alsthom-Sulzer "BBB-150"</h3>
+                            <p>Unidad clásica de tres bogies utilizada en los tramos más sinuosos.</p>
+                            <a href="qsl_alsthomsulzer150.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            
+            <section>
+                <h2>Coches de Viajeros</h2>
+                <p class="descripcion">Unidades de pasajeros remolcadas y automotores para servicios turísticos y regulares.</p>
+
+                <div class="cuadrula-cuatro">
+
+                    <div class="tarjeta borde-coches">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/coches/250/sin numero.jpg" alt="Serie 250" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Pasajeros</span>
+                            <h3>Coches Serie 250</h3>
+                            <p>Coches metálicos tradicionales utilizados en composiciones de larga distancia.</p>
+                            <a href="coches250.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-coches">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/iNJ3N.jpg" alt="Panorámico" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Pasajeros</span>
+                            <h3>Moderno Panorámico</h3>
+                            <p>Coches equipados con amplios ventanales para rutas turísticas y Tren Crucero.</p>
+                            <a href="unidadescompletaspanoramico.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-coches">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/crucero.jpg" alt="Panorámico" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Pasajeros</span>
+                            <h3>Crucero 1 y 2</h3>
+                            <p>Coches equipados con amplios ventanales para rutas turísticas y Tren Crucero.</p>
+                            <a href="unidadescompletascrucero.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-coches">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/3500.jpg" alt="Panorámico" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Pasajeros</span>
+                            <h3>CUT 3</h3>
+                            <p>Coches equipados con amplios ventanales para rutas turísticas y Tren Crucero.</p>
+                            <a href="unidadescompletasmodernocut3.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-coches">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/coches/cut4/0012crop.jpg" alt="Coches CUT4" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Pasajeros</span>
+                            <h3>Coches CUT4</h3>
+                            <p>Remolques modernos reformados por CINTRATEC a partir de unidades FEVE Apolo.</p>
+                            <a href="cochescut4.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>                    
+
+                    <div class="tarjeta borde-coches">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/coches/colonialmadera/207.jpg" alt="Coloniales Madera" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Pasajeros</span>
+                            <h3>Coloniales de Madera 13m</h3>
+                            <p>Coches históricos construidos en madera de 13m con gran valor patrimonial.</p>
+                            <a href="colonialmadera13.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-coches">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/coches/colonialmadera14/1560.jpg" alt="Panorámico" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Pasajeros</span>
+                            <h3>Coloniales de Madera 14m</h3>
+                            <p>Coches equipados con amplios ventanales para rutas turísticas y Tren Crucero.</p>
+                            <a href="colonialmadera14.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>      
+                    
+                    <div class="tarjeta borde-coches">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/coches/colonialreciclado/1580(1).jpg" alt="Panorámico" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Pasajeros</span>
+                            <h3>Metálico reciclado</h3>
+                            <p>Coches reciclados de antiguos vagones de carga o autobuses montados sobre bastidor de antiguo furgón.</p>
+                            <a href="mantenimiento.jpg" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-coches">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/coches/502.jpg" alt="Panorámico" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Pasajeros</span>
+                            <h3>Coche Jaula</h3>
+                            <p>Coches sin ventanas puertas y asientos, eran furgones de carga reciclados para coches. Contaban con bancos de madera en su interior.</p>
+                            <a href="cochesjaula.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-coches">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/coches/3500/UT3500 riobamba2.jpg" alt="Panorámico" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Pasajeros</span>
+                            <h3>Serie 3500</h3>
+                            <p>Unidades eléctricas de cercanías procedentes de Euskotren en España, conservan interior original. Nunca han sido utilizados en Ecuador.</p>
+                            <a href="coches3500.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-coches">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/coches/furgon/furgon.jpg" alt="Panorámico" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Pasajeros</span>
+                            <h3>Furgones generador</h3>
+                            <p>Coches sin pasajeros equipados con generadores eléctricos a diésel para alimentar de energía al tren.</p>
+                            <a href="feep_furgon_generador.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    
+
+
+                </div>
+            </section>
+
+            <!-- SECCIÓN 4: VAGONES DE CARGA -->
+            <section>
+                <h2>Vagones de Carga</h2>
+                <p class="descripcion">materialrodante dedicado al transporte de bienes, insumos y mantenimiento.</p>
+
+                <div class="cuadrula-cuatro">
+                    <div class="tarjeta borde-vagones">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/vagones/1513.jpg" alt="Vagón Cerrado Boxcar" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Carga</span>
+                            <h3>Furgón cerrado Boxcar tipo "1500"</h3>
+                            <p>Vagones cubiertos para el transporte seguro de mercancías generales y alimentos.</p>
+                            <a href="g&q_furgon_1500.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-vagones">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/vagones/600crop.jpg" alt="Vagón Plataforma" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Carga</span>
+                            <h3>Plataforma tipo <br> "300"</h3>
+                            <p>Unidades planas empleadas para carga pesada, contenedores y maquinaria.</p>
+                            <a href="g&q_gondola_600.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-vagones">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/vagones/kevin80107crop2.jpg" alt="Vagón Cisterna" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Carga</span>
+                            <h3>Cisterna/Tanquero tipo <br> "1100"</h3>
+                            <p>Vagones estanque para el transporte de combustibles y líquidos a lo largo de la red.</p>
+                            <a href="g&q_tanquero_1100.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta borde-vagones">
+                        <div class="tarjeta-imagen">
+                            <img src="ffcc/materialrodante/vagones/300crop.jpg" alt="Vagón Góndola" onerror="this.src=''">
+                        </div>
+                        <div class="tarjeta-cuerpo">
+                            <span class="tag">Carga</span>
+                            <h3>Góndola tipo <br> "600"</h3>
+                            <p>Vagones descubiertos con bordes para el transporte de minerales y balasto.</p>
+                            <a href="g&q_gondola_600.html" class="btn">Ver Detalles</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 RegistroFerroviario.ec — Archivo Histórico Particular de Harukaze</p>
+            <p>Catálogo de materialrodante</p>
+        </div>
+    </footer>
+
+    <script>
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const label = document.getElementById('themeIcon');
+            if (label) {
+                label.textContent = theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
+    </script>
+</body>
+</html>

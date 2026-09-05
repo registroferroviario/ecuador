@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="icon" type="image/png" href="ico.jpg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Unidades - RegistroFerroviario</title>
+    <meta name="description" content="Inventario y estado del materialrodante diésel: Series 2000, 2400, 160 y 150">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1e1f21;
+            color: #1e293b;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .nav {
+            background-color: #1f2937 !important;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav .container {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .nav a {
+            color: #ffffff !important;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            opacity: 0.85;
+            transition: opacity 0.2s, color 0.2s;
+        }
+        .nav a:hover {
+            opacity: 1;
+            color: #fef08a !important;
+        }
+        .nav a.active-link {
+            opacity: 1;
+            color: #ffffff !important;
+            border-bottom: 2px solid #ffffff;
+            padding-bottom: 2px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: #0f172a;
+            border-left: 5px solid #095209;
+            padding-left: 10px;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+        }
+        .fila-clickeable {
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+        .tabla-tecnica {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+        }
+        .tabla-tecnica tr:nth-child(even) {
+            background-color: #1e1f21;
+        }
+        .tabla-tecnica tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        .tabla-tecnica th, .tabla-tecnica td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+        }
+        .tabla-tecnica th {
+            background-color: #095209 !important;
+            color: #ffffff !important;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .tabla-tecnica td {
+            color: #334155 !important;
+            font-size: 0.92rem;
+        }
+        /* Resaltado para la columna de numeración */
+        .tabla-tecnica td:first-child {
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 600;
+            color: #0f172a !important;
+        }
+        /* Pie de página unificado */
+        footer {
+            background-color: #095209 !important;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+        /* Cabecera Principal */
+        .header2 {
+            background-color: #095209 !important;
+            color: #ffffff !important;
+            padding: 3.5rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header2 h1 {
+            margin: 0;
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .header2 .subtitle {
+            margin: 0.5rem 0 0 0;
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+    </style>
+</head>
+<body>
+    
+
+    <header class="header2">
+        <div class="container">
+            <h1>Listado de materialrodante</h1>
+            <p class="subtitle">Inventario general de parque de tracción de vapor del Ferrocarril a la Costa.<p>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <div class="container">
+            <a href="index.html">Inicio</a>
+            <a href="listadolocomotorasvaporcosta.html" class="active-link">Locomotoras de tranvía</a>
+            <a href="listadotranvias.html">Tranvías</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section id="serie-2000">
+        <h2>0-4-0</h2>
+            <p>Ordenados por W. R. Grace & Co. para Empresa de Carros Urbanos. Presumiblemente para esta operación, pero no está comprobado.</p>
+            <table class="tabla-tecnica">
+                <thead>
+                    <tr>
+                        <th style="width: 9%;">Numeración</th>
+                        <th style="width: 9%;">Fabricante</th>
+                        <th style="width: 9%;">Año</th>
+                        <th style="width: 9%;">Base Taller</th>
+                        <th style="width: 13%;">Estado</th>
+                        <th style="width: 13%;">Año de baja</th>
+                        <th style="width: 7%;">Ancho de vía</th>
+                        <th style="width: 13%;">Color</th>
+                        <th style="width: 28%;">Datos adicionales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="fila-clickeable" onclick="window.location='';">
+                        <td>1</td>
+                        <td>Porter</td>
+                        <td>1905</td>
+                        <td>-</td> 
+                        <td>Chatarreada</td>
+                        <td>¿?</td>
+                        <td>1435mm</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                    <tr class="fila-clickeable" onclick="window.location='';">
+                        <td>¿?</td>
+                        <td>Porter</td>
+                        <td>1907</td>
+                        <td>-</td> 
+                        <td>Chatarreada</td>
+                        <td>¿?</td>
+                        <td>1435mm</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        <section id="serie-2000">
+        <h2>0-4-0</h2>
+            <p>Similares al modelo anterior pero con cilindros más largo. Igual que el modelo anterior fueron ordenados por W. R. Grace & Co. 
+                para Empresa de Carros Urbanos. Presumiblemente para esta operación, pero no está comprobado.</p>
+            <table class="tabla-tecnica">
+                <thead>
+                    <tr>
+                        <th style="width: 9%;">Numeración</th>
+                        <th style="width: 9%;">Fabricante</th>
+                        <th style="width: 9%;">Año</th>
+                        <th style="width: 9%;">Base Taller</th>
+                        <th style="width: 13%;">Estado</th>
+                        <th style="width: 13%;">Año de baja</th>
+                        <th style="width: 7%;">Ancho de vía</th>
+                        <th style="width: 13%;">Color</th>
+                        <th style="width: 28%;">Datos adicionales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="fila-clickeable" onclick="window.location='';">
+                        <td>1</td>
+                        <td>Porter</td>
+                        <td>1907</td>
+                        <td>-</td> 
+                        <td>Chatarreada</td>
+                        <td>¿?</td>
+                        <td>1435mm</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                    <tr class="fila-clickeable" onclick="window.location='';">
+                        <td>2</td>
+                        <td>Porter</td>
+                        <td>1907</td>
+                        <td>-</td> 
+                        <td>Chatarreada</td>
+                        <td>¿?</td>
+                        <td>1435mm</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        <section id="serie-2000">
+        <h2>0-4-0T</h2>
+            <p>Locomotoras articuladas de doble tender construidas por Beyer Peacock en Inglaterra en 1929.</p>
+            <table class="tabla-tecnica">
+                <thead>
+                    <tr>
+                        <th style="width: 9%;">Numeración</th>
+                        <th style="width: 9%;">Fabricante</th>
+                        <th style="width: 9%;">Año</th>
+                        <th style="width: 9%;">Base Taller</th>
+                        <th style="width: 13%;">Estado</th>
+                        <th style="width: 13%;">Año de baja</th>
+                        <th style="width: 7%;">Ancho de vía</th>
+                        <th style="width: 13%;">Color</th>
+                        <th style="width: 28%;">Datos adicionales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="fila-clickeable" onclick="window.location='';">
+                        <td>-</td>
+                        <td>Henschel</td>
+                        <td>1924</td>
+                        <td>-</td> 
+                        <td>Chatarreada</td>
+                        <td>¿?</td>
+                        <td>1435mm</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        <section id="serie-2000">
+        <h2>0-4-0T</h2>
+            <p>Pedido a través de W. R. Grace para Empresa de Carros Urbanos, Guayaquil. 
+                La lista de Porter de Bob Lehmuth también muestra estos números en funcionamiento.</p>
+            <table class="tabla-tecnica">
+                <thead>
+                    <tr>
+                        <th style="width: 9%;">Numeración</th>
+                        <th style="width: 9%;">Fabricante</th>
+                        <th style="width: 9%;">Año</th>
+                        <th style="width: 9%;">Base Taller</th>
+                        <th style="width: 13%;">Estado</th>
+                        <th style="width: 13%;">Año de baja</th>
+                        <th style="width: 7%;">Ancho de vía</th>
+                        <th style="width: 13%;">Color</th>
+                        <th style="width: 28%;">Datos adicionales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="fila-clickeable" onclick="window.location='';">
+                        <td>7</td>
+                        <td>Porter</td>
+                        <td>1909</td>
+                        <td>-</td> 
+                        <td>¿?</td>
+                        <td>¿?</td>
+                        <td>1435mm</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr class="fila-clickeable" onclick="window.location='';">
+                        <td>8</td>
+                        <td>Porter</td>
+                        <td>1909</td>
+                        <td>-</td> 
+                        <td>¿?</td>
+                        <td>¿?</td>
+                        <td>1435mm</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr class="fila-clickeable" onclick="window.location='';">
+                        <td>9</td>
+                        <td>Porter</td>
+                        <td>1909</td>
+                        <td>-</td> 
+                        <td>¿?</td>
+                        <td>¿?</td>
+                        <td>1435mm</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr class="fila-clickeable" onclick="window.location='';">
+                        <td>10</td>
+                        <td>Porter</td>
+                        <td>1909</td>
+                        <td>-</td> 
+                        <td>¿?</td>
+                        <td>¿?</td>
+                        <td>1435mm</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr class="fila-clickeable" onclick="window.location='';">
+                        <td>11</td>
+                        <td>Porter</td>
+                        <td>1909</td>
+                        <td>-</td> 
+                        <td>¿?</td>
+                        <td>¿?</td>
+                        <td>1435mm</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr class="fila-clickeable" onclick="window.location='';">
+                        <td>12</td>
+                        <td>Porter</td>
+                        <td>1909</td>
+                        <td>-</td> 
+                        <td>¿?</td>
+                        <td>¿?</td>
+                        <td>1435mm</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+
+        <section id="serie-2000">
+        <h2>0-6-0T</h2>
+            <p>Locomotoras de 20cv para Empresa de Carros Urbanos.<p>
+            <table class="tabla-tecnica">
+                <thead>
+                    <tr>
+                        <th style="width: 9%;">Numeración</th>
+                        <th style="width: 9%;">Fabricante</th>
+                        <th style="width: 9%;">Año</th>
+                        <th style="width: 9%;">Base Taller</th>
+                        <th style="width: 13%;">Estado</th>
+                        <th style="width: 13%;">Año de baja</th>
+                        <th style="width: 7%;">Ancho de vía</th>
+                        <th style="width: 13%;">Color</th>
+                        <th style="width: 28%;">Datos adicionales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="fila-clickeable" onclick="window.location='';">
+                        <td>¿?</td>
+                        <td>O&Q</td>
+                        <td>1909</td>
+                        <td>-</td> 
+                        <td>¿?</td>
+                        <td>¿?</td>
+                        <td>1435mm</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr class="fila-clickeable" onclick="window.location='';">
+                        <td>¿?</td>
+                        <td>O&Q</td>
+                        <td>1909</td>
+                        <td>-</td> 
+                        <td>¿?</td>
+                        <td>¿?</td>
+                        <td>1435mm</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr class="fila-clickeable" onclick="window.location='';">
+                        <td>¿?</td>
+                        <td>O&Q</td>
+                        <td>1909</td>
+                        <td>-</td> 
+                        <td>¿?</td>
+                        <td>¿?</td>
+                        <td>1435mm</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr class="fila-clickeable" onclick="window.location='';">
+                        <td>¿?</td>
+                        <td>O&Q</td>
+                        <td>1909</td>
+                        <td>-</td> 
+                        <td>¿?</td>
+                        <td>¿?</td>
+                        <td>1435mm</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <footer>
+            <div class="container">
+                <p>&copy; 2026 RegistroFerroviario.ec</p>
+                <p>Inventario Técnico General Particular de Harukaze • materialrodante Diésel</p>
+            </div>
+        </footer>     
+    </main>
+</body>
+</html>

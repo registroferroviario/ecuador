@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <link rel="icon" type="image/png" href="ico.jpg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F.C. Quito a San Lorenzo - Registroferroviario.ec</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================
+           VARIABLES DE TEMA (ROJO + CIAN)
+           ========================================== */
+        [data-theme="light"] {
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --rail-color: rgba(185, 28, 28, 0.12);
+            --red-main: #dc2626;
+            --red-dark: #991b1b;
+            --red-soft: #fee2e2;
+            --cyan-accent: #0891b2;
+            --cyan-soft: #e0f2fe;
+            --cyan-glow: #06b6d4;
+            --border-card: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --shadow-card: rgba(0, 0, 0, 0.06);
+
+            
+            --dropdown-bg: #ffffff;
+            --dropdown-hover: #dc2626;
+            --dropdown-text-hover: #ffffff;
+            --dropdown-border: #cbd5e1;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0d1117;
+            --bg-card: #161b22;
+            --rail-color: rgba(6, 182, 212, 0.1);
+            --red-main: #b91c1c;
+            --red-dark: #b91c1c;
+            --red-soft: rgba(239, 68, 68, 0.15);
+            --cyan-accent: #22d3ee;
+            --cyan-soft: rgba(34, 211, 238, 0.12);
+            --cyan-glow: #06b6d4;
+            --border-card: #30363d;
+            --text-main: #f0f6fc;
+            --text-muted: #8b949e;
+            --shadow-card: rgba(0, 0, 0, 0.4);
+
+            /* Submenús Oscuros Neutros */
+            --dropdown-bg: #161b22;
+            --dropdown-hover: #b91c1c;
+            --dropdown-text-hover: #ffffff;
+            --dropdown-border: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        .top-stripe {
+            height: 6px;
+            background: linear-gradient(90deg, #ffcc00 0%, #0891b2 35%, #003399 65%, #dc2626 100%);
+            width: 100%;
+        }
+
+        .rail-pattern {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.75;
+            will-change: background-position;
+        }
+
+        .rail-pattern-left {
+            left: 15px;
+            background: repeating-linear-gradient(0deg, transparent, transparent 18px, var(--rail-color) 18px, var(--rail-color) 22px),
+            linear-gradient(90deg, transparent 22px, var(--rail-color) 22px, var(--rail-color) 26px, transparent 26px, transparent 54px, var(--rail-color) 54px, var(--rail-color) 58px, transparent 58px);
+        }
+
+        .rail-pattern-right {
+            right: 15px;
+            background: repeating-linear-gradient(0deg, transparent, transparent 18px, var(--rail-color) 18px, var(--rail-color) 22px),
+            linear-gradient(90deg, transparent 22px, var(--rail-color) 22px, var(--rail-color) 26px, transparent 26px, transparent 54px, var(--rail-color) 54px, var(--rail-color) 58px, transparent 58px);
+        }
+
+        /* NAVEGACIÓN Y DESPLEGABLES MULTINIVEL */
+        .top-navbar {
+            background-color: var(--bg-card);
+            border-bottom: 3px solid var(--cyan-accent);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px var(--shadow-card);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            height: 60px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            list-style: none;
+            height: 100%;
+        }
+
+        .nav-links li {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover,
+        .nav-links li:hover > a,
+        .nav-links a.active {
+            background-color: var(--cyan-soft);
+            color: var(--cyan-accent);
+        }
+
+        /* SUBMENÚS GENERALES */
+        .nav-links ul {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--dropdown-bg);
+            border: 1px solid var(--dropdown-border);
+            border-top: 2px solid var(--cyan-accent);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            list-style: none;
+            min-width: 260px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 6px 0;
+            z-index: 1001;
+        }
+
+        .nav-links li:hover > ul {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-links ul ul {
+            top: 0;
+            left: 100%;
+            margin-left: 2px;
+            border-top: 1px solid var(--dropdown-border);
+            border-left: 2px solid var(--cyan-accent);
+            border-radius: 0 8px 8px 8px;
+        }
+
+        .nav-links ul li {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+
+        .nav-links ul a {
+            width: 100%;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 0;
+            color: var(--text-main);
+            justify-content: space-between;
+        }
+
+        .nav-links ul a:hover,
+        .nav-links ul li:hover > a {
+            background-color: var(--dropdown-hover);
+            color: var(--dropdown-text-hover) !important;
+        }
+
+        .arrow-down::after { content: " ▾"; font-size: 0.75rem; color: var(--cyan-accent); }
+        .arrow-right::after { content: " ▸"; font-size: 0.75rem; color: var(--cyan-accent); }
+        .arrow-left::after { content: " ◂"; font-size: 0.75rem; color: var(--cyan-accent); }
+
+        .theme-toggle-btn {
+            background: var(--bg-card);
+            border: 2px solid var(--cyan-accent);
+            color: var(--cyan-accent);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--cyan-accent);
+            color: #ffffff;
+            box-shadow: 0 0 12px var(--cyan-soft);
+        }
+
+        .wrapper {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ENCABEZADO Y LOGO TRICOLOR */
+        header {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            border-left: 6px solid var(--red-main);
+            border-top: 1px solid var(--border-card);
+            border-right: 1px solid var(--border-card);
+            border-bottom: 3px solid var(--cyan-accent);
+            box-shadow: 0 6px 25px var(--shadow-card);
+            margin-bottom: 40px;
+            overflow: hidden;
+            display: flex;
+            align-items: stretch;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .header-info {
+            padding: 30px;
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .header-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .brand-logo-small {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: #0f172a;
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid var(--cyan-accent);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .brand-logo-small .tri-yellow { color: #ffcc00 !important; }
+        .brand-logo-small .tri-blue   { color: #003399 !important; }
+        .brand-logo-small .tri-red    { color: #b91c1c !important; }
+
+        .flag-box {
+            width: 60px;
+            height: 38px;
+            border: 2px solid var(--cyan-accent);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px var(--shadow-card);
+            flex-shrink: 0;
+        }
+
+        .flag-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .main-railway-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.2rem, 3.8vw, 3.2rem);
+            font-weight: 900;
+            color: var(--red-main);
+            line-height: 1.1;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        [data-theme="dark"] .main-railway-title {
+            color: #ffffff;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 600px;
+        }
+
+        .header-photo-container {
+            position: relative;
+            width: 40%;
+            min-width: 280px;
+            background-color: #0f172a;
+            overflow: hidden;
+            border-left: 2px solid var(--cyan-accent);
+        }
+
+        .header-photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.5s ease;
+        }
+
+        .header-photo-container:hover img {
+            transform: scale(1.05);
+        }
+
+        .header-photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 16px;
+            background: linear-gradient(180deg, transparent 0%, rgba(15, 23, 42, 0.95) 100%);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-align: right;
+            border-top: 1px solid rgba(34, 211, 238, 0.3);
+        }
+
+        /* SECCIONES GENÉRICAS */
+        section {
+            margin-bottom: 50px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .section-line {
+            flex-grow: 1;
+            height: 3px;
+            background: linear-gradient(90deg, var(--red-main), var(--cyan-accent), transparent);
+        }
+
+        
+        .infinite-carousel {
+            overflow: hidden;
+            width: 100%;
+            border-radius: 16px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-bottom: 3px solid var(--cyan-accent);
+            box-shadow: 0 8px 25px var(--shadow-card);
+            position: relative;
+            padding: 15px 0;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 20px;
+            width: max-content;
+            animation: scrollContinuous 25s linear infinite;
+        }
+
+        .infinite-carousel:hover .carousel-track {
+            animation-play-state: paused;
+        }
+
+        .carousel-card {
+            width: calc((1280px - 88px - 40px) / 3); 
+            height: 320px;
+            flex-shrink: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border-card);
+            box-shadow: 0 4px 12px var(--shadow-card);
+            transition: border-color 0.3s ease;
+        }
+
+        .carousel-card:hover {
+            border-color: var(--cyan-accent);
+        }
+
+        .carousel-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .carousel-card:hover img {
+            transform: scale(1.06);
+        }
+
+        .carousel-card-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 15px 12px;
+            background: linear-gradient(180deg, transparent 0%, rgba(15, 23, 42, 0.95) 100%);
+            color: #ffffff;
+        }
+
+        .carousel-card-caption h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+            color: #ffffff;
+        }
+
+        .carousel-card-caption p {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        @keyframes scrollContinuous {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-50% - 10px)); }
+        }
+
+        /* TABLA TÉCNICA */
+        .tech-table-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 22px var(--shadow-card);
+        }
+
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .tech-table th {
+            background-color: #0f172a;
+            color: var(--cyan-accent);
+            padding: 16px 24px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            border-bottom: 3px solid var(--red-main);
+        }
+
+        .tech-table td.param-title {
+            background-color: var(--red-main);
+            color: #ffffff;
+            font-weight: 700;
+            width: 38%;
+            padding: 14px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 3px solid var(--cyan-accent);
+        }
+
+        .tech-table td.param-value {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            font-weight: 400;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--border-card);
+        }
+
+        .tech-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tech-table tr:hover td.param-title {
+            background-color: var(--red-dark);
+        }
+
+        .tech-table tr:hover td.param-value {
+            background-color: var(--cyan-soft);
+        }
+
+        .btn-table-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--cyan-accent);
+            color: #ffffff !important;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            transition: all 0.25s ease;
+        }
+
+        .btn-table-link:hover {
+            background-color: var(--red-main);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        
+        .history-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-top: 3px solid var(--cyan-accent);
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 6px 20px var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .history-row {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .history-row.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .history-image-box {
+            width: 38%;
+            min-width: 260px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-card);
+            box-shadow: 0 4px 12px var(--shadow-card);
+            position: relative;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .history-image-box:hover {
+            border-color: var(--cyan-accent);
+        }
+
+        .history-image-box img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .history-image-box:hover img {
+            transform: scale(1.05);
+        }
+
+        .history-image-box span {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--cyan-accent);
+            font-size: 0.75rem;
+            padding: 8px 10px;
+            text-align: center;
+            font-weight: 600;
+            border-top: 1px solid var(--cyan-accent);
+        }
+
+        .history-content {
+            flex: 1;
+            font-size: 0.98rem;
+            color: var(--text-main);
+        }
+
+        .history-content h3 {
+            color: var(--red-main);
+        }
+
+        [data-theme="dark"] .history-content h3 {
+            color: #f87171;
+        }
+
+        .history-content p {
+            margin-bottom: 10px;
+        }
+
+        .history-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .history-content blockquote {
+            border-left: 4px solid var(--cyan-accent);
+            padding: 10px 14px;
+            margin: 12px 0;
+            font-style: italic;
+            color: var(--text-muted);
+            background-color: var(--cyan-soft);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.92rem;
+        }
+
+        .photo-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .gallery-item {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-bottom: 3px solid var(--cyan-accent);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px var(--shadow-card);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px var(--shadow-card);
+            border-bottom-color: var(--red-main);
+        }
+
+        .gallery-image-container {
+            width: 100%;
+            aspect-ratio: 16 / 9; 
+            overflow: hidden;
+            position: relative;
+            background-color: #0f172a; 
+            cursor: pointer;
+        }
+
+        .gallery-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .gallery-item:hover .gallery-image-container img {
+            transform: scale(1.08);
+        }
+
+        .gallery-info {
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-grow: 1;
+        }
+
+        .gallery-info h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .gallery-info p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(13, 17, 23, 0.95);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 0 25px rgba(34, 211, 238, 0.2);
+            border: 2px solid var(--cyan-accent);
+            object-fit: contain;
+        }
+
+        .modal-caption {
+            margin-top: 15px;
+            color: var(--cyan-accent);
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #ffffff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--cyan-accent);
+        }
+
+        .full-width-card {
+    background-color: transparent; /* Se quita el fondo para integrarlo totalmente */
+    border: none;                  /* Se eliminan todos los bordes */
+    box-shadow: none;              /* Se elimina la sombra */
+    padding: 0;                    /* Se elimina el relleno interior */
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.full-width-text {
+    width: 100%;
+    color: var(--text-main);
+    font-size: 0.98rem;
+    line-height: 1.6;
+}
+
+.full-width-text h3 {
+    color: var(--red-main);
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+[data-theme="dark"] .full-width-text h3 {
+    color: #f87171;
+}
+
+.triple-image-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+}
+
+.triple-image-item {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-card);
+    box-shadow: 0 4px 12px var(--shadow-card);
+    aspect-ratio: 16 / 9;
+    cursor: pointer;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.triple-image-item:hover {
+    border-color: var(--cyan-accent);
+    transform: translateY(-3px);
+}
+
+.triple-image-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.triple-image-item:hover img {
+    transform: scale(1.06);
+}
+
+.triple-image-item span {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(15, 23, 42, 0.9);
+    color: var(--cyan-accent);
+    font-size: 0.75rem;
+    padding: 8px 10px;
+    text-align: center;
+    font-weight: 600;
+    border-top: 1px solid var(--cyan-accent);
+}
+
+@media (max-width: 850px) {
+    .triple-image-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+        footer {
+            background-color: var(--bg-card);
+            border-top: 3px solid var(--cyan-accent);
+            border-bottom: 4px solid var(--red-main);
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            border-left: 1px solid var(--border-card);
+            border-right: 1px solid var(--border-card);
+        }
+
+        @media (max-width: 1100px) {
+            .rail-pattern { display: none; }
+            .carousel-card { width: 300px; }
+        }
+
+        @media (max-width: 850px) {
+            header { flex-direction: column; }
+            .header-photo-container { width: 100%; height: 220px; border-left: none; border-top: 2px solid var(--cyan-accent); }
+            .tech-table th, .tech-table td { padding: 10px 14px; font-size: 0.88rem; }
+            .tech-table td.param-title { width: 45%; }
+            .carousel-card { width: 260px; height: 260px; }
+            
+            .photo-gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .history-row, .history-row.reverse {
+                flex-direction: column;
+            }
+            .history-image-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-stripe"></div>
+
+    <div class="rail-pattern rail-pattern-left" id="railLeft"></div>
+    <div class="rail-pattern rail-pattern-right" id="railRight"></div>
+
+    <nav class="top-navbar">
+        <div class="nav-container">
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                
+                <li>
+                    <a href="ffcc.html" class="arrow-down">FF.CC. Ecuador</a>
+                    <ul>
+                        <li>
+                            <a href="fcdelsur.html" class="arrow-right">F.C. del Sur </a>
+                            <ul>
+                                <li><a href="fcdelsur.html">Información y reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfcdelsur.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="g&q.html" class="arrow-right">G. & Q. (Guayaquil - Quito)</a>
+                            <ul>
+                                <li>
+                                    <a href="g&q.html">Información y reseña histórica</a>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                    <ul>
+                                        <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                        <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                        <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                        <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotorasvaporg&q.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul"</a></li>
+                                        <li><a href="consolidation.html">Baldwin 2-8-0 "Consolidation"</a></li>
+                                        <li>
+                                            <a href="listadolocomotoras.html" class="arrow-left">Históricas</a>
+                                            <ul>
+                                                <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul" 42" 12,8 metros</a></li>
+                                                <li></li><a href="g&q_mogul2-6-0_48.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                                <li><a href="lima-shay.html">Lima 0-4+4+4-0 "Shay"</a></li>
+                                                <li><a href="g&q_mallet0-6-6-0.html">Baldwin 0-6-6-0 "Mallet"</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_42.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_54.html">Baldwin 2-8-0 "Consolidation" 54" 16,4 metros</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_44.html">Baldwin 2-8-0 "Consolidation" 44" 13,4 metros</a></li>
+                                                <li><a href="g&q_garratt_2-6-2+2-6-2.html">Beyer Peacock 2-6-2+2-6-2 "Garratt"</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="extra_locomotoras.html">Locomotoras utilitarias y equipo auxiliar</a></li>
+                                <li>
+                                    <a href="listadocoches.html" class="arrow-left">Listado de coches de viajeros</a>
+                                    <ul>
+                                        <li><a href="coches250.html">Coches serie 250</a></li>
+                                        <li>
+                                            <a href="unidadescompletas.html" class="arrow-right">Composiciones remolcadas</a>
+                                            <ul>
+                                                <li><a href="unidadescompletaspanoramico.html">Moderno Panorámico</a></li>
+                                                <li><a href="unidadescompletascrucero.html">Moderno Crucero 1 & 2</a></li>
+                                                <li><a href="unidadescompletasmodernocut3.html">Moderno CUT3</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="cochescut4.html">Coches CUT4</a></li>
+                                        <li><a href="colonialmadera13.html">Coloniales madera 13m</a></li>
+                                        <li><a href="colonialmadera14.html">Coloniales madera 14m</a></li>
+                                        <li><a href="coches_metalicos_reciclados.html">Metálico reciclado</a></li>
+                                        <li><a href="cochesjaula.html">Coches Jaula</a></li>
+                                        <li><a href="coches3500.html">Coches UT3500</a></li>
+                                        <li><a href="feep_furgon_generador.html">Furgones generador</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="mantenimiento.jpg" class="arrow-left">Vagones</a>
+                                    <ul>
+                                        <li><a href="g&q_furgon_1500.html">Furgón Boxcar tipo "1500"</a></li>
+                                        <li><a href="g&q_tanquero_1100.html">Vagón tanquero tipo "1100"</a></li>
+                                        <li><a href="g&q_plataforma_300.html">Plataforma tipo "300"</a></li>
+                                        <li><a href="g&q_gondola_600.html">Góndola tipo "600"</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="listadoestaciones_g&q.html">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcquitosanlorenzo.html" class="arrow-right">F.C. Quito a San Lorenzo</a>
+                            <ul>
+                                <li><a href="fcquitosanlorenzo.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasvaporqsl.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="qsl_borsig4-6-0.html">Borsig 4-6-0 42" 12,8 metros</a></li>
+                                        <li><a href="norte_baldwin2-8-0.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                        <li><a href="curaray_baldwin2-6-0.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                    </ul>
+                                
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                        <ul>
+                                            <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                            <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                            <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                            <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                            <li><a href="extra_locomotoras.html">Otras locomotoras diésel utilitarias</a></li>
+                                        </ul>
+                                </li>
+                                <li><a href="mantenimiento.jpg">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcsibambecuenca.html" class="arrow-right">S. C. (Sibambe a Cuenca)</a>
+                            <ul>
+                                <li><a href="fcsibambecuenca.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorassc.html">Listado locomotoras de vapor</a></li>
+                                <li><a href="listadoestaciones_sc.html">Estaciones</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcalacosta.html" class="arrow-right">F.C. Guayaquil a Salinas</a>
+                            <ul>
+                                <li><a href="fcalacosta.html">Reseña histórica</a></li>
+                                <li>
+                                    <a href="listadolocomotorasvaporcosta.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="costa_henschel2-6-0.html">Henschel 2-6-0 "Mogul"</a></li>
+                                        <li><a href="costa_henschel4-6-0.html">Henschel 4-6-0</a></li>
+                                    </ul>
+                                </li>
+                                    
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcambatocuraray.html" class="arrow-right">F.C. Ambato a Curaray</a>
+                            <ul>
+                                <li><a href="fcambatocuraray.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoras_curaray.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcbahiachone.html" class="arrow-right">F.C. Bahía a Chone</a>
+                            <ul>
+                                <li><a href="fcbahiachone.html">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fccentral.html" class="arrow-right">F.C. Central del Ecuador</a>
+                            <ul>
+                                <li><a href="fccentral.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfccentral.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_loja.html" class="arrow-right">F.C. Puerto Bolívar y Pasaje</a>
+                            <ul>
+                                <li><a href="fcpuertobolivar_loja.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoraseloro.html">Listado materialrodante</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_piedras.html" class="arrow-right">F.C. Puerto Bolívar a Piedras</a>
+                            <ul>
+                                <li><a href="fcpuertobolivar_piedras.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoraseloro.html">Listado materialrodante</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="ffccaduana_guayaquil.html" class="arrow-right">F.C. Aduana de Guayaquil</a>
+                            <ul>
+                                <li><a href="ffccaduana_guayaquil.html">Reseña Histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="mantenimiento.jpg">FF.CC. no construidos</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="ffcc.html#indus" class="arrow-down">FF.CC. Industriales</a>
+                    <ul>
+                        <li><a href="mantenimiento.jpg">Ingenio Valdez</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio San Carlos</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Inés María</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Luz María y Matilde</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Rocafuerte</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Nugues</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Adelina María</a></li>
+                        <li><a href="mantenimiento.jpg">United Fruit Company</a></li>
+                        <li><a href="mantenimiento.jpg">Ecuadorian Oilfields</a></li>
+                        <li><a href="mantenimiento.jpg">Galápagos?</a></li>
+                    </ul>
+                
+                </li>
+
+                <li><a href="metroquito.html">Metro de Quito</a></li>
+                <li><a href="tranviacuenca.html">Tranvía Cuenca</a></li>
+                <li>
+                    <a href="#" class="arrow-down">Tranvías Históricos</a>
+                    <ul>
+                        <li><a href="antiguo_tranviaquito.html">Tranvía de Quito</a></li>
+                        <li><a href="antiguo_tranviaguayaquil.html">Tranvía de Guayaquil</a></li>
+                    </ul>
+                </li>
+                
+                <li><a href="mantenimiento.jpg">F.E.E.P (2010-2020)</a></li>
+                <li><a href="actualidad_trenes.html">Trenes en 2026</a></li>
+            </ul>
+
+            <button class="theme-toggle-btn" onclick="toggleTheme()">
+                <span id="themeIcon">Modo Oscuro</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+
+        <header>
+            <div class="header-info">
+                <div class="header-top-row">
+                   
+                    <div class="brand-logo-small">
+                        <span class="tri-yellow">REGISTRO</span>
+                        <span class="tri-blue">FERRO</span><span class="tri-red">VIARIO</span>
+                    </div>
+
+                    <div class="flag-box">
+                        <img src="bandera.webp" alt="Bandera del Ecuador" onerror="this.src='icotrian.png'">
+                    </div>
+                </div>
+
+                <h1 class="main-railway-title">Ferrocarril <br> Quito a San Lorenzo</h1>
+                <p class="subtitle">L</p>
+            </div>
+
+            <div class="header-photo-container">
+                <img src="ffcc/materialrodante/locomotoras/diesel/sulzer/8tfaL.png" alt="Paso por la Nariz del Diablo" onerror="this.src='ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg'">
+                <div class="header-photo-overlay">Locomotora Alsthom-Sulzer BBB-151 en los Talleres del Ferrocarril de Ibarra.</div>
+            </div>
+        </header>
+
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Galería Fotográfica en Movimiento</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="infinite-carousel">
+                <div class="carousel-track">
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/norte/151 año desconocido.jpg" alt="Locomotora Shay" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4></h4>
+                            <p>.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/norte/cable de san lorenzo2.jpg" alt="Locomotora Shay" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>s</h4>
+                            <p>O.</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/norte/agosto de 1957.jpg" alt="Locomotora Alsthom" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>L</h4>
+                            <p>E.</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/norte/quito.jpg" alt="Estación Salcedo" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>ea</h4>
+                            <p>n.</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/norte/cable de san lorenzo.jpg" alt="Coche de Pasajeros" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>jo</h4>
+                            <p>o</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/norte/b 153.jpg" alt="Locomotora Alsthom" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4></h4>
+                            <p>U</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/norte/ibarra.jpg" alt="Estación Salcedo" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>T</h4>
+                            <p>T.</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/norte/cable de san lorenzo4.jpg" alt="Coche de Pasajeros" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4></h4>
+                            <p>"</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/norte/151 año desconocido.jpg" alt="Locomotora Shay" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4></h4>
+                            <p>.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/norte/cable de san lorenzo2.jpg" alt="Locomotora Shay" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4></h4>
+                            <p></p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/norte/agosto de 1957.jpg" alt="Locomotora Alsthom" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4>L</h4>
+                            <p></p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/norte/quito.jpg" alt="Estación Salcedo" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4></h4>
+                            <p></p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/norte/cable de san lorenzo.jpg" alt="Coche de Pasajeros" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4></h4>
+                            <p></p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/norte/b 153.jpg" alt="Locomotora Alsthom" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4></h4>
+                            <p></p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/norte/ibarra.jpg" alt="Estación Salcedo" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4></h4>
+                            <p></p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-card">
+                        <img src="ffcc/historia/norte/cable de san lorenzo4.jpg" alt="Coche de Pasajeros" onerror="this.src='icotrian.png'">
+                        <div class="carousel-card-caption">
+                            <h4></h4>
+                            <p></p>
+                        </div>
+                    </div>
+
+                    
+
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Información Técnica e Infraestructura</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="tech-table-container">
+                <table class="tech-table">
+                    <thead>
+                        <tr>
+                            <th>Especificación / Parámetro</th>
+                            <th>Detalle Técnico</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="param-title">Nombre</td>
+                            <td class="param-value">Ferrocarril Quito a San Lorenzo</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Constructor</td>
+                            <td class="param-value">-Sindicato de la Junta Autónoma (1915–1928) <br> -Compañía Scotoni(1930?-1937) <br> -Comptoir International d'Achats et de Ventes (1951–1957)</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Tipo</td>
+                            <td class="param-value">Ferrocarril ordinario, Línea principal</td>
+                        </tr>
+                         <tr>
+                            <td class="param-title">Ancho de vía</td>
+                            <td class="param-value"><strong>1.067 mm</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Número de estaciones</td>
+                            <td class="param-value"><strong>49</strong> registradas en 2005 pero solo <strong>3</strong> en operación en 2026</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Estado de operación</td>
+                            <td class="param-value"><strong>Fuera de servicio, invadido y abandonado</strong> <br>(excepto tramo de 57km entre Otavalo y Salinas) <br>
+                                En <strong>2026</strong> solo operativo tramo de 13,1km entre Ibarra y Andrade Marín</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Punto de partida</td>
+                            <td class="param-value">Quito-Chimbacalle</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Última estación</td>
+                            <td class="param-value">San Lorenzo</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Apertura de servicio</td>
+                            <td class="param-value"><strong>8 de julio de 1928</strong> (Primer trazado de 110km entre Quito y Cayambe).</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Apertura Total</td>
+                            <td class="param-value"><strong>9 de marzo de 1957</strong> (Llegada del primer tren al puerto de San Lorenzo).</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Última circulación (servicio ordinario)</td>
+                            <td class="param-value">2003</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Longitud</td>
+                            <td class="param-value">373,4 kilómetros</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Dueño</td>
+                            <td class="param-value">Estado ecuatoriano</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Operador</td>
+                            <td class="param-value">-Junta del Ferrocarril Quito a San Lorenzo "Q.S.L." (1928-1970)
+                                <br> -Empresa Nacional de Ferrocariles Ecuatorianos "ENFE" (1970-2010) <br> 
+                                -Ferrocariles Ecuatorianos Empresa Pública "FEEP" (2010-2020) <br>
+                                -Gobierno autónomo descentralizado de Ibarra (desde 2023)</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">Velocidad máxima</td>
+                            <td class="param-value">70 km/h</td>
+                        </tr>
+                        <tr>
+                            <td class="param-title">materialrodante utilizado</td>
+                            <td class="param-value">
+                                <a href="listadolocomotorasvaporqsl.html" class="btn-table-link">
+                                    Ver materialrodante &rarr;
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Reseña Histórica</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="history-card">
+                
+                <div class="history-row">
+                    <div class="history-image-box" onclick="openModal('ffcc/historia/norte/plazacentral1906.jpg', 'Plaza Central de Ibarra, ciudad escenario del nuevo ferrocarril en 1906.')">
+                        <img src="ffcc/historia/norte/plazacentral1906.jpg" alt="Construcción de la vía" onerror="this.src='ffcc/historia/g&q/estaciones/salcedo.jpg'">
+                        <span>Plaza Central de Ibarra, ciudad escenario del nuevo ferrocarril en 1906.</span>
+                    </div>
+                    <div class="history-content">
+                         <h3><strong>El primer gran proyecto: 1906</strong></h3><br>
+                        <p>En noviembre de 1906, el señor J. F. Steffan, en nombre de un sindicato extranjero encabezado por el Barón B. van Dedem, 
+                            presentó a la Asamblea Nacional un proyecto concreto. Se trataba de construir un puerto comercial en la costa de Esmeraldas 
+                            (el punto exacto lo decidiría una comisión mixta de ingenieros del Gobierno y de la empresa) 
+                            y una línea férrea que partiera de ese puerto, pasara por Ibarra y, eventualmente, llegara a Quito.
+                        </p>
+                        <p>
+                            La propuesta era ambiciosa y, al mismo tiempo, cuidadosa con los intereses del Estado. 
+                            <br> La empresa pedía la garantía del Gobierno sobre un interés del 5½ % anual durante 33 años, 
+                            pero solo después de que la obra estuviera terminada y entregada al servicio público. 
+                            <br> El capital invertido lo fijaría la misma comisión mixta, y la garantía se aplicaría únicamente sobre los gastos reales. 
+                            El Estado podía, si quería, amortizar el capital pagando una anualidad fija adicional del 1,1335 %. 
+                        </p>
+                        <p>
+                            Una vez amortizado, el Gobierno recibiría dos terceras partes de las utilidades netas y la empresa solo una. 
+                            <br> Si el Gobierno no amortizaba, la empresa explotaría la línea durante 75 años, 
+                            compartiendo las utilidades en la proporción de un tercio para el Estado y dos tercios para ella.
+                        </p>
+                    </div>
+                </div>
+
+                <p>
+                    Como compensación por el interés relativamente bajo y por las facilidades de amortización, 
+                    el Estado entregaría a la empresa terrenos baldíos equivalentes al medio por ciento del capital invertido. 
+                    Esos terrenos no se quedarían en manos de una gran compañía: se parcelarían en lotes de 100 o 200 hectáreas 
+                    y se entregarían en propiedad a colonos agricultores, preferentemente obreros agrícolas europeos, 
+                    que se convertirían con el tiempo en ecuatorianos. 
+                    La empresa se comprometía a informar cada año al Gobierno sobre el desarrollo de la colonización, 
+                    y el Estado conservaba plena soberanía sobre el territorio.
+                </p>
+                <p>
+                    El ferrocarril tendría un ancho de vía de 1.067 mm (4,2 pulgadas inglesas), con gradientes máximos del 4 % y curvas de radio mínimo de 60 metros. 
+                    <br> Se construirían diques, muelles y faros en el puerto para recibir buques de más de 1.500 toneladas. 
+                    <br> Los trabajos debían comenzar en dieciocho meses y terminar en siete años. <br> Steffan insistía en que se trataba de un contrato de buena fe, 
+                    en el que el éxito de la empresa coincidía con el beneficio del país.
+                </p>
+                <p>
+                    Por entonces existía ya un convenio con Archer Harman para prolongar el Ferrocarril del Sur desde Quito hasta Ibarra. 
+                    Por eso Steffan limitó su petición inicial a Ibarra, dejando abierta la posibilidad de llegar a Quito si el convenio Harman caducaba.
+                </p>
+
+                <div class="history-row reverse">
+                    <div class="history-image-box" onclick="openModal('', 'Autocarril de inspección sobre uno de los puentes de madera.')">
+                        <img src="icotrian.png" alt="Inauguración en Quito" onerror="this.src='ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg'">
+                        <span>Autocarril de inspección sobre uno de los puentes de madera.</span>
+                    </div>
+                    <div class="history-content">
+                        <h3><strong>De la ley a la controversia: 1913-1919</strong></h3><br>
+                        <p>En 1913 el Congreso ordenó construir el ferrocarril desde la costa de Esmeraldas hasta Quito. 
+                            En 1915 modificó la ley para empezar de preferencia por Quito–Ibarra. 
+                            En 1916 volvió a disponer que se iniciaran los trabajos por la costa, sin detener los de Quito a Ibarra.
+                            Se creó la Junta Central del Ferrocarril.
+                        </p>
+                        <p>
+                            Empezaron los terraplenes desde Quito y se hicieron los estudios de la sección San Lorenzo–Ibarra (1917-1919)
+                            y entonces surgió una fuerte controversia. <br> Ernesto Franco, representante de Esmeraldas, se opuso a enrielar primero desde Quito. 
+                            Argumentaba que traer materiales por Guayaquil salía mucho más caro y que un tramo sin salida al mar dejaría déficit. 
+                            Proponía construir desde San Lorenzo hacia Ibarra y habilitar provisionalmente los terraplenes de Quito para camiones.
+                        </p>
+                        <p>
+                            En 1919 Franco publicó folletos criticando la compra de rieles para Quito. 
+                            La Junta debatió el tema y pidió al Congreso que entregara las rentas de la Aduana de Esmeraldas y que se formara una junta provincial en esa ciudad. 
+                            <br> Se logró impedir, por el momento, la enrieladura desde Quito.
+                        </p>
+                    </div>
+                </div>
+
+
+
+                
+
+            <div class="full-width-card">
+                <div class="full-width-text">
+                    <h3>Primeras circulaciones de trenes: 1928-1929</h3>
+                        <p>
+                            Texto jeje xd lol
+                        </p>
+                </div>
+
+                <div class="triple-image-grid">
+                    <div class="triple-image-item" onclick="openModal('ffcc/historia/norte/borsig 1.jpg', 'Locomotora #1 Borsig 4-6-0 de 1926 en la ruta.')">
+                        <img src="ffcc/historia/norte/borsig 1.jpg" alt="Imagen 1" onerror="this.src='icotrian.png'">
+                        <span>Locomotora #1 Borsig 4-6-0 de 1926 en la ruta.</span>
+                    </div>
+                    <div class="triple-image-item" onclick="openModal('ffcc/historia/norte/comercioinauguracion1928.jpg', 'Periódico de la época con la noticia, 1928.')">
+                        <img src="ffcc/historia/norte/comercioinauguracion1928.jpg" alt="Imagen 2" onerror="this.src='icotrian.png'">
+                        <span>Periódico de la época con la noticia, 1928.</span>
+                    </div>
+
+                    <div class="triple-image-item" onclick="openModal('ffcc/historia/norte/borsig3.jpg', 'Descripción de la Imagen 3')">
+                        <img src="ffcc/historia/norte/borsig3ex.jpg" alt="Imagen 3" onerror="this.src='icotrian.png'">
+                        <span>Una de las dos Borsig atravesando Otavalo.</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Galería Fotográfica</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="photo-gallery-grid">
+                <div class="gallery-item">
+                    <div class="gallery-image-container" onclick="openModal('ffcc/historia/fcalacosta/cercakm22.jpg', 'Trabajos cerca del Kilómetro 22')">
+                        <img src="" alt="Descripción 1" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Trabajos </h3>
+                        <p>Descripción breve de la infraestructura, tren o estación mostrada en la imagen.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="ruta/a/tu/imagen2.jpg" alt="Descripción 2" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Título de la Fotografía 2</h3>
+                        <p>Descripción breve de la infraestructura, tren o estación mostrada en la imagen.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="ruta/a/tu/imagen3.jpg" alt="Descripción 3" onerror="this.src='icotrian.png'">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Título de la Fotografía 3</h3>
+                        <p>Descripción breve de la infraestructura, tren o estación mostrada en la imagen.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div><strong>registroferroviario.ec</strong> — Archivo Histórico Particular de Harukaze</div>
+            <div>Ecuador</div>
+        </footer>
+
+    </div>
+
+    <div id="imageModal" class="image-modal" onclick="closeModal()">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="imgModalSrc">
+        <div id="captionModal" class="modal-caption"></div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const label = document.getElementById('themeIcon');
+            if (label) {
+                label.textContent = theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
+
+        
+        const railLeft = document.getElementById('railLeft');
+        const railRight = document.getElementById('railRight');
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const position = scrolled * 0.4;
+            if (railLeft) railLeft.style.backgroundPositionY = `${position}px`;
+            if (railRight) railRight.style.backgroundPositionY = `${position}px`;
+        });
+
+        function openModal(imageSrc, captionText) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('imgModalSrc');
+            const caption = document.getElementById('captionModal');
+
+            modal.style.display = 'flex';
+            modalImg.src = imageSrc;
+            caption.textContent = captionText;
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        // Cerrar el modal al presionar la tecla ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

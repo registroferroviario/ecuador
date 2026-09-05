@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <link rel="icon" type="image/png" href="ico.jpg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de locomotoras de vapor F.C. a la Costa - RegistroFerroviario</title>
+    <meta name="description" content="Inventario y estado del materialrodante vapor F.C. a la Costa">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- VARIABLES DE COLOR EN TONOS VERDES (TEMA CLARO Y OSCURO) --- */
+        [data-theme="light"] {
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-card-alt: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-green: #166534;
+            --accent-green-hover: #14532d;
+            
+            --border-color: #166534;
+            --border-width: 2px;
+
+            --dropdown-bg: #ffffff;
+            --dropdown-hover: #166534;
+            --dropdown-text-hover: #ffffff;
+            --dropdown-border: #166534;
+            --shadow: 0 4px 15px rgba(15, 23, 42, 0.12);
+
+            --via-color: #cbd5e1;
+            --via-rail: #94a3b8;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-alt: #0f172a;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-green: #22c55e;
+            --accent-green-hover: #166534;
+            
+            --border-color: #334155;
+            --border-width: 1px;
+
+            --dropdown-bg: #1e293b;
+            --dropdown-hover: #166534;
+            --dropdown-text-hover: #ffffff;
+            --dropdown-border: #334155;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+
+            --via-color: #1e293b;
+            --via-rail: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container,
+        .container2 {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2.5rem;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .wrapper-main {
+            position: relative;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .via-decorativa {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 24px;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.7;
+            background-image: 
+                linear-gradient(90deg, var(--via-rail) 0, var(--via-rail) 3px, transparent 3px, transparent 21px, var(--via-rail) 21px, var(--via-rail) 24px),
+                repeating-linear-gradient(0deg, transparent, transparent 12px, var(--via-color) 12px, var(--via-color) 16px);
+        }
+
+        .via-izquierda { left: 10px; }
+        .via-derecha { right: 10px; }
+
+        /* --- NAVEGACIÓN COMPLETA MULTINIVEL --- */
+        .top-navbar {
+            background-color: var(--bg-card);
+            border-bottom: calc(var(--border-width) + 1px) solid var(--accent-green);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            height: 55px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            list-style: none;
+            height: 100%;
+        }
+
+        .nav-links li {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover,
+        .nav-links li:hover > a,
+        .nav-links a.active {
+            background-color: var(--bg-card-alt);
+            color: var(--accent-green);
+        }
+
+        .nav-links ul {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--dropdown-bg);
+            border: var(--border-width) solid var(--dropdown-border);
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            list-style: none;
+            min-width: 260px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 6px 0;
+            z-index: 1001;
+        }
+
+        .nav-links li:hover > ul {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-links ul ul {
+            top: 0;
+            left: 100%;
+            margin-left: 2px;
+        }
+
+        .nav-links ul li {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+
+        .nav-links ul a {
+            width: 100%;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 0;
+            color: var(--text-primary);
+            justify-content: space-between;
+        }
+
+        .nav-links ul a:hover,
+        .nav-links ul li:hover > a {
+            background-color: var(--dropdown-hover);
+            color: var(--dropdown-text-hover) !important;
+        }
+
+        .arrow-down::after { content: " ▾"; font-size: 0.75rem; }
+        .arrow-right::after { content: " ▸"; font-size: 0.75rem; }
+        .arrow-left::after { content: " ◂"; font-size: 0.75rem; }
+
+        .theme-toggle-btn {
+            background: var(--bg-card);
+            border: var(--border-width) solid var(--accent-green);
+            color: var(--accent-green);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--accent-green);
+            color: #ffffff;
+        }
+
+        /* --- HEADER EN TONOS VERDES --- */
+        .header2 {
+            position: relative;
+            padding: 3.5rem 0;
+            text-align: center;
+            color: #ffffff;
+            background-color: #14532d;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-blend-mode: multiply;
+        }
+        .header2::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('ffcc/historia/fcalacosta/2 Henschel 4-6-0 1923b.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.25;
+            z-index: 1;
+        }
+        .header2 h1 {
+            margin: 0;
+            font-size: 2.2rem;        
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+        .header2 .subtitle {
+            margin: 0.5rem 0 0 0;
+            font-size: 1.1rem;
+            color: #bbf7d0;
+            opacity: 0.95;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* --- ESTILOS DE CONTENIDO --- */
+        h2 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            padding-left: 1.25rem;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 28px;
+            background: var(--accent-green);
+            border-radius: 4px;
+        }
+
+        .fila-clickable {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fila-clickable:hover {
+            background-color: rgba(22, 101, 52, 0.25) !important;
+            border-left: 4px solid var(--accent-green);
+        }
+
+        .tabla-tecnica {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card);
+            border: var(--border-width) solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 3rem;
+        }
+        .tabla-tecnica tr:nth-child(even) { background-color: var(--bg-card); }
+        .tabla-tecnica tr:nth-child(odd) { background-color: var(--bg-card-alt); }
+
+        .tabla-tecnica th, .tabla-tecnica td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+        }
+        .tabla-tecnica th {
+            background-color: #14532d !important;
+            color: #ffffff !important;
+            padding: 1.2rem 1rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-align: center !important;
+        }
+        .tabla-tecnica td {
+            color: var(--text-primary) !important;
+            text-align: center !important;
+        }
+        .tabla-tecnica td:first-child {
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 600;
+        }
+
+        footer {
+            background-color: #14532d !important;
+            color: rgba(255, 255, 255, 0.9);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+
+        /* --- LIGHTBOX Y GALERÍA --- */
+        .lightbox-galeria {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .lightbox-galeria.active { display: flex; }
+        .lightbox-galeria img {
+            max-width: 85%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+        }
+        .lightbox-cerrar {
+            position: absolute;
+            top: 18px;
+            right: 28px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+        }
+        .lightbox-galeria .flecha {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: none;
+            font-size: 32px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .flecha-izq { left: 25px; }
+        .flecha-der { right: 25px; }
+        .contador { color: #94a3b8; margin-top: 14px; font-size: 0.95rem; }
+        .lightbox-caption { color: #ffffff; margin-top: 6px; font-size: 1rem; }
+
+        @media (max-width: 1024px) {
+            .via-decorativa { display: none; }
+            .container { padding: 0 1.5rem; }
+        }
+
+        @media (max-width: 768px) {
+            .tabla-tecnica {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                white-space: nowrap;
+            }
+            .header2 h1 { font-size: 1.8rem; }
+            .header2 .subtitle { font-size: 1rem; }
+            h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header2">
+        <div class="container2">
+            <h1>Listado de materialrodante</h1>
+            <p class="subtitle">Inventario general del parque de tracción de vapor del Ferrocarril a la Costa.</p>
+        </div>
+    </header>
+
+    <nav class="top-navbar">
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                
+                <li>
+                    <a href="ffcc.html" class="arrow-down">FF.CC. Ecuador</a>
+                    <ul>
+                        <li>
+                            <a href="fcdelsur.html" class="arrow-right">F.C. del Sur</a>
+                            <ul>
+                                <li><a href="fcdelsur.html">Información y reseña histórica</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="g&q.html" class="arrow-right">G. & Q. (Guayaquil - Quito)</a>
+                            <ul>
+                                <li><a href="g&q.html">Información y reseña histórica</a></li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                    <ul>
+                                        <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                        <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                        <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                        <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                        <li><a href="extra_locomotoras.html">Otras locomotoras diésel utilitarias</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotorasvaporg&q.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul"</a></li>
+                                        <li><a href="consolidation.html">Baldwin 2-8-0 "Consolidation"</a></li>
+                                        <li>
+                                            <a href="listadolocomotorasvaporg&q.html" class="arrow-left">Históricas</a>
+                                            <ul>
+                                                <li><a href="historica1.html">Baldwin 2-6-0 "Mogul" 42" 12,8 metros</a></li>
+                                                <li><a href="historica2.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                                <li><a href="lima-shay.html">Lima 0-4+4+4-0 "Shay"</a></li>
+                                                <li><a href="historica3.html">Baldwin 0-6-6-0 "Mallet"</a></li>
+                                                <li><a href="historica3.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                                <li><a href="historica3.html">Baldwin 2-8-0 "Consolidation" 54" 16,4 metros</a></li>
+                                                <li><a href="historica3.html">Baldwin 2-8-0 "Consolidation" 44" 13,4 metros</a></li>
+                                                <li><a href="g&q_garratt_2-6-2+2-6-2.html">Beyer Peacock 2-6-2+2-6-2 "Garratt"</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="listadocoches.html" class="arrow-left">Listado de coches de viajeros</a>
+                                    <ul>
+                                        <li><a href="coches250.html">Coches serie 250</a></li>
+                                        <li>
+                                            <a href="unidadescompletas.html" class="arrow-right">Composiciones remolcadas</a>
+                                            <ul>
+                                                <li><a href="unidadescompletaspanoramico.html">Moderno Panorámico</a></li>
+                                                <li><a href="unidadescompletascrucero.html">Moderno Crucero 1 & 2</a></li>
+                                                <li><a href="unidadescompletasmodernocut3.html">Moderno CUT3</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="cochescut4.html">Coches CUT4</a></li>
+                                        <li><a href="colonialmadera13.html">Coloniales madera 13m</a></li>
+                                        <li><a href="colonialmadera14.html">Coloniales madera 14m</a></li>
+                                        <li><a href="cochesjaula.html">Coches Jaula</a></li>
+                                        <li><a href="coches3500.html">Coches UT3500</a></li>
+                                        <li><a href="feep_furgon_generador.html">Furgones generador</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="listadoestaciones_g&q.html">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcquitosanlorenzo.html" class="arrow-right">F.C. Quito a San Lorenzo</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                                <li><a href="mantenimiento.jpg">Estaciones</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcsibambecuenca.html" class="arrow-right">S. C. (Sibambe a Cuenca)</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                                <li><a href="mantenimiento.jpg">Estaciones</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcalacosta.html" class="arrow-right">F.C. Guayaquil a Salinas</a>
+                            <ul>
+                                <li><a href="fcalacosta.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasvaporcosta.html" class="active">Listado locomotoras</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcambatocuraray.html" class="arrow-right">F.C. Ambato a Curaray</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcbahiachone.html" class="arrow-right">F.C. Bahía a Chone</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fccentral.html" class="arrow-right">F.C. Central del Ecuador</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_loja.html" class="arrow-right">F.C. Puerto Bolívar y Pasaje</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_piedras.html" class="arrow-right">F.C. Puerto Bolívar a Piedras</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="ffccaduana_guayaquil.html" class="arrow-right">F.C. Aduana de Guayaquil</a>
+                            <ul>
+                                <li><a href="ffccaduana_guayaquil.html">Reseña Histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#" class="arrow-right">Ingenios</a>
+                            <ul>
+                                <li><a href="mantenimiento.jpg">Autoferros Históricos</a></li>
+                                <li><a href="mantenimiento.jpg">Tren Crucero</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="mantenimiento.jpg">FF.CC. no construidos</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li><a href="metroquito.html">Metro de Quito</a></li>
+                <li><a href="tranviacuenca.html">Tranvía Cuenca</a></li>
+                <li>
+                    <a href="materialrodante.html" class="arrow-down">Tranvías Históricos</a>
+                    <ul>
+                        <li><a href="antiguo_tranviaquito.html">Tranvía de Quito</a></li>
+                        <li><a href="antiguo_tranviaguayaquil.html">Tranvía de Guayaquil</a></li>
+                    </ul>
+                </li>
+                
+                <li><a href="listadocoches.html">F.E.E.P (2010-2020)</a></li>
+                <li><a href="actualidad_trenes.html">Trenes en 2026</a></li>
+            </ul>
+
+            <button class="theme-toggle-btn" onclick="toggleTheme()">
+                <span id="themeIcon">Modo Claro</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="wrapper-main">
+        <div class="via-decorativa via-izquierda"></div>
+        <div class="via-decorativa via-derecha"></div>
+
+        <main class="container">
+            <section id="serie-2000">
+                <h2>Listado de las locomotoras del FC a la Costa</h2>
+                <p style="margin-bottom: 1.5rem;">- En un diario de la época se menciona que el Ferrocarril a la Costa cuenta con cinco locomotoras pero se desconoce la quinta unidad.<br>Haga clic en la fila para ver fotos y ficha técnica.</p>
+                
+                <table class="tabla-tecnica">
+                    <thead>
+                        <tr>
+                            <th style="width: 9%;">Numeración</th>
+                            <th style="width: 9%;">Fabricante</th>
+                            <th style="width: 9%;">Tipo</th>
+                            <th style="width: 9%;">Año</th>
+                            <th style="width: 11%;">Estado</th>
+                            <th style="width: 11%;">Año de baja</th>
+                            <th style="width: 10%;">Ancho de vía</th>
+                            <th style="width: 8%;">Color</th>
+                            <th style="width: 33%;">Datos adicionales</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="fila-clickable enlace-foto" data-imgs="ffcc/historia/fcalacosta/1 Henschel 2-6-0 color y BN (3).png, ffcc/historia/fcalacosta/Henschel 2-6-0.jpg"
+                            data-captions="Locomotora Henschel 2-6-0 'Mogul' fabricada en 1922., Vista posterior de la unidad">
+                            <td>1</td>
+                            <td>Henschel</td>
+                            <td>2-6-0</td>
+                            <td>1922</td> 
+                            <td>¿?</td>
+                            <td>1954</td>
+                            <td>1435mm</td>
+                            <td>-</td>
+                            <td>Choque frontal con autoferro #26, 22-jun-1950.</td>
+                        </tr>
+                        <tr class="fila-clickable enlace-foto" data-imgs="ffcc/historia/fcalacosta/2 Henschel 4-6-0 1923b.png"
+                            data-captions="Locomotora Henschel 4-6-0 fabricada en 1923 y apodada 'Mastodonte de Hierro' en el F.C. a la Costa.">
+                            <td>2</td>
+                            <td>Henschel</td>
+                            <td>4-6-0</td>
+                            <td>1923</td> 
+                            <td>¿?</td>
+                            <td>1954</td>
+                            <td>1435mm</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr class="fila-clickable" onclick="window.location='';">
+                            <td>¿?</td>
+                            <td>Henschel</td>
+                            <td>0-4-0</td>
+                            <td>1924</td>
+                            <td>¿?</td>
+                            <td>1954</td>
+                            <td>1435mm</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr class="fila-clickable" onclick="window.location='';">
+                            <td>¿?</td>
+                            <td>Henschel</td>
+                            <td>0-6-0</td>
+                            <td>1925</td>
+                            <td>¿?</td>
+                            <td>1954</td>
+                            <td>1435mm</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr class="fila-clickable" onclick="window.location='';">
+                            <td>¿?</td>
+                            <td>¿?</td>
+                            <td>¿?</td>
+                            <td>¿?</td> 
+                            <td>¿?</td>
+                            <td>¿?</td>
+                            <td>1435mm?</td>
+                            <td>¿?</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <footer>
+                <div class="container">
+                    <p>&copy; 2026 RegistroFerroviario.ec</p>
+                    <p>Inventario Técnico General Particular de Harukaze • materialrodante de Vapor F.C. a la Costa.</p>
+                </div>
+            </footer>     
+        </main>
+    </div>
+
+    <!-- LIGHTBOX GALERÍA -->
+    <div id="lightbox-galeria" class="lightbox-galeria">
+        <span class="lightbox-cerrar">&times;</span>
+        <button class="flecha flecha-izq">‹</button>
+        <img src="" alt="">
+        <button class="flecha flecha-der">›</button>
+        <div style="text-align: center;">
+            <div class="lightbox-caption"></div>
+            <div class="contador"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONTROL DE TEMA MODO OSCURO/CLARO ---
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const label = document.getElementById('themeIcon');
+            if (label) {
+                label.textContent = theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(savedTheme);
+
+        // --- SISTEMA LIGHTBOX PARA GALERÍA ---
+        let fotosActuales = [];
+        let captionsActuales = [];
+        let indiceActual = 0;
+
+        const lightbox = document.getElementById('lightbox-galeria');
+        const imgLightbox = lightbox.querySelector('img');
+        const captionEl = lightbox.querySelector('.lightbox-caption');
+        const contador = lightbox.querySelector('.contador');
+
+        function mostrarFoto(indice) {
+            imgLightbox.src = fotosActuales[indice];
+            captionEl.textContent = captionsActuales[indice] || '';
+            contador.textContent = (indice + 1) + ' / ' + fotosActuales.length;
+        }
+
+        document.querySelectorAll('.enlace-foto').forEach(el => {
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const imgsAttr = this.getAttribute('data-imgs');
+                if (!imgsAttr) return;
+
+                fotosActuales = imgsAttr.split(',').map(f => f.trim());
+                captionsActuales = (this.getAttribute('data-captions') || '').split(',').map(c => c.trim());
+                indiceActual = 0;
+                mostrarFoto(0);
+                lightbox.classList.add('active');
+            });
+        });
+
+        lightbox.querySelector('.flecha-izq').addEventListener('click', function(e) {
+            e.stopPropagation();
+            indiceActual = (indiceActual - 1 + fotosActuales.length) % fotosActuales.length;
+            mostrarFoto(indiceActual);
+        });
+
+        lightbox.querySelector('.flecha-der').addEventListener('click', function(e) {
+            e.stopPropagation();
+            indiceActual = (indiceActual + 1) % fotosActuales.length;
+            mostrarFoto(indiceActual);
+        });
+
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === this || e.target.classList.contains('lightbox-cerrar')) {
+                this.classList.remove('active');
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (!lightbox.classList.contains('active')) return;
+
+            if (e.key === 'Escape') lightbox.classList.remove('active');
+            if (e.key === 'ArrowLeft') {
+                indiceActual = (indiceActual - 1 + fotosActuales.length) % fotosActuales.length;
+                mostrarFoto(indiceActual);
+            }
+            if (e.key === 'ArrowRight') {
+                indiceActual = (indiceActual + 1) % fotosActuales.length;
+                mostrarFoto(indiceActual);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "tren-descarrilo",
+    "titulo": "Descarriló el 'Tren Nariz del Daiblo'",
+    "fecha": "2026-08-23",
+    "autor": "RF",
+    "imagen": "ffcc/materialrodante/locomotoras/diesel/alsthom2400/2407.jpg",
+    "resumen": "El tren que debía llegar a Alasuí a las 16:30 terminó apareciendo en la estación sobre las 19:30.",
+    "contenido": "El tren que debía llegar a Alasuí a las 16:30 terminó apareciendo en la estación sobre las 19:30."
+  },
+  {
+    "id": "restauracion-jaula-500",
+    "titulo": "Locomotora a vapor #14 fue entregada en Cuenca",
+    "fecha": "2026-08-14",
+    "autor": "Redacción FEEP",
+    "imagen": "ffcc/materialrodante/locomotoras/vapor/14duran2018.jpg",
+    "resumen": "La locomotora procedente de los talleres de Durán ya está en el parque estación de Cuenca.",
+    "contenido": "Hoy iniciaron oficialmente las inspecciones técnicas para evaluar la estructura de los vagones jaula. Este proyecto busca preservar el patrimonio histórico ferroviario..."
+  },
+  {
+    "id": "llegada-unidades-cut4",
+    "titulo": "Autoferro chocó contra automóvil en Ibarra",
+    "fecha": "2026-08-10",
+    "autor": "Talleres Centrales",
+    "imagen": "ffcc/materialrodante/autoferros/26.jpg",
+    "resumen": "Durante un viaje rutinario un automóvil invadió un paso a nivel e impactó con el Autoferro #26.",
+    "contenido": "Durante un viaje rutinario un automóvil invadió un paso a nivel e impactó con el Autoferro #26."
+  },
+  {
+    "id": "tayta",
+    "titulo": "Tren 'Tayta Imbabura' embistió automóvil en Ibarra",
+    "fecha": "2026-08-10",
+    "autor": "Talleres Centrales",
+    "imagen": "ffcc/materialrodante/locomotoras/diesel/alsthom2400/2402 (2).jpg",
+    "resumen": "Durante un viaje rutinario un automóvil invadió un paso a nivel e impactó con el Autoferro #26.",
+    "contenido": "Durante un viaje rutinario un automóvil invadió un paso a nivel e impactó con el Autoferro #26."
+  }
+]

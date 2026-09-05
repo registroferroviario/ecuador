@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <link rel="icon" type="image/png" href="ico.jpg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trenes en 2026 - Registroferroviario.ec</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        
+        [data-theme="light"] {
+            --bg-body: #f8f6f4;
+            --bg-card: #ffffff;
+            --rail-color: rgba(159, 18, 57, 0.12);
+            --red-main: #9f1239;
+            --red-dark: #880e2f;
+            --red-soft: #ffe4e6;
+            --blue-main: #1d4ed8;
+            --gray-main: #475569;
+            --yellow-accent: #d97706;
+            --yellow-bright: #f59e0b;
+            --border-card: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --shadow-card: rgba(0, 0, 0, 0.05);
+            --shadow-hover: rgba(0, 0, 0, 0.12);
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0a0e17;
+            --bg-card: #121824;
+            --rail-color: rgba(186, 230, 253, 0.08);
+            --red-main: #e11d48;
+            --red-dark: #be123c;
+            --red-soft: rgba(225, 29, 72, 0.15);
+            --blue-main: #3b82f6;
+            --gray-main: #94a3b8;
+            --yellow-accent: #f59e0b;
+            --yellow-bright: #fbbf24;
+            --border-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --shadow-card: rgba(0, 0, 0, 0.4);
+            --shadow-hover: rgba(0, 0, 0, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.7;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        .top-stripe {
+            height: 8px;
+            background: linear-gradient(90deg, #f59e0b 0%, #1d4ed8 50%, #e11d48 100%);
+            width: 100%;
+        }
+
+        /* Rieles animados laterales */
+        .rail-pattern {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.75;
+            will-change: background-position;
+        }
+
+        .rail-pattern-left {
+            left: 15px;
+            background: repeating-linear-gradient(0deg, transparent, transparent 18px, var(--rail-color) 18px, var(--rail-color) 22px),
+            linear-gradient(90deg, transparent 22px, var(--rail-color) 22px, var(--rail-color) 26px, transparent 26px, transparent 54px, var(--rail-color) 54px, var(--rail-color) 58px, transparent 58px);
+        }
+
+        .rail-pattern-right {
+            right: 15px;
+            background: repeating-linear-gradient(0deg, transparent, transparent 18px, var(--rail-color) 18px, var(--rail-color) 22px),
+            linear-gradient(90deg, transparent 22px, var(--rail-color) 22px, var(--rail-color) 26px, transparent 26px, transparent 54px, var(--rail-color) 54px, var(--rail-color) 58px, transparent 58px);
+        }
+
+        /* BARRA DE NAVEGACIÓN SUPERIOR */
+        .top-navbar {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-card);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 15px var(--shadow-card);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .nav-logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 900;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .logo-registro {
+            color: #ffdd00;
+        }
+
+        .logo-ferroviario {
+            background: linear-gradient(90deg, #1d4ed8 0%, #1d4ed8 50%, #e11d48 50%, #e11d48 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background-color: var(--red-soft);
+            color: var(--red-main);
+        }
+
+        .theme-toggle-btn {
+            background: var(--bg-card);
+            border: 2px solid var(--red-main);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--red-main);
+            color: #ffffff;
+        }
+
+        .wrapper {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* HERO BANNER */
+        .hero-banner {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 55px;
+            box-shadow: 0 10px 30px var(--shadow-card);
+            border: 1px solid var(--border-card);
+        }
+
+        .hero-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(10, 14, 23, 0.2) 0%, rgba(10, 14, 23, 0.88) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 45px;
+            color: #ffffff;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            width: fit-content;
+            backdrop-filter: blur(4px);
+        }
+
+        .hero-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.2rem, 4vw, 3.4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .hero-subtitle {
+            font-size: 1.05rem;
+            max-width: 750px;
+            opacity: 0.9;
+        }
+
+        /* CARRUSEL PRINCIPAL */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 28px;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .section-line {
+            flex-grow: 1;
+            height: 2px;
+            background: linear-gradient(90deg, var(--red-main), transparent);
+        }
+
+        .carousel-section {
+            margin-bottom: 70px;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 440px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px var(--shadow-card);
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+        }
+
+        .carousel-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .carousel-slide.active { opacity: 1; }
+
+        .carousel-slide img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-caption {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 35px 30px 25px;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.88) 100%);
+            color: #ffffff;
+        }
+
+        .carousel-caption h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+
+        .carousel-caption p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-btn:hover {
+            background: var(--red-main);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-btn.prev { left: 20px; }
+        .carousel-btn.next { right: 20px; }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 16px;
+            right: 25px;
+            z-index: 10;
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: var(--yellow-accent);
+            width: 26px;
+            border-radius: 10px;
+        }
+
+        .nariz-diablo-full-card {
+    background: linear-gradient(135deg, #2d0612 0%, #4c0d1e 60%, #1a030a 100%);
+    border-radius: 20px;
+    padding: 45px;
+    color: #f8fafc;
+    box-shadow: 0 15px 35px rgba(45, 6, 18, 0.5);
+    margin-bottom: 60px;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+        .nariz-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 35px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.25);
+            padding-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .nariz-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.3rem;
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nariz-badge-custom {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #fef08a;
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 8px 18px;
+            border-radius: 20px;
+            letter-spacing: 0.8px;
+        }
+
+        /* BLOQUES DE TEXTO CON IMÁGENES A IZQUIERDA Y DERECHA */
+        .content-block {
+            display: flex;
+            gap: 35px;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .content-block.image-left {
+            flex-direction: row;
+        }
+
+        .content-block.image-right {
+            flex-direction: row-reverse;
+        }
+
+        .block-img-wrapper {
+            flex: 1;
+            min-width: 300px;
+            height: 260px;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            flex-shrink: 0;
+        }
+
+        .block-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .block-img-wrapper:hover img {
+            transform: scale(1.05);
+        }
+
+        .block-text-card {
+            flex: 1.2;
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 14px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .block-title-yellow {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #fde047;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        }
+
+        .block-desc-white {
+            color: #f8fafc;
+            font-size: 0.98rem;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+        /* CARRUSEL MULTI-TARJETA (MUESTRA 3 FOTOS A LA VEZ) */
+        .multi-carousel-wrapper {
+            margin-top: 45px;
+            padding-top: 30px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        .multi-carousel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .multi-carousel-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .multi-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .multi-btn {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #ffffff;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .multi-btn:hover {
+            background: #f59e0b;
+            border-color: #f59e0b;
+            color: #000000;
+            transform: scale(1.08);
+        }
+
+        .multi-track-container {
+            overflow: hidden;
+            width: 100%;
+            border-radius: 16px;
+        }
+
+        .multi-track {
+            display: flex;
+            gap: 20px;
+            transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .multi-card {
+            flex: 0 0 calc((100% - 40px) / 3); /* Muestra exactamente 3 fotos en pantalla */
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+        }
+
+        .multi-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .multi-card-body {
+            padding: 16px;
+            flex-grow: 1;
+        }
+
+        .multi-card-body h5 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            color: #fde047;
+            margin-bottom: 6px;
+        }
+
+        .multi-card-body p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        /* SECCIÓN TREN DEL TAYTA IMBABURA */
+        .rail-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 16px;
+            padding: 45px;
+            margin-bottom: 60px;
+            box-shadow: 0 6px 20px var(--shadow-card);
+        }
+
+        .rail-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 35px;
+            border-bottom: 2px solid var(--border-card);
+            padding-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .rail-section-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.1rem;
+            font-weight: 900;
+            color: var(--text-main);
+        }
+
+        .rail-badge {
+            background-color: var(--red-soft);
+            color: var(--red-main);
+            font-weight: 800;
+            font-size: 0.82rem;
+            padding: 6px 16px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .standard-text-card {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .standard-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .standard-desc {
+            color: var(--text-muted);
+            font-size: 0.98rem;
+        }
+
+        footer {
+            background-color: var(--bg-card);
+            border-top: 3px solid var(--red-main);
+            border-radius: 12px;
+            padding: 24px 30px;
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .menu-toggle {
+        display: block; 
+    }
+
+    .nav-links {
+        display: none; 
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--bg-card);
+        border-bottom: 2px solid var(--accent-red);
+        height: auto;
+        padding: 10px 0;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    
+    .nav-links.mobile-open {
+        display: flex;
+    }
+
+    .nav-links li {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+    }
+
+    .nav-links a {
+        width: 100%;
+        padding: 12px 20px;
+    }
+
+    
+    .nav-links ul {
+        position: static;
+        width: 100%;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        border: none;
+        background-color: var(--bg-card-alt);
+        display: none; 
+        padding-left: 15px;
+    }
+
+    
+    .nav-links li.open > ul {
+        display: block;
+    }
+}
+.nav-links li {
+    position: relative;
+}
+
+.nav-links ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    list-style: none;
+    min-width: 260px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 6px 0;
+    z-index: 1001;
+}
+
+/* Mostrar submenú al hacer hover */
+.nav-links li:hover > ul {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Submenús anidados de 2º y 3er nivel */
+.nav-links ul ul {
+    top: 0;
+    left: 100%;
+    margin-left: 2px;
+}
+
+.nav-links ul li {
+    width: 100%;
+}
+
+.nav-links ul a {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: 0;
+    color: var(--text-main);
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav-links ul a:hover,
+.nav-links ul li:hover > a {
+    background-color: var(--red-main);
+    color: #ffffff !important;
+}
+
+/* --- FLECHAS INDICADORAS DE SUBMENÚ --- */
+.arrow-down::after { content: " ▾"; font-size: 0.75rem; }
+.arrow-right::after { content: " ▸"; font-size: 0.75rem; }
+.arrow-left::after { content: " ◂"; font-size: 0.75rem; }
+
+        @media (max-width: 1100px) {
+            .rail-pattern { display: none; }
+        }
+
+        @media (max-width: 900px) {
+            .content-block.image-left,
+            .content-block.image-right {
+                flex-direction: column;
+            }
+            .block-img-wrapper {
+                width: 100%;
+                min-width: 100%;
+                height: 220px;
+            }
+            .multi-card {
+                flex: 0 0 calc((100% - 20px) / 2); /* 2 tarjetas en tablets */
+            }
+            .nariz-diablo-full-card, .rail-section { padding: 25px; }
+            .hero-banner { height: 300px; }
+            .hero-overlay { padding: 25px; }
+        }
+
+        @media (max-width: 600px) {
+            .multi-card {
+                flex: 0 0 100%; /* 1 tarjeta en móviles */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-stripe"></div>
+
+    <div class="rail-pattern rail-pattern-left" id="railLeft"></div>
+    <div class="rail-pattern rail-pattern-right" id="railRight"></div>
+
+    <nav class="top-navbar">
+        <div class="nav-container">
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                
+                <li>
+                    <a href="ffcc.html" class="arrow-down">FF.CC. Ecuador</a>
+                    <ul>
+                        <li>
+                            <a href="fcdelsur.html" class="arrow-right">F.C. del Sur </a>
+                            <ul>
+                                <li><a href="fcdelsur.html">Información y reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfcdelsur.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="g&q.html" class="arrow-right">G. & Q. (Guayaquil - Quito)</a>
+                            <ul>
+                                <li>
+                                    <a href="g&q.html">Información y reseña histórica</a>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                    <ul>
+                                        <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                        <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                        <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                        <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="listadolocomotorasvaporg&q.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul"</a></li>
+                                        <li><a href="consolidation.html">Baldwin 2-8-0 "Consolidation"</a></li>
+                                        <li>
+                                            <a href="listadolocomotoras.html" class="arrow-left">Históricas</a>
+                                            <ul>
+                                                <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul" 42" 12,8 metros</a></li>
+                                                <li></li><a href="g&q_mogul2-6-0_48.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                                <li><a href="lima-shay.html">Lima 0-4+4+4-0 "Shay"</a></li>
+                                                <li><a href="g&q_mallet0-6-6-0.html">Baldwin 0-6-6-0 "Mallet"</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_42.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_54.html">Baldwin 2-8-0 "Consolidation" 54" 16,4 metros</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_44.html">Baldwin 2-8-0 "Consolidation" 44" 13,4 metros</a></li>
+                                                <li><a href="g&q_garratt_2-6-2+2-6-2.html">Beyer Peacock 2-6-2+2-6-2 "Garratt"</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="extra_locomotoras.html">Locomotoras utilitarias y equipo auxiliar</a></li>
+                                <li>
+                                    <a href="listadocoches.html" class="arrow-left">Listado de coches de viajeros</a>
+                                    <ul>
+                                        <li><a href="coches250.html">Coches serie 250</a></li>
+                                        <li>
+                                            <a href="unidadescompletas.html" class="arrow-right">Composiciones remolcadas</a>
+                                            <ul>
+                                                <li><a href="unidadescompletaspanoramico.html">Moderno Panorámico</a></li>
+                                                <li><a href="unidadescompletascrucero.html">Moderno Crucero 1 & 2</a></li>
+                                                <li><a href="unidadescompletasmodernocut3.html">Moderno CUT3</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="cochescut4.html">Coches CUT4</a></li>
+                                        <li><a href="colonialmadera13.html">Coloniales madera 13m</a></li>
+                                        <li><a href="colonialmadera14.html">Coloniales madera 14m</a></li>
+                                        <li><a href="coches_metalicos_reciclados.html">Metálico reciclado</a></li>
+                                        <li><a href="cochesjaula.html">Coches Jaula</a></li>
+                                        <li><a href="coches3500.html">Coches UT3500</a></li>
+                                        <li><a href="feep_furgon_generador.html">Furgones generador</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="mantenimiento.jpg" class="arrow-left">Vagones</a>
+                                    <ul>
+                                        <li><a href="g&q_furgon_1500.html">Furgón Boxcar tipo "1500"</a></li>
+                                        <li><a href="g&q_tanquero_1100.html">Vagón tanquero tipo "1100"</a></li>
+                                        <li><a href="g&q_plataforma_300.html">Plataforma tipo "300"</a></li>
+                                        <li><a href="g&q_gondola_600.html">Góndola tipo "600"</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="listadoestaciones_g&q.html">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcquitosanlorenzo.html" class="arrow-right">F.C. Quito a San Lorenzo</a>
+                            <ul>
+                                <li><a href="fcquitosanlorenzo.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasvaporqsl.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="qsl_borsig4-6-0.html">Borsig 4-6-0 42" 12,8 metros</a></li>
+                                        <li><a href="norte_baldwin2-8-0.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                        <li><a href="curaray_baldwin2-6-0.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                    </ul>
+                                
+                                </li>
+                                <li>
+                                    <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
+                                        <ul>
+                                            <li><a href="feep_td2000.html">Ingeteam TD-2000</a></li>
+                                            <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
+                                            <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
+                                            <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
+                                            <li><a href="extra_locomotoras.html">Otras locomotoras diésel utilitarias</a></li>
+                                        </ul>
+                                </li>
+                                <li><a href="mantenimiento.jpg">Estaciones de la línea</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcsibambecuenca.html" class="arrow-right">S. C. (Sibambe a Cuenca)</a>
+                            <ul>
+                                <li><a href="fcsibambecuenca.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorassc.html">Listado locomotoras de vapor</a></li>
+                                <li><a href="listadoestaciones_sc.html">Estaciones</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcalacosta.html" class="arrow-right">F.C. Guayaquil a Salinas</a>
+                            <ul>
+                                <li><a href="fcalacosta.html">Reseña histórica</a></li>
+                                <li>
+                                    <a href="listadolocomotorasvaporcosta.html" class="arrow-left">Listado locomotoras de vapor</a>
+                                    <ul>
+                                        <li><a href="costa_henschel2-6-0.html">Henschel 2-6-0 "Mogul"</a></li>
+                                        <li><a href="costa_henschel4-6-0.html">Henschel 4-6-0</a></li>
+                                    </ul>
+                                </li>
+                                    
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcambatocuraray.html" class="arrow-right">F.C. Ambato a Curaray</a>
+                            <ul>
+                                <li><a href="fcambatocuraray.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoras_curaray.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fcbahiachone.html" class="arrow-right">F.C. Bahía a Chone</a>
+                            <ul>
+                                <li><a href="fcbahiachone.html">Reseña histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="fccentral.html" class="arrow-right">F.C. Central del Ecuador</a>
+                            <ul>
+                                <li><a href="fccentral.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfccentral.html">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_loja.html" class="arrow-right">F.C. Puerto Bolívar y Pasaje</a>
+                            <ul>
+                                <li><a href="fcpuertobolivar_loja.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoraseloro.html">Listado materialrodante</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="fcpuertobolivar_piedras.html" class="arrow-right">F.C. Puerto Bolívar a Piedras</a>
+                            <ul>
+                                <li><a href="fcpuertobolivar_piedras.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoraseloro.html">Listado materialrodante</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="ffccaduana_guayaquil.html" class="arrow-right">F.C. Aduana de Guayaquil</a>
+                            <ul>
+                                <li><a href="ffccaduana_guayaquil.html">Reseña Histórica</a></li>
+                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="mantenimiento.jpg">FF.CC. no construidos</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="ffcc.html#indus" class="arrow-down">FF.CC. Industriales</a>
+                    <ul>
+                        <li><a href="mantenimiento.jpg">Ingenio Valdez</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio San Carlos</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Inés María</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Luz María y Matilde</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Rocafuerte</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Nugues</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Adelina María</a></li>
+                        <li><a href="mantenimiento.jpg">United Fruit Company</a></li>
+                        <li><a href="mantenimiento.jpg">Ecuadorian Oilfields</a></li>
+                        <li><a href="mantenimiento.jpg">Galápagos?</a></li>
+                    </ul>
+                
+                </li>
+
+                <li><a href="metroquito.html">Metro de Quito</a></li>
+                <li><a href="tranviacuenca.html">Tranvía Cuenca</a></li>
+                <li>
+                    <a href="#" class="arrow-down">Tranvías Históricos</a>
+                    <ul>
+                        <li><a href="antiguo_tranviaquito.html">Tranvía de Quito</a></li>
+                        <li><a href="antiguo_tranviaguayaquil.html">Tranvía de Guayaquil</a></li>
+                    </ul>
+                </li>
+                
+                <li><a href="mantenimiento.jpg">F.E.E.P (2010-2020)</a></li>
+                
+            </ul>
+
+            <button class="theme-toggle-btn" onclick="toggleTheme()">
+                <span id="themeIcon">Modo Oscuro</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+
+        <header class="hero-banner">
+            <img src="ffcc/2001.jpg" alt="Trenes en 2026 Banner" onerror="this.src='icotrian.png'">
+            <div class="hero-overlay">
+                <span class="hero-badge">INFORME ESPECIAL 2026</span>
+                <h1 class="hero-title">Trenes en circulación en 2026</h1>
+                <p class="hero-subtitle">Estado actual del reducido servicio ferroviario.</p>
+            </div>
+        </header>
+
+
+        <section class="nariz-diablo-full-card">
+            
+            <div class="nariz-header">
+                <h2>Tren "Nariz del Diablo"</h2>
+                <span class="nariz-badge-custom">RUTA (ALAUSÍ - SIBAMBE)</span>
+            </div>
+
+            <div class="content-block image-left">
+                <div class="block-img-wrapper">
+                    <img src="historia/Trenesactualidad/narizdeldiablo.webp" alt="Ingeniería en Zigzag" onerror="this.src='icotrian.png'">
+                </div>
+                <div class="block-text-card">
+                    <h3 class="block-title-yellow">Desafío de Ingeniería en Zigzag</h3>
+                    <p class="block-desc-white">
+                        Conocida mundialmente como una de las hazañas de ingeniería más complejas de la historia ferroviaria, la bajada en zigzag por la pared rocosa del Pistishi hasta Sibambe requiere inspecciones constantes en el terreno debido a la topografía extrema de los Andes chimboracenses.
+                    </p>
+                </div>
+            </div>
+
+            <div class="content-block image-right">
+                <div class="block-img-wrapper">
+                    <img src="" alt="Rehabilitación Alausí" onerror="this.src='icotrian.png'">
+                </div>
+                <div class="block-text-card">
+                    <h3 class="block-title-yellow">Rehabilitación en Alausí</h3>
+                    <p class="block-desc-white">
+                        En abril de 2026 tras una temporada sin circulaciones por un fenómeno natural que destruyó la vía pudo ser reabierto al público tras una 
+                        reparación exhaustiva por parte de las autoridades locales de la Municipalidad de Alausí.
+                    </p>
+                    <h3 class="block-title-yellow">Circulaciones "Tren Nariz del Diablo"</h3>
+                    <p class="block-desc-white">
+                        A fecha de septiembre de 2026 los trenes circulan de jueves a domingo tres veces al día con salidas desde la estación de Alausí a las:
+                        <br> -08h00 <br> -11h00 <br> -14h00 
+                    </p>
+                </div>
+            </div>
+
+            <div class="multi-carousel-wrapper">
+                <div class="multi-carousel-header">
+                    <div class="multi-carousel-title">
+                        <span>📷</span> Galería Fotográfica de la Nariz del Diablo (3 a la vista)
+                    </div>
+                    <div class="multi-controls">
+                        <button class="multi-btn" onclick="slideMulti(-1)">&#10094;</button>
+                        <button class="multi-btn" onclick="slideMulti(1)">&#10095;</button>
+                    </div>
+                </div>
+
+                <div class="multi-track-container">
+                    <div class="multi-track" id="multiTrack">
+                        
+                        <div class="multi-card">
+                            <img src="" alt="" onerror="this.src='icotrian.png'">
+                            <div class="multi-card-body">
+                                <h5>titulo dx</h5>
+                                <p>Descripción xd</p>
+                            </div>
+                        </div>
+
+                        <div class="multi-card">
+                            <img src="" alt="" onerror="this.src='icotrian.png'">
+                            <div class="multi-card-body">
+                                <h5>titulo dx</h5>
+                                <p>Descripción xd</p>
+                            </div>
+                        </div>
+
+                        <div class="multi-card">
+                            <img src="" alt="" onerror="this.src='icotrian.png'">
+                            <div class="multi-card-body">
+                                <h5>titulo dx</h5>
+                                <p>Descripción xd</p>
+                            </div>
+                        </div>
+
+                        <div class="multi-card">
+                            <img src="" alt="" onerror="this.src='icotrian.png'">
+                            <div class="multi-card-body">
+                                <h5>titulo dx</h5>
+                                <p>Descripción xd</p>
+                            </div>
+                        </div>
+
+                        <div class="multi-card">
+                            <img src="" alt="" onerror="this.src='icotrian.png'">
+                            <div class="multi-card-body">
+                                <h5>titulo dx</h5>
+                                <p>Descripción xd</p>
+                            </div>
+                        </div>
+
+                        <div class="multi-card">
+                            <img src="" alt="" onerror="this.src='icotrian.png'">
+                            <div class="multi-card-body">
+                                <h5>titulo dx</h5>
+                                <p>Descripción xd</p>
+                            </div>
+                        </div>
+
+                        <div class="multi-card">
+                            <img src="" alt="" onerror="this.src='icotrian.png'">
+                            <div class="multi-card-body">
+                                <h5>titulo dx</h5>
+                                <p>Descripción xd</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="rail-section">
+            <div class="rail-section-header">
+                <h2>Tren del Tayta Imbabura</h2>
+                <span class="rail-badge">RUTA (IBARRA - ANDRADE MARÍN)</span>
+            </div>
+
+            <div class="content-block image-left">
+                <div class="block-img-wrapper">
+                    <img src="historia/Trenesactualidad/tayta.jfif" alt="Tren del Tayta Imbabura" onerror="this.src='icotrian.png'">
+                </div>
+                <div class="standard-text-card">
+                    <h3 class="standard-title">xd</h3>
+                    <p class="standard-desc">
+                        lol.
+                    </p>
+                </div>
+            </div>
+
+            <div class="content-block image-right">
+                <div class="block-img-wrapper">
+                    <img src="ffcc/materialrodante/locomotoras/diesel/alsthom2400/2402.jpg" alt="Rehabilitación Alausí" onerror="this.src='icotrian.png'">
+                </div>
+                <div class="standard-text-card">
+                    <h3 class="standard-title">texto</h3>
+                    <p class="standard-desc">
+                         textaco
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="rail-section">
+            <div class="rail-section-header">
+                <h2>Trencito de la Laguna del Yambo (Salcedo)</h2>
+                <span class="rail-badge">RUTA (LAGUNA DEL YAMBO)</span>
+            </div>
+
+            <div class="content-block image-left">
+                <div class="block-img-wrapper">
+                    <img src="" alt="Tren del Tayta Imbabura" onerror="this.src='icotrian.png'">
+                </div>
+                <div class="standard-text-card">
+                    <h3 class="standard-title">Es</h3>
+                    <p class="standard-desc">
+                        As
+                    </p>
+                </div>
+            </div>
+
+            <div class="content-block image-right">
+                <div class="block-img-wrapper">
+                    <img src="" alt="Rehabilitación Alausí" onerror="this.src='icotrian.png'">
+                </div>
+                <div class="standard-text-card">
+                    <h3 class="standard-title">I</h3>
+                    <p class="standard-desc">
+                        E
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div><strong>registroferroviario.ec</strong> — Archivo Histórico Particular de Harukaze</div>
+            <div>Ecuador</div>
+        </footer>
+
+    </div>
+
+    <script>
+        // MODO CLARO / OSCURO CON PERSISTENCIA
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const label = document.getElementById('themeIcon');
+            if (label) {
+                label.textContent = theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
+
+        // DESPLAZAMIENTO ANIMADO DE RIELES EN EL SCROLL
+        const railLeft = document.getElementById('railLeft');
+        const railRight = document.getElementById('railRight');
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const position = scrolled * 0.4;
+            if (railLeft) railLeft.style.backgroundPositionY = `${position}px`;
+            if (railRight) railRight.style.backgroundPositionY = `${position}px`;
+        });
+
+        // CARRUSEL PRINCIPAL (SUPERIOR)
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlide(index) {
+            if (index >= slides.length) currentSlide = 0;
+            else if (index < 0) currentSlide = slides.length - 1;
+            else currentSlide = index;
+
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === currentSlide);
+            });
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        function moveSlide(direction) {
+            showSlide(currentSlide + direction);
+        }
+
+        function setSlide(index) {
+            showSlide(index);
+        }
+
+        setInterval(() => {
+            moveSlide(1);
+        }, 5000);
+
+        // CARRUSEL MULTI-TARJETA (MUESTRA 3 A LA VEZ)
+        let currentMultiIndex = 0;
+        const totalCards = 7;
+
+        function getVisibleCards() {
+            if (window.innerWidth <= 600) return 1;
+            if (window.innerWidth <= 900) return 2;
+            return 3;
+        }
+
+        function slideMulti(direction) {
+            const visibleCards = getVisibleCards();
+            const maxIndex = totalCards - visibleCards;
+
+            currentMultiIndex += direction;
+
+            if (currentMultiIndex < 0) {
+                currentMultiIndex = maxIndex;
+            } else if (currentMultiIndex > maxIndex) {
+                currentMultiIndex = 0;
+            }
+
+            const track = document.getElementById('multiTrack');
+            const cardWidth = track.children[0].getBoundingClientRect().width;
+            const gap = 20;
+            
+            const moveAmount = (cardWidth + gap) * currentMultiIndex;
+            track.style.transform = `translateX(-${moveAmount}px)`;
+        }
+
+        window.addEventListener('resize', () => {
+            slideMulti(0);
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+       
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('mobile-open');
+        });
+
+        
+        const parentItems = document.querySelectorAll('.nav-links li');
+
+        parentItems.forEach(item => {
+            const link = item.querySelector(':scope > a');
+            const subMenu = item.querySelector(':scope > ul');
+
+            if (subMenu && link) {
+                link.addEventListener('click', (e) => {
+                  
+                    if (window.innerWidth <= 900) {
+                        
+                        if (!item.classList.contains('open')) {
+                            e.preventDefault(); 
+                            
+                            
+                            const siblings = item.parentElement.querySelectorAll(':scope > li.open');
+                            siblings.forEach(sibling => sibling.classList.remove('open'));
+
+                            item.classList.add('open');
+                        }
+                    
+                    }
+                });
+            }
+        });
+    });
+    
+    </script>
+
+</body>
+</html>
