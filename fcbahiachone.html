@@ -714,6 +714,70 @@
     }
 }
 
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .menu-toggle {
+        display: block; 
+    }
+
+    .nav-links {
+        display: none; 
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--bg-card);
+        border-bottom: 2px solid var(--accent-red);
+        height: auto;
+        padding: 10px 0;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    
+    .nav-links.mobile-open {
+        display: flex;
+    }
+
+    .nav-links li {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+    }
+
+    .nav-links a {
+        width: 100%;
+        padding: 12px 20px;
+    }
+
+    
+    .nav-links ul {
+        position: static;
+        width: 100%;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        border: none;
+        background-color: var(--bg-card-alt);
+        display: none; /* Se ocultan por defecto */
+        padding-left: 15px;
+    }
+
+    
+    .nav-links li.open > ul {
+        display: block;
+    }
+}
       
         footer {
             background-color: var(--bg-card);
@@ -1008,7 +1072,7 @@
             </div>
 
             <div class="header-photo-container">
-                <img src="ffcc/historia/fccentral/calceta color.jpg" alt="Paso por la Nariz del Diablo" onerror="this.src='ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg'">
+                <img src="ffcc/historia/central/calceta color.jpg" alt="Paso por la Nariz del Diablo" onerror="this.src='ffcc/materialrodante/locomotoras/vapor/shay/Shay15.jpg'">
                 <div class="header-photo-overlay">Autocarril llegando a Calceta.</div>
             </div>
         </header>
@@ -1024,7 +1088,7 @@
                 <div class="carousel-track">
                     
                     <div class="carousel-card">
-                        <img src="ffcc/historia/fccentral/borsig chemins de fer.jpg" alt="Locomotora Shay" onerror="this.src='icotrian.png'">
+                        <img src="ffcc/historia/central/borsig chemins de fer.jpg" alt="Locomotora Shay" onerror="this.src='icotrian.png'">
                         <div class="carousel-card-caption">
                             <h4>Locomotora de vapor Borsig al salir de fábrica.</h4>
                             <p>Tramo trinchera del Pistishi</p>
@@ -1032,7 +1096,7 @@
                     </div>
 
                     <div class="carousel-card">
-                        <img src="ffcc/historia/fccentral/12.jpg" alt="Locomotora Alsthom" onerror="this.src='icotrian.png'">
+                        <img src="ffcc/historia/central/12.jpg" alt="Locomotora Alsthom" onerror="this.src='icotrian.png'">
                         <div class="carousel-card-caption">
                             <h4>Locomotora de vapor #12 al salir de fábrica.</h4>
                             <p>Tracción de carga y turismo</p>
@@ -1040,7 +1104,7 @@
                     </div>
 
                     <div class="carousel-card">
-                        <img src="ffcc/historia/fccentral/1930.jpg" alt="Estación Salcedo" onerror="this.src='icotrian.png'">
+                        <img src="ffcc/historia/central/1930.jpg" alt="Estación Salcedo" onerror="this.src='icotrian.png'">
                         <div class="carousel-card-caption">
                             <h4>Tren cerca de Bahía de Caráquez</h4>
                             <p>Red patrimonial andina</p>
@@ -1048,7 +1112,7 @@
                     </div>
 
                     <div class="carousel-card">
-                        <img src="ffcc/historia/fccentral/calceta2.jpg" alt="Coche de Pasajeros" onerror="this.src='icotrian.png'">
+                        <img src="ffcc/historia/central/calceta2.jpg" alt="Coche de Pasajeros" onerror="this.src='icotrian.png'">
                         <div class="carousel-card-caption">
                             <h4>Autocarril llegando a Calceta.</h4>
                             <p>Equipamiento histórico restaurado</p>
@@ -1057,7 +1121,7 @@
 
                     
                     <div class="carousel-card">
-                        <img src="ffcc/historia/fccentral/5-feb-1911 El tren en Bahía de Caraquez.jpeg" alt="Locomotora Shay" onerror="this.src='icotrian.png'">
+                        <img src="ffcc/historia/central/5-feb-1911 El tren en Bahía de Caraquez.jpeg" alt="Locomotora Shay" onerror="this.src='icotrian.png'">
                         <div class="carousel-card-caption">
                             <h4>Locomotora Vapor Shay #15</h4>
                             <p>Tramo trinchera del Pistishi</p>

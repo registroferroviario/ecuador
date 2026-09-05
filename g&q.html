@@ -878,7 +878,70 @@
     color: #000;
 }
 
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
 
+@media (max-width: 900px) {
+    .menu-toggle {
+        display: block; 
+    }
+
+    .nav-links {
+        display: none; 
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--bg-card);
+        border-bottom: 2px solid var(--accent-red);
+        height: auto;
+        padding: 10px 0;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    
+    .nav-links.mobile-open {
+        display: flex;
+    }
+
+    .nav-links li {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+    }
+
+    .nav-links a {
+        width: 100%;
+        padding: 12px 20px;
+    }
+
+    
+    .nav-links ul {
+        position: static;
+        width: 100%;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        border: none;
+        background-color: var(--bg-card-alt);
+        display: none; /* Se ocultan por defecto */
+        padding-left: 15px;
+    }
+
+    
+    .nav-links li.open > ul {
+        display: block;
+    }
+}
 
         footer {
             background-color: var(--bg-card);
@@ -934,7 +997,10 @@
 
     <nav class="top-navbar">
         <div class="nav-container">
-            <ul class="nav-links">
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+
+            <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">Inicio</a></li>
                 
                 <li>
@@ -950,7 +1016,9 @@
                         <li>
                             <a href="g&q.html" class="arrow-right">G. & Q. (Guayaquil - Quito)</a>
                             <ul>
-                                <li><a href="g&q.html">Información y reseña histórica</a></li>
+                                <li>
+                                    <a href="g&q.html">Información y reseña histórica</a>
+                                </li>
                                 <li>
                                     <a href="listadolocomotoras.html" class="arrow-left">Listado locomotoras diésel</a>
                                     <ul>
@@ -958,7 +1026,6 @@
                                         <li><a href="enfe_alsthom2400.html">GEC Alsthom AD "2400"</a></li>
                                         <li><a href="g&q_alco_160.html">ALCo DL-535B "160"</a></li>
                                         <li><a href="qsl_alsthomsulzer150.html">Alsthom-Sulzer "BBB-150"</a></li>
-                                        <li><a href="extra_locomotoras.html">Otras locomotoras diésel utilitarias</a></li>
                                     </ul>
                                 </li>
                                 <li>
@@ -969,18 +1036,20 @@
                                         <li>
                                             <a href="listadolocomotoras.html" class="arrow-left">Históricas</a>
                                             <ul>
-                                                <li><a href="historica1.html">Baldwin 2-6-0 "Mogul" 42" 12,8 metros</a></li>
-                                                <li></li><a href="historica2.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
+                                                <li><a href="g&q_mogul2-6-0_42.html">Baldwin 2-6-0 "Mogul" 42" 12,8 metros</a></li>
+                                                <li></li><a href="g&q_mogul2-6-0_48.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
                                                 <li><a href="lima-shay.html">Lima 0-4+4+4-0 "Shay"</a></li>
-                                                <li><a href="historica3.html">Baldwin 0-6-6-0 "Mallet"</a></li>
-                                                <li><a href="historica3.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
-                                                <li><a href="historica3.html">Baldwin 2-8-0 "Consolidation" 54" 16,4 metros</a></li>
-                                                <li><a href="historica3.html">Baldwin 2-8-0 "Consolidation" 44" 13,4 metros</a></li>
+                                                <li><a href="g&q_mallet0-6-6-0.html">Baldwin 0-6-6-0 "Mallet"</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_42.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_54.html">Baldwin 2-8-0 "Consolidation" 54" 16,4 metros</a></li>
+                                                <li><a href="g&q_consolidation2-8-0_44.html">Baldwin 2-8-0 "Consolidation" 44" 13,4 metros</a></li>
                                                 <li><a href="g&q_garratt_2-6-2+2-6-2.html">Beyer Peacock 2-6-2+2-6-2 "Garratt"</a></li>
                                             </ul>
                                         </li>
                                     </ul>
                                 </li>
+                                <li>
+                                    <a href="extra_locomotoras.html">Locomotoras utilitarias y equipo auxiliar</a></li>
                                 <li>
                                     <a href="listadocoches.html" class="arrow-left">Listado de coches de viajeros</a>
                                     <ul>
@@ -996,9 +1065,19 @@
                                         <li><a href="cochescut4.html">Coches CUT4</a></li>
                                         <li><a href="colonialmadera13.html">Coloniales madera 13m</a></li>
                                         <li><a href="colonialmadera14.html">Coloniales madera 14m</a></li>
+                                        <li><a href="coches_metalicos_reciclados.html">Metálico reciclado</a></li>
                                         <li><a href="cochesjaula.html">Coches Jaula</a></li>
                                         <li><a href="coches3500.html">Coches UT3500</a></li>
                                         <li><a href="feep_furgon_generador.html">Furgones generador</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="mantenimiento.jpg" class="arrow-left">Vagones</a>
+                                    <ul>
+                                        <li><a href="g&q_furgon_1500.html">Furgón Boxcar tipo "1500"</a></li>
+                                        <li><a href="g&q_tanquero_1100.html">Vagón tanquero tipo "1100"</a></li>
+                                        <li><a href="g&q_plataforma_300.html">Plataforma tipo "300"</a></li>
+                                        <li><a href="g&q_gondola_600.html">Góndola tipo "600"</a></li>
                                     </ul>
                                 </li>
                                 <li><a href="listadoestaciones_g&q.html">Estaciones de la línea</a></li>
@@ -1013,6 +1092,7 @@
                                     <ul>
                                         <li><a href="qsl_borsig4-6-0.html">Borsig 4-6-0 42" 12,8 metros</a></li>
                                         <li><a href="norte_baldwin2-8-0.html">Baldwin 2-8-0 "Consolidation" 42" 12,8 metros</a></li>
+                                        <li><a href="curaray_baldwin2-6-0.html">Baldwin 2-6-0 "Mogul" 48" 14,6 metros</a></li>
                                     </ul>
                                 
                                 </li>
@@ -1033,9 +1113,9 @@
                         <li>
                             <a href="fcsibambecuenca.html" class="arrow-right">S. C. (Sibambe a Cuenca)</a>
                             <ul>
-                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
-                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
-                                <li><a href="mantenimiento.jpg">Estaciones</a></li>
+                                <li><a href="fcsibambecuenca.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorassc.html">Listado locomotoras de vapor</a></li>
+                                <li><a href="listadoestaciones_sc.html">Estaciones</a></li>
                             </ul>
                         </li>
 
@@ -1057,15 +1137,15 @@
                         <li>
                             <a href="fcambatocuraray.html" class="arrow-right">F.C. Ambato a Curaray</a>
                             <ul>
-                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
-                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                                <li><a href="fcambatocuraray.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoras_curaray.html">Listado locomotoras de vapor</a></li>
                             </ul>
                         </li>
 
                         <li>
                             <a href="fcbahiachone.html" class="arrow-right">F.C. Bahía a Chone</a>
                             <ul>
-                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="fcbahiachone.html">Reseña histórica</a></li>
                                 <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
                             </ul>
                         </li>
@@ -1073,22 +1153,24 @@
                         <li>
                             <a href="fccentral.html" class="arrow-right">F.C. Central del Ecuador</a>
                             <ul>
-                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="fccentral.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotorasfccentral.html">Listado locomotoras de vapor</a></li>
                             </ul>
                         </li>
                         
                         <li>
                             <a href="fcpuertobolivar_loja.html" class="arrow-right">F.C. Puerto Bolívar y Pasaje</a>
                             <ul>
-                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
-                                <li><a href="mantenimiento.jpg">Listado locomotoras de vapor</a></li>
+                                <li><a href="fcpuertobolivar_loja.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoraseloro.html">Listado materialrodante</a></li>
                             </ul>
                         </li>
                         
                         <li>
                             <a href="fcpuertobolivar_piedras.html" class="arrow-right">F.C. Puerto Bolívar a Piedras</a>
                             <ul>
-                                <li><a href="mantenimiento.jpg">Reseña histórica</a></li>
+                                <li><a href="fcpuertobolivar_piedras.html">Reseña histórica</a></li>
+                                <li><a href="listadolocomotoraseloro.html">Listado materialrodante</a></li>
                             </ul>
                         </li>
                         <li>
@@ -1108,16 +1190,16 @@
                 <li>
                     <a href="ffcc.html#indus" class="arrow-down">FF.CC. Industriales</a>
                     <ul>
-                        <li><a href="">Ingenio Valdez</a></li>
-                        <li><a href="">Ingenio San Carlos</a></li>
-                        <li><a href="">Ingenio Inés María</a></li>
-                        <li><a href="">Ingenio Luz María y Matilde</a></li>
-                        <li><a href="">Ingenio Rocafuerte</a></li>
-                        <li><a href="">Ingenio Nugues</a></li>
-                        <li><a href="">Ingenio Adelina María</a></li>
-                        <li><a href="">United Fruit Company</a></li>
-                        <li><a href="">Ecuadorian Oilfields</a></li>
-                        <li><a href="">Galápagos?</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Valdez</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio San Carlos</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Inés María</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Luz María y Matilde</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Rocafuerte</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Nugues</a></li>
+                        <li><a href="mantenimiento.jpg">Ingenio Adelina María</a></li>
+                        <li><a href="mantenimiento.jpg">United Fruit Company</a></li>
+                        <li><a href="mantenimiento.jpg">Ecuadorian Oilfields</a></li>
+                        <li><a href="mantenimiento.jpg">Galápagos?</a></li>
                     </ul>
                 
                 </li>
@@ -1554,6 +1636,42 @@ function closeMapModal(event) {
         }
     }
 }
+document.addEventListener('DOMContentLoaded', () => {
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('mobile-open');
+        });
+
+        
+        const parentItems = document.querySelectorAll('.nav-links li');
+
+        parentItems.forEach(item => {
+            const link = item.querySelector(':scope > a');
+            const subMenu = item.querySelector(':scope > ul');
+
+            if (subMenu && link) {
+                link.addEventListener('click', (e) => {
+                    
+                    if (window.innerWidth <= 900) {
+                        
+                        if (!item.classList.contains('open')) {
+                            e.preventDefault(); 
+                            
+                            
+                            const siblings = item.parentElement.querySelectorAll(':scope > li.open');
+                            siblings.forEach(sibling => sibling.classList.remove('open'));
+
+                            item.classList.add('open');
+                        }
+                        
+                    }
+                });
+            }
+        });
+    });
     </script>
 </body>
 </html>
